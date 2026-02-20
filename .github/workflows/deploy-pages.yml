@@ -1,4 +1,4 @@
-name: Deploy reveal.js Presentation to GitHub Pages
+name: Deploy reveal.js Presentation and Docs to GitHub Pages
 
 on:
   push:
@@ -36,33 +36,167 @@ jobs:
 
       - name: Assemble site
         run: |
-          # Create directory structure that mirrors the paths expected by the HTML
-          mkdir -p _site/node_modules/reveal.js/dist/theme
-          mkdir -p _site/node_modules/reveal.js/plugin/zoom
-          mkdir -p _site/node_modules/reveal.js/plugin/notes
+          # ── Directory scaffold ────────────────────────────────────────────
+          mkdir -p _site/presentation/node_modules/reveal.js/dist/theme
+          mkdir -p _site/presentation/node_modules/reveal.js/plugin/zoom
+          mkdir -p _site/presentation/node_modules/reveal.js/plugin/notes
+          mkdir -p _site/docs
 
-          # Serve the presentation as root index
-          cp slides-reveal.js/semantic-constraints-presentation.html _site/index.html
+          # ── reveal.js presentation (served under /presentation/) ──────────
+          cp slides-reveal.js/semantic-constraints-presentation.html \
+             _site/presentation/index.html
 
-          # reveal.js core CSS and JS
           cp slides-reveal.js/node_modules/reveal.js/dist/reset.css \
-             _site/node_modules/reveal.js/dist/
+             _site/presentation/node_modules/reveal.js/dist/
           cp slides-reveal.js/node_modules/reveal.js/dist/reveal.css \
-             _site/node_modules/reveal.js/dist/
+             _site/presentation/node_modules/reveal.js/dist/
           cp slides-reveal.js/node_modules/reveal.js/dist/reveal.js \
-             _site/node_modules/reveal.js/dist/
-
-          # League theme (used in the presentation)
+             _site/presentation/node_modules/reveal.js/dist/
           cp slides-reveal.js/node_modules/reveal.js/dist/theme/league.css \
-             _site/node_modules/reveal.js/dist/theme/
-
-          # Plugins referenced by the presentation (zoom + notes)
+             _site/presentation/node_modules/reveal.js/dist/theme/
           cp slides-reveal.js/node_modules/reveal.js/plugin/zoom/zoom.js \
-             _site/node_modules/reveal.js/plugin/zoom/
+             _site/presentation/node_modules/reveal.js/plugin/zoom/
           cp slides-reveal.js/node_modules/reveal.js/plugin/notes/notes.js \
-             _site/node_modules/reveal.js/plugin/notes/
+             _site/presentation/node_modules/reveal.js/plugin/notes/
 
-          # Prevent GitHub Pages from running Jekyll on this static site
+          # ── Shared CSS injected into every doc page via pandoc -H ─────────
+          cat > /tmp/doc-style.html << 'STYLEEOF'
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <style>
+            body{font-family:Georgia,serif;max-width:860px;margin:2rem auto;
+                 padding:0 1.5rem;color:#ddd;background:#1a1a2e;line-height:1.7}
+            h1,h2,h3,h4{color:#c9a84c}
+            a{color:#7ec8e3}
+            code{background:#0f0f23;border-radius:4px;padding:.15em .4em;font-size:.9em}
+            pre{background:#0f0f23;padding:1em;border-radius:4px;overflow-x:auto}
+            pre code{padding:0;background:none}
+            blockquote{border-left:3px solid #c9a84c44;margin-left:0;
+                       padding-left:1rem;color:#aaa}
+            table{border-collapse:collapse;width:100%}
+            th,td{border:1px solid #333;padding:.5em .75em;text-align:left}
+            th{background:#0f0f23;color:#c9a84c}
+            img{max-width:100%}
+          </style>
+          STYLEEOF
+
+          # ── Shared nav bar injected before body content via pandoc -B ─────
+          cat > /tmp/doc-nav.html << 'NAVEOF'
+          <nav style="margin-bottom:2.5rem;padding-bottom:1rem;border-bottom:1px solid #333">
+            <a href="../" style="color:#7ec8e3;text-decoration:none">← Home</a>
+            &nbsp;&nbsp;|&nbsp;&nbsp;
+            <a href="./" style="color:#7ec8e3;text-decoration:none">↑ Docs index</a>
+          </nav>
+          NAVEOF
+
+          # ── Convert every markdown file in texts.md/ to HTML with pandoc ──
+          for md in "texts.md"/*.md; do
+            base=$(basename "$md" .md)
+            pandoc "$md" \
+              --standalone \
+              --metadata title="${base//-/ }" \
+              --highlight-style=espresso \
+              -H /tmp/doc-style.html \
+              -B /tmp/doc-nav.html \
+              -o "_site/docs/${base}.html"
+            echo "Converted: $base"
+          done
+
+          # ── Docs index page (auto-generated list of all converted docs) ────
+          cat > _site/docs/index.html << 'DOCSEOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Research Documents</title>
+            <style>
+              body{font-family:Georgia,serif;max-width:860px;margin:2rem auto;
+                   padding:0 1.5rem;color:#ddd;background:#1a1a2e;line-height:1.7}
+              h1{color:#c9a84c}
+              nav{margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid #333}
+              a{color:#7ec8e3;text-decoration:none}
+              a:hover{text-decoration:underline}
+              ul{list-style:none;padding:0;margin:0}
+              li{padding:.6rem 0;border-bottom:1px solid #2a2a40}
+              li:last-child{border-bottom:0}
+              .label{font-size:.8rem;color:#888;margin-left:.5rem}
+            </style>
+          </head>
+          <body>
+            <nav><a href="../">← Home</a></nav>
+            <h1>Research Documents</h1>
+            <ul>
+          DOCSEOF
+
+          for md in "texts.md"/*.md; do
+            base=$(basename "$md" .md)
+            label="${base//-/ }"
+            echo "      <li><a href=\"${base}.html\">${label}</a></li>" \
+              >> _site/docs/index.html
+          done
+
+          cat >> _site/docs/index.html << 'DOCSEOF'
+            </ul>
+          </body>
+          </html>
+          DOCSEOF
+
+          # ── Landing page ──────────────────────────────────────────────────
+          cat > _site/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Geometric Feature Invariance in SAEs</title>
+            <style>
+              *{box-sizing:border-box}
+              body{font-family:Georgia,serif;margin:0;background:#1a1a2e;color:#ddd;
+                   display:flex;flex-direction:column;align-items:center;
+                   justify-content:center;min-height:100vh;padding:2rem}
+              h1{color:#c9a84c;text-align:center;font-size:2rem;margin-bottom:.5rem}
+              .subtitle{color:#aaa;text-align:center;margin-bottom:3rem;
+                        max-width:600px;line-height:1.6}
+              .cards{display:flex;gap:2rem;flex-wrap:wrap;justify-content:center}
+              .card{background:#0f0f23;border:1px solid #c9a84c44;border-radius:8px;
+                    padding:2rem;max-width:340px;width:100%;text-align:center}
+              .card h2{color:#c9a84c;margin-top:0}
+              .card p{color:#aaa;font-size:.95rem;line-height:1.6}
+              .btn{display:inline-block;margin-top:1.2rem;padding:.65rem 1.5rem;
+                   background:#c9a84c;color:#1a1a2e;border-radius:4px;
+                   text-decoration:none;font-weight:bold;font-family:Georgia,serif}
+              .btn:hover{background:#e0b85a}
+            </style>
+          </head>
+          <body>
+            <h1>Geometric Feature Invariance in SAEs</h1>
+            <p class="subtitle">
+              A Framework for Transferable Mechanistic Interpretability
+              and Scalable AI Safety
+            </p>
+            <div class="cards">
+              <div class="card">
+                <h2>Presentation</h2>
+                <p>
+                  <em>Enforcing Semantic Constraints in SynthSAEBench</em> —
+                  interactive reveal.js slide deck.
+                </p>
+                <a class="btn" href="presentation/">Open slides →</a>
+              </div>
+              <div class="card">
+                <h2>Research Documents</h2>
+                <p>
+                  Research notes, proposals, literature summaries,
+                  and implementation plans.
+                </p>
+                <a class="btn" href="docs/">Browse docs →</a>
+              </div>
+            </div>
+          </body>
+          </html>
+          EOF
+
+          # Prevent GitHub Pages from running Jekyll
           touch _site/.nojekyll
 
       - name: Configure Pages
