@@ -1,0 +1,6 @@
+# Node.js dependencies — installed by the CI workflow, not committed
+node_modules/
+slides-reveal.js/node_modules/
+
+# Build/deploy artifacts
+_site/
