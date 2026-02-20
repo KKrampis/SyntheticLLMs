@@ -1,0 +1,11 @@
+.reveal .slides section {
+  font-size: 0.8em;
+}
+
+.reveal h1, .reveal h2, .reveal h3 {
+  font-size: 1.2em;
+}
+
+.reveal ul li {
+  font-size: 0.9em;
+}

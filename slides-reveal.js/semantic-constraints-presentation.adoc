@@ -1,0 +1,88 @@
+= Enforcing Semantic Constraints in SynthSAEBench
+:revealjs_theme: league
+:revealjs_transition: slide
+:stem: asciimath
+:revealjs_customcss: custom.css
+
+== From abstract hierarchies to semantic structure
+
+* SynthSAEBench's hierarchy mechanism can be reinterpreted as a **semantic taxonomy** 
+* Transform from purely statistical testbed into **semantically grounded simulation**
+* Build concept trees with domains like "Agency & Planning," "Social Manipulation," "Situational Awareness"
+* Features branch from broad categories to specific manifestations (e.g., "Deception" → "Strategic Ambiguity")
+* Tune firing probabilities to match realistic scenarios: rare scheming features, high correlations within domains
+
+== SynthSAEBench hierarchical constraints
+
+Current implementation enforces **probabilistic dependencies only**:
+
+stem:[c_("child") larr c_("child") * bb(1)[c_("parent") > 0]]
+
+* **Constraint**: Children can only fire when parent is active
+* **Applied level-by-level** from root to leaves for cascading
+* **Mutual exclusion**: At most one child per parent can be active
+
+[.notes]
+--
+This ensures statistical dependencies but creates no geometric relationship between feature directions
+--
+
+== LLM-generated misalignment hierarchies
+
+* **Step 1**: LLM generates misalignment concept hierarchy with semantic similarity stem:[alpha] values
+* **Step 2**: Translate hierarchy into geometric feature directions using compositional formula
+* **Step 3**: Feed resulting directions and structure into SynthSAEBench framework
+* **Step 4**: Train SAE on synthetic data and test precise diagnostic questions
+* **Step 5**: Measure failure modes with ground truth precision impossible on real LLMs
+
+== Compositional feature directions: the approach
+
+**Key Insight**: Make child feature directions compositionally dependent on parents
+
+stem:[d_("child") = alpha * d_("parent") + beta * d_bot]
+
+**Terms**:
+
+* **stem:[d_("parent")]**: Parent's direction vector
+* **stem:[d_bot]**: Component orthogonal to parent (child's "specialization")  
+* **stem:[alpha, beta]**: Mixing coefficients controlling inheritance level
+* **stem:[alpha]**: Controls how much parent representation is inherited
+* **stem:[beta]**: Controls strength of child's unique component
+
+== LLM-generated example hierarchy and diagnostic questions
+
+* **LLM creates**: "Deceptive Reasoning" root → "Goal Misrepresentation" (stem:[alpha=0.7]) & "Information Withholding"
+* **LLM adds grandchildren**: "Reward Hacking" (stem:[alpha=0.4]) under Goal Misrepresentation, "Selective Omission" under Information Withholding
+* **Example question 1**: Does SAE learn latent with high cosine similarity to root when only grandchild features fire?
+* **Example question 2**: Does ablating "Deceptive Reasoning" latent impair "Reward Hacking" reconstruction more than unrelated features?
+
+== Implementing stem:[d_bot]: geometric orthogonalization
+
+**How to create the orthogonal component stem:[d_bot]:**
+
+We use **Gram-Schmidt orthogonalization** to find a vector perpendicular to the parent:
+
+stem:[d_bot = v - (v * d_("parent")) d_("parent")]
+
+* Start with a random vector stem:[v]
+* Subtract its projection onto stem:[d_("parent")] 
+* The term stem:[(v * d_("parent")) d_("parent")] is the component that "points along" the parent
+* Subtracting it leaves only the perpendicular part
+* Normalize result to unit length
+
+== Safety research applications: testing SAE robustness
+
+* **Capability detection robustness**: Test SAE identification of rare, sparse dangerous features (<0.1% samples)
+* **Worst-case adversarial scenarios**: Model capability concealment where models actively hide dangerous capabilities
+  ** Create features anti-correlated with overt expressions of same capabilities
+  ** Test whether SAEs recover underlying features when obvious signals suppressed
+* **Intervention testing with ground truth**: Ablate SAE latents and verify actual behavior change
+
+== Advanced monitoring and threat model validation
+
+* **Transfer learning for monitoring**: Search for geometric signatures from synthetic data in real SAEs
+* Look for latent correlations, decoder cosine similarities, and activation statistics that characterize specific hierarchical structures
+* Identify structural patterns in successful synthetic SAEs: clustered latents with low firing probability and mutual exclusivity constraints
+* **Threat model validation**: Test interpretability tools on realistic AI safety scenarios by constructing hierarchies for dangerous capabilities
+* Build semantic trees for power-seeking, deception, sycophancy, manipulation with controllable parameters
+* Systematically vary prevalence (how rare are scheming features?), abstraction levels (root vs deep hierarchy placement), and correlation structures between related capabilities

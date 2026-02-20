@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>semantic-constraints-synthsaebench</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <script
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
+  type="text/javascript"></script>
+</head>
+<body>
+<h1
+id="enforcing-semantic-constraints-in-synthsaebench-hierarchies">Enforcing
+Semantic Constraints in SynthSAEBench Hierarchies</h1>
+<h2
+id="the-approach-compositional-feature-directions-with-hierarchical-constraints">The
+Approach: Compositional Feature Directions with Hierarchical
+Constraints</h2>
+<p>While SynthSAEBench’s current hierarchy mechanism only enforces
+probabilistic dependencies (children fire when parents fire), we can
+introduce partial semantic structure by modifying how feature direction
+vectors are constructed within the hierarchy. The key insight is to make
+child feature directions <strong>compositionally dependent</strong> on
+their parent directions, rather than having them be independent random
+vectors. Specifically, when constructing a hierarchical feature tree, we
+can define each child feature direction as <span
+class="math inline">\(d_{\text{child}} = \alpha \cdot d_{\text{parent}}
++ \beta \cdot d_{\perp}\)</span>, where <span
+class="math inline">\(d_{\text{parent}}\)</span> is the parent’s
+direction vector, <span class="math inline">\(d_{\perp}\)</span> is a
+component orthogonal to the parent (representing the “specialization” of
+the child concept), and <span class="math inline">\(\alpha,
+\beta\)</span> are mixing coefficients that control how much of the
+parent’s representation is inherited. This creates genuine compositional
+structure where activations containing child features literally contain
+components of parent features in their vector representations. By
+carefully choosing the <span class="math inline">\(\alpha\)</span>
+values across the hierarchy (e.g., <span class="math inline">\(\alpha =
+0.7\)</span> for closely related concepts, <span
+class="math inline">\(\alpha = 0.3\)</span> for more distantly related
+ones), we can encode semantic relatedness as geometric similarity in the
+feature space.</p>
+<p><strong>Implementing d_⊥:</strong></p>
+<p>To get a vector orthogonal to the parent direction, you use
+<strong>Gram-Schmidt orthogonalization</strong>. You start with a random
+vector v, then subtract off its projection onto the parent
+direction:</p>
+<p><strong><span class="math inline">\(d_{\perp} = v - (v \cdot
+d_{\text{parent}}) d_{\text{parent}}\)</span></strong></p>
+<p>The term (v · d_parent) d_parent is the component of v that “points
+along” the parent, so subtracting it leaves only the part that’s
+perpendicular. You then normalize the result to unit length. This gives
+you a vector that lives in the subspace of the full embedding space that
+is completely “unrelated” to the parent direction — it captures whatever
+is unique or distinguishing about the child concept beyond what it
+inherits from the parent.</p>
+<p><strong>What β does geometrically:</strong></p>
+<p>β controls how much of that orthogonal “specialization” component
+makes it into the final child direction. The full formula d_child =
+α·d_parent + β·d_⊥ is a <strong>linear combination</strong> of two
+orthogonal vectors, which means you’re essentially picking a point on a
+2D plane spanned by those two directions. Since d_parent and d_⊥ are
+orthogonal unit vectors, the cosine similarity between d_child (after
+normalization) and d_parent is determined by the ratio α/β — a large β
+relative to α means the child direction tilts strongly away from the
+parent toward its own unique subspace, encoding a concept that is more
+“specialized” and less like its parent. A small β means the child hugs
+closely to the parent direction, encoding a concept that is almost
+synonymous with the parent. So α and β together act as a geometric dial
+controlling where on the spectrum between “identical to parent” and
+“completely independent from parent” the child concept sits.</p>
+<h3
+id="hierarchical-feature-geometry-containing-misalignment-concept-semantics">Hierarchical
+Feature Geometry Containing Misalignment Concept Semantics</h3>
+<p><strong>Step 1: LLM generates the misalignment concept
+hierarchy.</strong> You prompt an LLM to produce a tree of
+misalignment-related concepts — something like “Deceptive Reasoning” as
+a root, with children “Goal Misrepresentation” and “Information
+Withholding,” and then grandchildren like “Reward Hacking” and
+“Sycophantic Agreement” under Goal Misrepresentation, and “Selective
+Omission” and “Framing Manipulation” under Information Withholding.
+Critically, you also ask the LLM to assign an α value to each
+parent-child edge, encoding its judgment of <em>how semantically
+similar</em> the child is to the parent — “Reward Hacking” might get
+α=0.4 from “Goal Misrepresentation” since it’s a fairly specific
+instantiation, while “Goal Misrepresentation” might get α=0.7 from
+“Deceptive Reasoning” since it’s almost a direct sub-case.</p>
+<p><strong>Step 2: Translate the tree into feature directions.</strong>
+You start at the root and assign it a random unit vector d_root. For
+each child, you compute d_child = α·d_parent + β·d_⊥, where d_⊥ is
+obtained by Gram-Schmidt against the parent, and β is chosen such that
+after normalization the cosine similarity between parent and child
+matches the α the LLM specified (so β is essentially derived from α, not
+independently set). You recurse down the tree level by level, so
+grandchildren inherit geometric structure from both their parent and
+transitively from their grandparent — “Reward Hacking” ends up with some
+directional overlap with both “Goal Misrepresentation” <em>and</em>
+“Deceptive Reasoning,” which is exactly the right semantic property.</p>
+<p><strong>Step 3: Feed into SynthSAEBench’s hierarchy
+mechanism.</strong> The resulting feature directions slot directly into
+the feature dictionary D, and the tree structure maps directly onto
+SynthSAEBench’s existing hierarchy: the parent firing-probability
+constraint (c_child ← c_child · 1[c_parent &gt; 0]) enforces that
+“Reward Hacking” can only be active when “Goal Misrepresentation” is
+active, while the geometric construction ensures that the hidden
+activations produced for “Reward Hacking” samples literally contain a
+component pointing in the direction of “Deceptive Reasoning.”</p>
+<p><strong>Step 4 and additional experiments:</strong> You can now train
+an SAE on this synthetic data and ask very concrete diagnostic
+questions: does the SAE learn a latent whose decoder direction has high
+cosine similarity with d_root even when only grandchild features are
+firing? Does ablating the latent most aligned with “Deceptive Reasoning”
+impair reconstruction of “Reward Hacking” more than it impairs
+reconstruction of unrelated features? Does the SAE split the hierarchy
+correctly or does it absorb child concepts into parent latents? Because
+you hold the ground truth — you know exactly which direction corresponds
+to which concept and what the α values were — you can measure failure
+modes with precision that is impossible on a real LLM. The LLM-generated
+hierarchy is what makes the concepts interpretable to humans; the
+compositional direction construction is what makes the geometry
+testable.</p>
+<h2
+id="theory-semantic-correlation-through-geometric-constraints">Theory:
+Semantic Correlation Through Geometric Constraints</h2>
+<p>The theoretical foundation rests on the principle that
+<strong>semantic relatedness should manifest as geometric structure in
+representation space</strong>. When we set <span
+class="math inline">\(\alpha &gt; 0\)</span>, we create non-zero cosine
+similarity between parent and child feature directions: <span
+class="math inline">\(\cos(\theta) = d_{\text{child}}^T
+d_{\text{parent}} = \alpha\)</span> - after normalization, from</p>
+<p><span class="math inline">\(d_{\text{child}}^T d_{\text{parent}} =
+(\alpha \cdot d_{\text{parent}} + \beta \cdot d_{\perp})^T
+d_{\text{parent}} = \alpha \underbrace{(d_{\text{parent}}^T
+d_{\text{parent}})}_{=1} + \beta \underbrace{(d*{\perp}^T
+d_{\text{parent}})}_{=0} = \alpha\)</span>),</p>
+<p>while their orthogonal components <span
+class="math inline">\(d_{\perp}\)</span> point in different directions
+to distinguish them from each other. This creates a testable prediction:
+SAEs that successfully decompose these features should discover latents
+where the decoder directions for child features have high cosine
+similarity with the decoder direction for the parent feature, and
+interventions that ablate the parent feature should impair
+reconstruction of child features more severely than unrelated
+features.</p>
+<h2 id="limitations-and-what-this-achieves">Limitations and What This
+Achieves</h2>
+<p>This approach provides <strong>weak semantic structure</strong>—it’s
+geometrically grounded but still falls short of true semantic
+understanding. We’re encoding human-chosen semantic relationships (like
+“deception contains goal misrepresentation”) into the statistical
+properties of the data, but the model still doesn’t “understand”
+deception in any functional sense. What we gain is the ability to test
+whether SAEs can discover and respect compositional structure: if an SAE
+trained on hierarchically-constrained features with compositional
+directions fails to learn latents that preserve the parent-child
+geometric relationships, this tells us it will struggle even more with
+the implicit semantic hierarchies in real LLMs. Critically, this
+approach lets us validate necessary conditions for handling semantic
+structure—if SAEs can’t decompose explicitly encoded compositional
+hierarchies where we control the mixing coefficients and geometric
+relationships, they certainly won’t succeed on the far more complex
+implicit semantic structures in language model representations. This
+bridges the gap between purely statistical hierarchies (current
+SynthSAEBench) and truly semantic hierarchies (which we cannot fully
+create without solving the interpretability problem we’re trying to
+investigate), providing a testbed for architectural improvements that
+must handle compositional feature structure.</p>
+</body>
+</html>

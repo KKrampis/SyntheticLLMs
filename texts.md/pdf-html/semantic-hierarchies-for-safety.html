@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>semantic-hierarchies-for-safety</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <script
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
+  type="text/javascript"></script>
+</head>
+<body>
+<h1
+id="semantic-hierarchies-for-ai-safety-research-in-synthsaebench">Semantic
+Hierarchies for AI Safety Research in SynthSAEBench</h1>
+<h2
+id="overview-from-abstract-hierarchies-to-semantic-structure">Overview:
+From Abstract Hierarchies to Semantic Structure</h2>
+<p>Yes, there is a powerful way to enforce hierarchies that provide
+semantic meaning for specific topics, including AI safety-relevant
+concepts like harmful actions, scheming, and deception. The key insight
+is that SynthSAEBench’s hierarchy mechanism can be reinterpreted as a
+<strong>semantic taxonomy</strong> rather than just an abstract
+parent-child relationship. Instead of having arbitrary hierarchical
+features, we can deliberately construct hierarchy trees that mirror real
+conceptual structures, including dangerous capability domains. This
+transforms the synthetic benchmark from a purely statistical testbed
+into a <strong>semantically grounded simulation</strong> where we can
+study how SAEs decompose and represent structured knowledge that matters
+for AI safety.</p>
+<h2
+id="technical-implementation-building-semantic-concept-trees">Technical
+Implementation: Building Semantic Concept Trees</h2>
+<p>The implementation leverages SynthSAEBench’s existing hierarchy
+infrastructure but populates it with carefully designed concept trees.
+At the root level, you might have broad domains like “Agency &amp;
+Planning,” “Social Manipulation,” or “Situational Awareness.” Each root
+spawns children representing subcategories—for example, under “Social
+Manipulation” you might have “Deception,” “Persuasion,” and “Coercion.”
+These further branch into specific manifestations: “Deception” could
+have children like “Lying by Omission,” “Fabrication,” “Misdirection,”
+and “Strategic Ambiguity.” The crucial technical detail is that the
+<strong>firing probabilities and correlations</strong> can be tuned to
+match realistic deployment scenarios. For instance, scheming-related
+features might be: (1) rare overall (low <span
+class="math inline">\(p_i\)</span> for root-level scheming features),
+(2) highly correlated with each other (when the model is scheming,
+multiple scheming-related features activate together), and (3)
+anti-correlated with honest behavior features (enforced through negative
+entries in the correlation matrix).</p>
+<p>Here’s a concrete example hierarchy for deception-related
+features:</p>
+<pre><code>Root: Deceptive Reasoning (p=0.001, rare but critical)
+├── Child: Goal Misrepresentation (p=0.01 | parent active)
+│   ├── Grandchild: False Alignment Signaling (p=0.3 | parent active)
+│   └── Grandchild: Hidden Objective Pursuit (p=0.5 | parent active)
+├── Child: Information Withholding (p=0.015 | parent active)
+│   ├── Grandchild: Strategic Omission (p=0.4 | parent active)
+│   └── Grandchild: Selective Disclosure (p=0.6 | parent active)
+└── Child: Strategic Misdirection (p=0.02 | parent active)
+    ├── Grandchind: Attention Manipulation (p=0.5 | parent active)
+    └── Grandchild: False Trail Creation (p=0.5 | parent active)</code></pre>
+<p>The hierarchical constraint means that “False Alignment Signaling”
+can only activate when both “Goal Misrepresentation” AND “Deceptive
+Reasoning” are active, creating a realistic dependency structure. You
+can further enhance realism by making some of these features
+<strong>manifold features</strong> rather than discrete ones. For
+example, “Degree of Deception” might be a circular manifold representing
+a continuous spectrum from “full honesty” to “complete fabrication,”
+while “Target Sophistication” might be a 1D manifold representing the
+intended audience’s ability to detect deception. This captures the
+reality that deceptive behavior isn’t binary but exists along multiple
+continuous dimensions.</p>
+<h2
+id="safety-research-applications-testing-sae-robustness-on-dangerous-capabilities">Safety
+Research Applications: Testing SAE Robustness on Dangerous
+Capabilities</h2>
+<p>This semantic hierarchy approach enables several critical AI safety
+research directions. First, <strong>capability detection
+robustness</strong>: Train SAEs on synthetic data containing rare but
+hierarchically structured dangerous capability features, then measure
+whether SAEs can reliably identify these features even when they’re: (a)
+very sparse (appearing in &lt;0.1% of samples), (b) entangled with
+benign features through correlation, or (c) expressed at different
+levels of abstraction in the hierarchy. If SAEs fail to consistently
+recover rare scheming features in the controlled synthetic setting, this
+tells us they’ll likely miss such features in real models. Second,
+<strong>transfer learning for monitoring</strong>: Suppose you construct
+a synthetic dataset with a specific deception hierarchy and train SAEs
+that successfully learn to decompose it. You can then test whether the
+learned <strong>geometric signatures</strong>—the specific patterns of
+latent correlations, decoder cosine similarities, and activation
+statistics—transfer to SAEs trained on actual language models. If you
+find that certain structural patterns (e.g., a cluster of highly
+correlated latents with low firing probability and specific mutual
+exclusivity constraints) reliably indicate scheming-type hierarchies in
+synthetic data, you can search for the same patterns in real SAEs as a
+monitoring signal.</p>
+<p>Third, <strong>worst-case adversarial scenarios</strong>: Use the
+semantic hierarchy to model scenarios where models actively hide
+dangerous capabilities. Create features for “Capability Concealment”
+that are anti-correlated with overt expressions of the same capabilities
+and test whether SAEs can still recover the underlying features when the
+model has learned to suppress obvious signals. For example, you might
+have:</p>
+<pre><code>Harmful Capability Feature (manifold: intensity of capability)
+├── Overt Expression (discrete, negatively correlated with concealment)
+└── Concealed Expression (discrete, fires when capability present but overt suppressed)</code></pre>
+<p>Train SAEs and measure whether they learn separate latents for
+concealed vs. overt expressions or conflate them. Fourth,
+<strong>intervention testing with ground truth</strong>: Because you
+have complete ground truth about which features represent dangerous
+capabilities, you can test whether ablating or clamping SAE latents
+matched to these features actually prevents the corresponding behavior.
+This is impossible with real models where you don’t know the true
+feature structure, but in synthetic data you can definitively answer:
+“If I ablate the SAE latents that claim to represent ‘Strategic
+Misdirection,’ do samples containing this ground-truth feature actually
+change?”</p>
+<p>The power of this approach is that you can construct arbitrarily
+complex semantic hierarchies reflecting real AI safety threat
+models—power-seeking, deception, sycophancy, manipulation, goal
+misspecification—and then rigorously test whether interpretability tools
+can decompose these structures. You can vary the prevalence (how rare
+are scheming features?), the abstraction level (do dangerous
+capabilities appear at the root or deep in the hierarchy?), the
+correlation structure (are scheming features clustered together?), and
+the representation type (discrete vs. manifold) to understand the limits
+of SAE-based monitoring. This grounds AI safety research in concrete,
+reproducible experiments with known ground truth, allowing us to build
+confidence in interpretability methods before deploying them for actual
+model monitoring.</p>
+</body>
+</html>

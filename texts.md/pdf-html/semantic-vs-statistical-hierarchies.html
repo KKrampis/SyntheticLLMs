@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>semantic-vs-statistical-hierarchies</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <script
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
+  type="text/javascript"></script>
+</head>
+<body>
+<h1
+id="the-semantic-gap-statistical-vs.-meaningful-hierarchies-in-synthsaebench">The
+Semantic Gap: Statistical vs. Meaningful Hierarchies in
+SynthSAEBench</h1>
+<h2 id="the-core-limitation-statistics-without-semantics">The Core
+Limitation: Statistics Without Semantics</h2>
+<p>You’re absolutely correct - SynthSAEBench’s hierarchy mechanism is
+purely <strong>statistical</strong>, not semantic. It enforces
+probabilistic dependencies (child features can only fire when parents
+fire) but has zero understanding of what those features actually mean.
+When we label a feature as “Deceptive Reasoning” with children “Goal
+Misrepresentation” and “Information Withholding,” those labels are
+purely for our bookkeeping - the synthetic model doesn’t know or care
+about deception, goals, or information. From the model’s perspective,
+it’s just:</p>
+<ul>
+<li>Feature 42 (parent): fires with probability 0.001, represented by
+direction vector <span class="math inline">\(d_{42} \in
+\mathbb{R}^{768}\)</span></li>
+<li>Feature 137 (child of 42): fires with probability 0.01 conditional
+on feature 42 firing, direction <span
+class="math inline">\(d_{137}\)</span></li>
+<li>Feature 291 (child of 42): fires with probability 0.015 conditional
+on feature 42 firing, direction <span
+class="math inline">\(d_{291}\)</span></li>
+</ul>
+<p>There is no inherent relationship between <span
+class="math inline">\(d_{42}\)</span>, <span
+class="math inline">\(d_{137}\)</span>, and <span
+class="math inline">\(d_{291}\)</span> beyond the statistical
+constraint. They could be pointing in completely unrelated directions in
+the activation space. The “hierarchy” is implemented as:
+<code>if c_42 == 0, then set c_137 = 0 and c_291 = 0</code> - a simple
+masking operation that has nothing to do with semantic content.</p>
+<h2
+id="whats-missing-semantic-structure-in-the-representation-space">What’s
+Missing: Semantic Structure in the Representation Space</h2>
+<p>The fundamental issue is that <strong>semantics requires
+compositional structure in the representation itself</strong>, not just
+in firing probabilities. In real language models, “Deceptive Reasoning”
+and “Goal Misrepresentation” have a semantic relationship because:</p>
+<ol type="1">
+<li><strong>Shared representational structure</strong>: The activation
+patterns for “goal misrepresentation” literally contain components of
+“deceptive reasoning” - the child concept is composed from the parent
+concept</li>
+<li><strong>Functional relationships</strong>: When the model processes
+text about misrepresenting goals, the deceptive reasoning circuits are
+actually used/activated</li>
+<li><strong>Geometric relationships</strong>: The representation spaces
+have meaningful structure where “lying about goals” is genuinely closer
+to “deception” than to “honest reporting”</li>
+</ol>
+<p>None of this exists in current SynthSAEBench. The features are just
+random orthogonal directions with a statistical dependency rule. When
+feature 137 fires, it adds <span class="math inline">\(c_{137} \cdot
+d_{137}\)</span> to the activation, which has no compositional
+relationship to what feature 42 adds (<span class="math inline">\(c_{42}
+\cdot d_{42}\)</span>). They’re just independent vectors that happen to
+have correlated firing patterns.</p>
+<h2 id="what-would-be-needed-for-true-semantic-hierarchies">What Would
+Be Needed for True Semantic Hierarchies</h2>
+<p>To create genuinely semantic hierarchies in SynthSAEBench, we would
+need several fundamental changes:</p>
+<h3 id="compositional-representation-structure">1. Compositional
+Representation Structure</h3>
+<p>Child feature directions should be <strong>composed from</strong>
+parent feature directions, not independent of them. For example:</p>
+<pre><code>Parent: &quot;Deceptive Reasoning&quot; → d_parent
+Child: &quot;Goal Misrepresentation&quot; → d_child = α·d_parent + β·d_specificity
+
+where:
+- α·d_parent: The &quot;deceptive reasoning&quot; component (inherited)
+- β·d_specificity: The specific additional structure for &quot;goals&quot; vs other deception types
+- d_specificity is orthogonal to d_parent</code></pre>
+<p>This creates genuine compositional structure where the child
+representation literally contains the parent representation plus
+additional information. When an SAE decomposes activations containing
+the child feature, it should ideally recover both components.</p>
+<h3 id="semantic-basis-vectors-with-interpretable-meaning">2. Semantic
+Basis Vectors with Interpretable Meaning</h3>
+<p>Instead of random orthogonal directions, define a set of
+<strong>semantic basis concepts</strong> that have interpretable
+meanings. For instance:</p>
+<pre><code>Semantic Bases:
+- e_intent: &quot;Intentionality/Agency&quot; direction
+- e_honesty: &quot;Truthfulness&quot; direction  
+- e_goal: &quot;Goal-oriented behavior&quot; direction
+- e_other_aware: &quot;Model of other agents&quot; direction
+
+Then construct features as combinations:
+- &quot;Deceptive Reasoning&quot; = +1·e_intent -1·e_honesty +1·e_other_aware
+- &quot;Goal Misrepresentation&quot; = +1·e_intent -1·e_honesty +1·e_goal +1·e_other_aware
+- &quot;Honest Goal Pursuit&quot; = +1·e_intent +1·e_honesty +1·e_goal</code></pre>
+<p>The challenge is that we don’t actually know what the “right”
+semantic basis vectors are, and they may not exist as simple linear
+directions. This is precisely the problem SAEs are trying to solve for
+real models!</p>
+<h3 id="task-relevant-functional-relationships">3. Task-Relevant
+Functional Relationships</h3>
+<p>For hierarchies to be semantically meaningful, there should be
+<strong>tasks</strong> where the hierarchical relationship matters
+functionally. For example:</p>
+<ul>
+<li>A task that requires “Goal Misrepresentation” should necessarily
+invoke “Deceptive Reasoning” mechanisms</li>
+<li>Ablating the parent feature should impair performance on all child
+feature tasks</li>
+<li>The activation patterns should show that child tasks genuinely use
+parent representations</li>
+</ul>
+<p>This would require coupling SynthSAEBench to synthetic <strong>task
+datasets</strong> where we can test functional relationships, not just
+generating random activations.</p>
+<h3 id="grounded-semantics-through-data-distribution">4. Grounded
+Semantics Through Data Distribution</h3>
+<p>Another approach is to generate activations that are actually
+grounded in meaningful data. Instead of random sampling, create
+activations that correspond to:</p>
+<ul>
+<li>Synthetic text snippets or scenarios with known semantic
+properties</li>
+<li>Specific reasoning patterns that we explicitly encode</li>
+<li>Distributions that mirror real language model activation patterns on
+semantically categorized data</li>
+</ul>
+<p>For example, you could:</p>
+<ol type="1">
+<li>Take real LLM activations on text containing deception</li>
+<li>Use dimensionality reduction to find the main directions in this
+“deception subspace”</li>
+<li>Use these empirical directions as your synthetic feature
+vectors</li>
+<li>Build hierarchies based on actual nested semantic content in
+text</li>
+</ol>
+<h2 id="the-fundamental-paradox">The Fundamental Paradox</h2>
+<p>Here’s the deep problem: <strong>We want to use synthetic data to
+test SAEs because we don’t know the true features in real models. But to
+create semantically meaningful synthetic features, we need to know what
+semantic structure looks like in representation space - which is exactly
+what we don’t know.</strong></p>
+<p>This creates a paradox:</p>
+<ul>
+<li><strong>Statistical SynthSAEBench</strong> (current): We can create
+it, but it lacks semantic meaning, so it may not tell us how SAEs handle
+real semantic structures</li>
+<li><strong>Semantic SynthSAEBench</strong> (proposed): Would test what
+we care about, but requires knowing the answer to the very question
+we’re trying to investigate</li>
+</ul>
+<h2 id="what-we-can-actually-do-partial-solutions">What We Can Actually
+Do: Partial Solutions</h2>
+<p>Given this limitation, here are realistic approaches:</p>
+<h3
+id="approach-1-weak-semantic-structure-through-correlation-patterns">Approach
+1: Weak Semantic Structure Through Correlation Patterns</h3>
+<p>We can’t create true semantics, but we can create <strong>statistical
+signatures that might correlate with semantics</strong>:</p>
+<ul>
+<li>Features related to deception are highly correlated with each
+other</li>
+<li>Features related to deception are anti-correlated with honesty
+features</li>
+<li>Hierarchical relationships enforce realistic conditional
+dependencies</li>
+<li>Manifold structures capture continuous semantic dimensions (e.g.,
+degree of deception as a manifold)</li>
+</ul>
+<p>This won’t give us true semantics, but it tests whether SAEs can
+handle the <strong>statistical patterns</strong> that real semantic
+structures might produce.</p>
+<h3 id="approach-2-hybrid-approach-with-real-model-guidance">Approach 2:
+Hybrid Approach with Real Model Guidance</h3>
+<p>Use real LLM activations to guide synthetic feature construction:</p>
+<ol type="1">
+<li>Collect LLM activations on curated datasets with known semantic
+properties</li>
+<li>Use PCA/ICA/sparse coding to find empirical feature directions</li>
+<li>Use these directions as synthetic feature vectors in
+SynthSAEBench</li>
+<li>Test whether SAEs trained on this “semi-synthetic” data recover the
+original directions</li>
+</ol>
+<p>This grounds the synthetic features in real semantics while
+maintaining the control and ground truth of synthetic data.</p>
+<h3
+id="approach-3-accept-the-limitation-and-focus-on-what-it-tests-well">Approach
+3: Accept the Limitation and Focus on What It Tests Well</h3>
+<p>Explicitly acknowledge that SynthSAEBench tests <strong>statistical
+decomposition</strong>, not semantic understanding:</p>
+<ul>
+<li>Can SAEs handle hierarchical statistical dependencies? (Yes, we can
+test this)</li>
+<li>Can SAEs decompose correlated vs. independent features? (Yes, we can
+test this)</li>
+<li>Can SAEs discover rare features vs. common features? (Yes, we can
+test this)</li>
+<li>Do SAEs learn semantically meaningful hierarchies? (<strong>No, we
+cannot test this with pure SynthSAEBench</strong>)</li>
+</ul>
+<p>Use it for what it’s good at: controlled experiments on statistical
+properties of SAE learning, not as a complete substitute for evaluation
+on real semantically meaningful data.</p>
+<h2 id="implications-for-ai-safety-research">Implications for AI Safety
+Research</h2>
+<p>For AI safety applications, this limitation means:</p>
+<p><strong>What we CAN test with statistical hierarchies:</strong></p>
+<ul>
+<li>Whether SAEs can detect rare but statistically structured patterns
+(if scheming has characteristic correlation signatures)</li>
+<li>Scaling behavior when dangerous features are sparse</li>
+<li>Whether transfer learning works for statistical signatures</li>
+<li>Robustness of detection to feature correlations and hierarchical
+dependencies</li>
+</ul>
+<p><strong>What we CANNOT test:</strong></p>
+<ul>
+<li>Whether SAEs actually understand what “deception” means
+compositionally</li>
+<li>Whether ablating “deception features” prevents deceptive reasoning
+in a functionally meaningful way</li>
+<li>Whether the hierarchical relationships we create match real semantic
+hierarchies in deployed models</li>
+<li>Whether our synthetic “scheming” features bear any resemblance to
+how real models represent scheming</li>
+</ul>
+<p><strong>Practical recommendation</strong>: Use SynthSAEBench to test
+<strong>necessary but not sufficient</strong> conditions. If SAEs fail
+on statistical hierarchies, they’ll definitely fail on real semantic
+hierarchies. If they succeed on statistical hierarchies, they might
+still fail on semantic ones, so you need additional validation on real
+models.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>You’ve identified the core limitation: SynthSAEBench’s hierarchies
+are <strong>statistical simulacra</strong> of semantic structure, not
+genuine semantic hierarchies. The feature labels we assign (“Deceptive
+Reasoning,” “Goal Misrepresentation”) are for human interpretation only
+- the synthetic model has no semantic understanding. This is a
+fundamental constraint of working with synthetic data in the absence of
+knowing what true semantic features look like in representation space.
+The value of SynthSAEBench lies in providing controlled testbeds for
+statistical properties (sparsity, correlation, hierarchy, manifolds)
+that we believe are <strong>necessary</strong> for handling real
+semantic structures, while acknowledging it cannot fully capture the
+<strong>compositional and functional</strong> properties that define
+true semantics.</p>
+</body>
+</html>
