@@ -1,0 +1,279 @@
+name: Deploy reveal.js Presentation and Docs to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Only one concurrent deployment; cancel in-progress runs except the last one
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: slides-reveal.js/package-lock.json
+
+      - name: Install dependencies
+        working-directory: slides-reveal.js
+        run: npm ci
+
+      - name: Install pandoc
+        run: sudo apt-get install -y pandoc
+
+      - name: Assemble site
+        run: |
+          # ── Directory scaffold ────────────────────────────────────────────
+          mkdir -p _site/presentation/node_modules/reveal.js/dist/theme
+          mkdir -p _site/presentation/node_modules/reveal.js/plugin/zoom
+          mkdir -p _site/presentation/node_modules/reveal.js/plugin/notes
+          mkdir -p _site/docs
+
+          # ── reveal.js presentation (served under /presentation/) ──────────
+          cp slides-reveal.js/semantic-constraints-presentation.html \
+             _site/presentation/index.html
+
+          cp slides-reveal.js/node_modules/reveal.js/dist/reset.css \
+             _site/presentation/node_modules/reveal.js/dist/
+          cp slides-reveal.js/node_modules/reveal.js/dist/reveal.css \
+             _site/presentation/node_modules/reveal.js/dist/
+          cp slides-reveal.js/node_modules/reveal.js/dist/reveal.js \
+             _site/presentation/node_modules/reveal.js/dist/
+          cp slides-reveal.js/node_modules/reveal.js/dist/theme/league.css \
+             _site/presentation/node_modules/reveal.js/dist/theme/
+          cp slides-reveal.js/node_modules/reveal.js/plugin/zoom/zoom.js \
+             _site/presentation/node_modules/reveal.js/plugin/zoom/
+          cp slides-reveal.js/node_modules/reveal.js/plugin/notes/notes.js \
+             _site/presentation/node_modules/reveal.js/plugin/notes/
+
+          # ── Shared CSS injected into every doc page via pandoc -H ─────────
+          # Theme: Claude Code-inspired (dark charcoal, orange accents, system fonts)
+          cat > /tmp/doc-style.html << 'STYLEEOF'
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <style>
+            :root {
+              --bg:       #141414;
+              --bg2:      #1e1e1e;
+              --bg3:      #2a2a2a;
+              --text:     #e0e0e0;
+              --muted:    #999;
+              --accent:   #d4774a;
+              --link:     #60a5fa;
+              --border:   #333;
+            }
+            *{box-sizing:border-box}
+            body{
+              font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+              max-width:880px;margin:2rem auto;padding:0 1.5rem;
+              color:var(--text);background:var(--bg);line-height:1.75;font-size:1rem;
+            }
+            h1,h2,h3,h4{color:var(--accent);font-weight:600;line-height:1.3;margin-top:2rem}
+            h1{font-size:1.8rem;border-bottom:1px solid var(--border);padding-bottom:.5rem}
+            h2{font-size:1.35rem}
+            h3{font-size:1.1rem}
+            a{color:var(--link);text-decoration:none}
+            a:hover{text-decoration:underline}
+            p{margin:.75rem 0}
+            code{
+              font-family:"SF Mono","Fira Code","Roboto Mono",Menlo,monospace;
+              font-size:.875em;background:var(--bg2);border-radius:4px;
+              padding:.15em .45em;border:1px solid var(--border);
+            }
+            pre{
+              background:var(--bg2);padding:1.1em 1.25em;border-radius:6px;
+              overflow-x:auto;border:1px solid var(--border);margin:1.25rem 0;
+            }
+            pre code{padding:0;background:none;border:none;font-size:.85em}
+            blockquote{
+              border-left:3px solid var(--accent);margin:1.25rem 0;
+              padding:.5rem 1rem;background:var(--bg2);border-radius:0 4px 4px 0;
+              color:var(--muted);
+            }
+            table{border-collapse:collapse;width:100%;margin:1.25rem 0;font-size:.9rem}
+            th,td{border:1px solid var(--border);padding:.5em .85em;text-align:left}
+            th{background:var(--bg2);color:var(--accent);font-weight:600}
+            tr:nth-child(even) td{background:var(--bg2)}
+            img{max-width:100%;border-radius:4px}
+            hr{border:none;border-top:1px solid var(--border);margin:2rem 0}
+            strong{color:#f0c090}
+          </style>
+          STYLEEOF
+
+          # ── Shared nav bar injected before body content via pandoc -B ─────
+          cat > /tmp/doc-nav.html << 'NAVEOF'
+          <nav style="margin-bottom:2.5rem;padding-bottom:1rem;border-bottom:1px solid #333;
+                      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+                      font-size:.875rem">
+            <a href="../" style="color:#60a5fa;text-decoration:none">← Home</a>
+            &nbsp;&nbsp;|&nbsp;&nbsp;
+            <a href="./" style="color:#60a5fa;text-decoration:none">↑ Docs index</a>
+          </nav>
+          NAVEOF
+
+          # ── Convert markdown docs to HTML (skip universality-references) ──
+          # --mathjax enables MathJax for $...$ and $$...$$ rendering
+          for md in "texts.md"/*.md; do
+            base=$(basename "$md" .md)
+            [ "$base" = "universality-references" ] && continue
+            pandoc "$md" \
+              --standalone \
+              --from=markdown+tex_math_dollars \
+              --mathjax \
+              --metadata title="${base//-/ }" \
+              --highlight-style=espresso \
+              -H /tmp/doc-style.html \
+              -B /tmp/doc-nav.html \
+              -o "_site/docs/${base}.html"
+            echo "Converted: $base"
+          done
+
+          # ── Docs index page ───────────────────────────────────────────────
+          cat > _site/docs/index.html << 'DOCSEOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Research Documents</title>
+            <style>
+              :root{--bg:#141414;--bg2:#1e1e1e;--text:#e0e0e0;--accent:#d4774a;
+                    --link:#60a5fa;--border:#333;--muted:#999}
+              *{box-sizing:border-box}
+              body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+                   max-width:880px;margin:2rem auto;padding:0 1.5rem;
+                   color:var(--text);background:var(--bg);line-height:1.75}
+              h1{color:var(--accent);font-size:1.8rem;border-bottom:1px solid var(--border);
+                 padding-bottom:.5rem;margin-bottom:1.5rem}
+              nav{margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid var(--border);
+                  font-size:.875rem}
+              a{color:var(--link);text-decoration:none}
+              a:hover{text-decoration:underline}
+              ul{list-style:none;padding:0;margin:0}
+              li{padding:.65rem 0;border-bottom:1px solid var(--border)}
+              li:last-child{border-bottom:0}
+              li a{font-size:1rem}
+            </style>
+          </head>
+          <body>
+            <nav><a href="../">← Home</a></nav>
+            <h1>Research Documents</h1>
+            <ul>
+          DOCSEOF
+
+          for md in "texts.md"/*.md; do
+            base=$(basename "$md" .md)
+            [ "$base" = "universality-references" ] && continue
+            label="${base//-/ }"
+            echo "      <li><a href=\"${base}.html\">${label}</a></li>" \
+              >> _site/docs/index.html
+          done
+
+          cat >> _site/docs/index.html << 'DOCSEOF'
+            </ul>
+          </body>
+          </html>
+          DOCSEOF
+
+          # ── Landing page ──────────────────────────────────────────────────
+          cat > _site/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Geometric Feature Invariance in SAEs</title>
+            <style>
+              :root{--bg:#141414;--bg2:#1e1e1e;--text:#e0e0e0;--accent:#d4774a;
+                    --link:#60a5fa;--border:#333;--muted:#999}
+              *{box-sizing:border-box}
+              body{
+                font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+                margin:0;background:var(--bg);color:var(--text);
+                display:flex;flex-direction:column;align-items:center;
+                justify-content:center;min-height:100vh;padding:2rem;
+              }
+              h1{color:var(--accent);text-align:center;font-size:2rem;
+                 font-weight:700;margin-bottom:.5rem}
+              .subtitle{color:var(--muted);text-align:center;margin-bottom:3rem;
+                        max-width:600px;line-height:1.65;font-size:.95rem}
+              .cards{display:flex;gap:2rem;flex-wrap:wrap;justify-content:center}
+              .card{
+                background:var(--bg2);border:1px solid var(--border);border-radius:8px;
+                padding:2rem;max-width:340px;width:100%;text-align:center;
+              }
+              .card:hover{border-color:var(--accent);transition:border-color .2s}
+              .card h2{color:var(--accent);margin-top:0;font-size:1.25rem}
+              .card p{color:var(--muted);font-size:.9rem;line-height:1.65}
+              .btn{
+                display:inline-block;margin-top:1.2rem;padding:.65rem 1.5rem;
+                background:var(--accent);color:#fff;border-radius:4px;
+                text-decoration:none;font-weight:600;font-size:.9rem;
+              }
+              .btn:hover{background:#e08860}
+            </style>
+          </head>
+          <body>
+            <h1>Geometric Feature Invariance in SAEs</h1>
+            <p class="subtitle">
+              A Framework for Transferable Mechanistic Interpretability
+              and Scalable AI Safety
+            </p>
+            <div class="cards">
+              <div class="card">
+                <h2>Presentation</h2>
+                <p>
+                  <em>Enforcing Semantic Constraints in SynthSAEBench</em> —
+                  interactive reveal.js slide deck.
+                </p>
+                <a class="btn" href="presentation/">Open slides →</a>
+              </div>
+              <div class="card">
+                <h2>Research Documents</h2>
+                <p>
+                  Research notes, proposals, literature summaries,
+                  and implementation plans.
+                </p>
+                <a class="btn" href="docs/">Browse docs →</a>
+              </div>
+            </div>
+          </body>
+          </html>
+          EOF
+
+          # Prevent GitHub Pages from running Jekyll
+          touch _site/.nojekyll
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
