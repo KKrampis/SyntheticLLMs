@@ -34,6 +34,9 @@ jobs:
         working-directory: slides-reveal.js
         run: npm ci
 
+      - name: Install pandoc
+        run: sudo apt-get install -y pandoc
+
       - name: Assemble site
         run: |
           # ── Directory scaffold ────────────────────────────────────────────
