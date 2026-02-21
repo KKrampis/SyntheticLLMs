@@ -128,7 +128,10 @@ jobs:
 
           # ── Convert markdown docs to HTML (skip universality-references) ──
           # --mathjax enables MathJax for $...$ and $$...$$ rendering
-          for md in "texts.md"/*.md; do
+          # find+mapfile avoids glob issues with dotted directory names / spaces
+          mapfile -t md_files < <(find texts.md -maxdepth 1 -name "*.md" -type f | sort)
+          echo "Found ${#md_files[@]} markdown files"
+          for md in "${md_files[@]}"; do
             base=$(basename "$md" .md)
             [ "$base" = "universality-references" ] && continue
             pandoc "$md" \
@@ -176,7 +179,7 @@ jobs:
             <ul>
           DOCSEOF
 
-          for md in "texts.md"/*.md; do
+          for md in "${md_files[@]}"; do
             base=$(basename "$md" .md)
             [ "$base" = "universality-references" ] && continue
             label="${base//-/ }"
