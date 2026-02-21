@@ -6,7 +6,7 @@ While SynthSAEBench's current hierarchy mechanism only enforces probabilistic de
 
 **Implementing d_⊥:**
 
-To get a vector orthogonal to the parent direction, you use **Gram-Schmidt orthogonalization**. You start with a random vector v, then subtract off its projection onto the parent direction:
+To get a vector orthogonal to the parent direction, you use **Gram-Schmidt  orthogonalization**. You start with a random vector v, then subtract off its projection onto the parent direction:
 
 **$d_{\perp} = v - (v \cdot d_{\text{parent}}) d_{\text{parent}}$**
 
