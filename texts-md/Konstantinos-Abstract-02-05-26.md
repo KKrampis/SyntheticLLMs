@@ -12,8 +12,6 @@ This work addresses fundamental challenges in mechanistic interpretability and A
 
 Expected outcomes include: (1) clear characterization of geometric patterns that remain stable across models, (2) transformation methods that reliably map feature correspondences validated against synthetic ground-truth, (3) improved SAE training guidelines prioritizing cross-model compatibility, and (4) demonstrations that safety-relevant interventions transfer from smaller to larger models in the same family. This research will accelerate mechanistic interpretability, enable efficient safety analysis of model families, and provide scalable methods for monitoring AI systems as they grow in capability and complexity.
 
-
-
 ### Theory of Change
 
 Activities: We will develop multi-model synthetic benchmarks where multiple synthetic LLMs with known but different feature decompositions generate training data, enabling controlled testing of whether SAEs trained on one synthetic model can transfer to another through the geometric transformations identified by universality via invariant transformations.

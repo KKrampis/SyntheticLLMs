@@ -2,7 +2,7 @@
 
 ## Overview: From Abstract Hierarchies to Semantic Structure
 
-Yes, there is a powerful way to enforce hierarchies that provide semantic meaning for specific topics, including AI safety-relevant concepts like harmful actions, scheming, and deception. The key insight is that SynthSAEBench's hierarchy mechanism can be reinterpreted as a **semantic taxonomy** rather than just an abstract parent-child relationship. Instead of having arbitrary hierarchical features, we can deliberately construct hierarchy trees that mirror real conceptual structures, including dangerous capability domains. This transforms the synthetic benchmark from a purely statistical testbed into a **semantically grounded simulation** where we can study how SAEs decompose and represent structured knowledge that matters for AI safety.
+The key insight is that SynthSAEBench's hierarchy mechanism can be reinterpreted as a **semantic taxonomy** rather than just an abstract parent-child relationship. Instead of having arbitrary hierarchical features, we can deliberately construct hierarchy trees that mirror real conceptual structures, including dangerous capability domains. This transforms the synthetic benchmark from a purely statistical testbed into a **semantically grounded simulation** where we can study how SAEs decompose and represent structured knowledge that matters for AI safety.
 
 ## Technical Implementation: Building Semantic Concept Trees
 
