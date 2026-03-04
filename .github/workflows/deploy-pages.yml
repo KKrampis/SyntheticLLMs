@@ -44,6 +44,7 @@ jobs:
           mkdir -p _site/presentation/node_modules/reveal.js/plugin/zoom
           mkdir -p _site/presentation/node_modules/reveal.js/plugin/notes
           mkdir -p _site/docs
+          mkdir -p _site/paper
 
           # ── reveal.js presentation (served under /presentation/) ──────────
           cp slides-reveal.js/semantic-constraints-presentation.html \
@@ -126,6 +127,17 @@ jobs:
           </nav>
           NAVEOF
 
+          # ── Shared nav bar for paper section ──────────────────────────────
+          cat > /tmp/paper-nav.html << 'PAPERNAVEOF'
+          <nav style="margin-bottom:2.5rem;padding-bottom:1rem;border-bottom:1px solid #333;
+                      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+                      font-size:.875rem">
+            <a href="../" style="color:#60a5fa;text-decoration:none">← Home</a>
+            &nbsp;&nbsp;|&nbsp;&nbsp;
+            <a href="./" style="color:#60a5fa;text-decoration:none">↑ Paper index</a>
+          </nav>
+          PAPERNAVEOF
+
           # ── Convert markdown docs to HTML (skip universality-references) ──
           # --mathjax enables MathJax for $...$ and $$...$$ rendering
           # find+mapfile avoids glob issues with dotted directory names / spaces
@@ -193,6 +205,71 @@ jobs:
           </html>
           DOCSEOF
 
+          # ── Research Paper (midpoint files) ───────────────────────────────
+          # Find and process midpoint files
+          mapfile -t paper_files < <(find . -maxdepth 1 -name "*midpoint*" -o -name "*Midpoint*" -type f | sort)
+          echo "Found ${#paper_files[@]} research paper files"
+          
+          for paper_file in "${paper_files[@]}"; do
+            base=$(basename "$paper_file" .md)
+            pandoc "$paper_file" \
+              --standalone \
+              --from=markdown+tex_math_dollars \
+              --mathjax \
+              --metadata title="${base//-/ }" \
+              --highlight-style=espresso \
+              -H /tmp/doc-style.html \
+              -B /tmp/paper-nav.html \
+              -o "_site/paper/${base}.html"
+            echo "Converted research paper: $base"
+          done
+
+          # ── Paper index page ──────────────────────────────────────────────
+          cat > _site/paper/index.html << 'PAPEREOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Research Paper</title>
+            <style>
+              :root{--bg:#141414;--bg2:#1e1e1e;--text:#e0e0e0;--accent:#d4774a;
+                    --link:#60a5fa;--border:#333;--muted:#999}
+              *{box-sizing:border-box}
+              body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+                   max-width:880px;margin:2rem auto;padding:0 1.5rem;
+                   color:var(--text);background:var(--bg);line-height:1.75}
+              h1{color:var(--accent);font-size:1.8rem;border-bottom:1px solid var(--border);
+                 padding-bottom:.5rem;margin-bottom:1.5rem}
+              nav{margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid var(--border);
+                  font-size:.875rem}
+              a{color:var(--link);text-decoration:none}
+              a:hover{text-decoration:underline}
+              ul{list-style:none;padding:0;margin:0}
+              li{padding:.65rem 0;border-bottom:1px solid var(--border)}
+              li:last-child{border-bottom:0}
+              li a{font-size:1rem}
+            </style>
+          </head>
+          <body>
+            <nav><a href="../">← Home</a></nav>
+            <h1>Research Paper</h1>
+            <ul>
+          PAPEREOF
+
+          for paper_file in "${paper_files[@]}"; do
+            base=$(basename "$paper_file" .md)
+            label="${base//-/ }"
+            echo "      <li><a href=\"${base}.html\">${label}</a></li>" \
+              >> _site/paper/index.html
+          done
+
+          cat >> _site/paper/index.html << 'PAPEREOF'
+            </ul>
+          </body>
+          </html>
+          PAPEREOF
+
           # ── Landing page ──────────────────────────────────────────────────
           cat > _site/index.html << 'EOF'
           <!DOCTYPE html>
@@ -253,6 +330,14 @@ jobs:
                   and implementation plans.
                 </p>
                 <a class="btn" href="docs/">Browse docs →</a>
+              </div>
+              <div class="card">
+                <h2>Research Paper</h2>
+                <p>
+                  Formal research paper with arXiv structure,
+                  including abstract and theoretical framework.
+                </p>
+                <a class="btn" href="paper/">Read paper →</a>
               </div>
             </div>
           </body>
