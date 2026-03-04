@@ -2,8 +2,6 @@
 
 ## The Core Limitation: Statistics Without Semantics
 
-
-
 SynthSAEBench's hierarchy mechanism is purely **statistical**, not semantic. It enforces probabilistic dependencies (child features can only fire when parents fire) but has zero understanding of what those features actually mean. When we label a feature as "Deceptive Reasoning" with children "Goal Misrepresentation" and "Information Withholding," those labels are purely for our bookkeeping - the synthetic model doesn't know or care about deception, goals, or information. From the model's perspective, it's just:
 
 - Feature 42 (parent): fires with probability 0.001, represented by direction vector $d_{42} \in \mathbb{R}^{768}$

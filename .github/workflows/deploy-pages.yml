@@ -64,9 +64,12 @@ jobs:
              _site/presentation/node_modules/reveal.js/plugin/notes/
 
           # ── Shared CSS injected into every doc page via pandoc -H ─────────
-          # Theme: Claude Code-inspired (dark charcoal, orange accents, system fonts)
+          # Theme: Claude Code-inspired (dark charcoal, orange accents, Open Sans font)
           cat > /tmp/doc-style.html << 'STYLEEOF'
           <meta name="viewport" content="width=device-width, initial-scale=1">
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+          <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
           <style>
             :root {
               --bg:       #141414;
@@ -80,7 +83,7 @@ jobs:
             }
             *{box-sizing:border-box}
             body{
-              font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+              font-family:"Open Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
               max-width:880px;margin:2rem auto;padding:0 1.5rem;
               color:var(--text);background:var(--bg);line-height:1.75;font-size:1rem;
             }
@@ -166,11 +169,14 @@ jobs:
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <title>Research Documents</title>
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
             <style>
               :root{--bg:#141414;--bg2:#1e1e1e;--text:#e0e0e0;--accent:#d4774a;
                     --link:#60a5fa;--border:#333;--muted:#999}
               *{box-sizing:border-box}
-              body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+              body{font-family:"Open Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
                    max-width:880px;margin:2rem auto;padding:0 1.5rem;
                    color:var(--text);background:var(--bg);line-height:1.75}
               h1{color:var(--accent);font-size:1.8rem;border-bottom:1px solid var(--border);
@@ -232,11 +238,14 @@ jobs:
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <title>Research Paper</title>
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
             <style>
               :root{--bg:#141414;--bg2:#1e1e1e;--text:#e0e0e0;--accent:#d4774a;
                     --link:#60a5fa;--border:#333;--muted:#999}
               *{box-sizing:border-box}
-              body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+              body{font-family:"Open Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
                    max-width:880px;margin:2rem auto;padding:0 1.5rem;
                    color:var(--text);background:var(--bg);line-height:1.75}
               h1{color:var(--accent);font-size:1.8rem;border-bottom:1px solid var(--border);
@@ -278,12 +287,15 @@ jobs:
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <title>Geometric Feature Invariance in SAEs</title>
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
             <style>
               :root{--bg:#141414;--bg2:#1e1e1e;--text:#e0e0e0;--accent:#d4774a;
                     --link:#60a5fa;--border:#333;--muted:#999}
               *{box-sizing:border-box}
               body{
-                font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+                font-family:"Open Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
                 margin:0;background:var(--bg);color:var(--text);
                 display:flex;flex-direction:column;align-items:center;
                 justify-content:center;min-height:100vh;padding:2rem;
@@ -317,27 +329,15 @@ jobs:
             <div class="cards">
               <div class="card">
                 <h2>Presentation</h2>
-                <p>
-                  <em>Enforcing Semantic Constraints in SynthSAEBench</em> —
-                  interactive reveal.js slide deck.
-                </p>
                 <a class="btn" href="presentation/">Open slides →</a>
               </div>
               <div class="card">
                 <h2>Research Documents</h2>
-                <p>
-                  Research notes, proposals, literature summaries,
-                  and implementation plans.
-                </p>
                 <a class="btn" href="docs/">Browse docs →</a>
               </div>
               <div class="card">
                 <h2>Research Paper</h2>
-                <p>
-                  Formal research paper with arXiv structure,
-                  including abstract and theoretical framework.
-                </p>
-                <a class="btn" href="paper/">Read paper →</a>
+                <a class="btn" href="paper/Krampis-Midpoint-Mar03-2026.html">Read paper →</a>
               </div>
             </div>
           </body>
