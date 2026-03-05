@@ -19,6 +19,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -32,6 +33,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: slides-reveal.js
+        timeout-minutes: 5
         run: npm ci
 
       - name: Install pandoc
@@ -144,8 +146,10 @@ jobs:
           # ── Convert markdown docs to HTML (skip universality-references) ──
           # --mathjax enables MathJax for $...$ and $$...$$ rendering
           # find+mapfile avoids glob issues with dotted directory names / spaces
+          echo "Looking for markdown files in texts-md directory..."
+          ls -la texts-md/
           mapfile -t md_files < <(find texts-md -maxdepth 1 -name "*.md" -type f | sort)
-          echo "Found ${#md_files[@]} markdown files"
+          echo "Found ${#md_files[@]} markdown files: ${md_files[*]}"
           for md in "${md_files[@]}"; do
             base=$(basename "$md" .md)
             [ "$base" = "universality-references" ] && continue
@@ -213,8 +217,10 @@ jobs:
 
           # ── Research Paper (midpoint files) ───────────────────────────────
           # Find and process midpoint files
+          echo "Looking for midpoint files in current directory..."
+          ls -la *midpoint* *Midpoint* 2>/dev/null || echo "No midpoint files found with ls"
           mapfile -t paper_files < <(find . -maxdepth 1 -name "*midpoint*" -o -name "*Midpoint*" -type f | sort)
-          echo "Found ${#paper_files[@]} research paper files"
+          echo "Found ${#paper_files[@]} research paper files: ${paper_files[*]}"
           
           for paper_file in "${paper_files[@]}"; do
             base=$(basename "$paper_file" .md)
