@@ -219,7 +219,7 @@ jobs:
           # Find and process midpoint files
           echo "Looking for midpoint files in current directory..."
           ls -la *midpoint* *Midpoint* 2>/dev/null || echo "No midpoint files found with ls"
-          mapfile -t paper_files < <(find . -maxdepth 1 -name "*midpoint*" -o -name "*Midpoint*" -type f | sort)
+          mapfile -t paper_files < <(find . -maxdepth 1 \( -name "*midpoint*.md" -o -name "*Midpoint*.md" \) -type f | sort)
           echo "Found ${#paper_files[@]} research paper files: ${paper_files[*]}"
           
           for paper_file in "${paper_files[@]}"; do
