@@ -11,7 +11,11 @@
       "Bash(git pull origin claude/github-pages-reveal-js-QCbwc)",
       "Bash(git checkout claude/list-semantic-md-files-JRGXf)",
       "Bash(git pull origin claude/list-semantic-md-files-JRGXf)",
-      "Bash(git add .claude/settings.local.json Krampis-Midpoint-Mar03-2026.md Krampis-Mar10-2026.md posts-md/ \"texts-md/.claude/\" \"texts-md/SAE Metrics Overview.md\")"
+      "Bash(git add .claude/settings.local.json Krampis-Midpoint-Mar03-2026.md Krampis-Mar10-2026.md posts-md/ \"texts-md/.claude/\" \"texts-md/SAE Metrics Overview.md\")",
+      "Bash(git commit -m \"$(cat <<''EOF''\nUpdate Claude settings and add new markdown content\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git add .claude/settings.local.json)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nUpdate Claude settings configuration\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git checkout claude/github-pages-reveal-js-QCbwc)"
     ],
     "deny": [],
     "ask": []
