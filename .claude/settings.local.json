@@ -1,11 +1,17 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git commit -m \"added midpoint paper\")",
-      "Bash(git add .github/workflows/deploy-pages.yml)",
-      "Bash(git commit -m \"fix workflow timeout issues - add timeout limits and debug output\")",
-      "Bash(git push)",
-      "Bash(git commit -m \"fix workflow - only process .md files, not PDFs\")"
+      "WebFetch(domain:ar5iv.labs.arxiv.org)",
+      "WebFetch(domain:arxiv.org)",
+      "WebSearch",
+      "Bash(git fetch origin)",
+      "Bash(git checkout -b claude/github-pages-reveal-js-QCbwc origin/claude/github-pages-reveal-js-QCbwc)",
+      "Bash(git checkout -b claude/list-semantic-md-files-JRGXf origin/claude/list-semantic-md-files-JRGXf)",
+      "Bash(git checkout main)",
+      "Bash(git pull origin claude/github-pages-reveal-js-QCbwc)",
+      "Bash(git checkout claude/list-semantic-md-files-JRGXf)",
+      "Bash(git pull origin claude/list-semantic-md-files-JRGXf)",
+      "Bash(git add .claude/settings.local.json Krampis-Midpoint-Mar03-2026.md Krampis-Mar10-2026.md posts-md/ \"texts-md/.claude/\" \"texts-md/SAE Metrics Overview.md\")"
     ],
     "deny": [],
     "ask": []
