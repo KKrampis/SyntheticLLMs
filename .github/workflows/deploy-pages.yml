@@ -48,6 +48,9 @@ jobs:
           mkdir -p _site/docs
           mkdir -p _site/paper
 
+          # ── Copy pitch PDF ────────────────────────────────────────────────
+          cp "Geometric_SAE_Invariance Pitch v1.pdf" "_site/Geometric_SAE_Invariance Pitch v1.pdf"
+
           # ── reveal.js presentation (served under /presentation/) ──────────
           cp slides-reveal.js/semantic-constraints-presentation.html \
              _site/presentation/index.html
@@ -356,6 +359,11 @@ jobs:
               <div class="card">
                 <h2>Research Paper</h2>
                 <a class="btn" href="paper/Krampis-Midpoint-Mar03-2026.html">Read paper →</a>
+              </div>
+              <div class="card">
+                <h2>Pitch Presentation</h2>
+                <p style="color:var(--muted);font-size:.9rem;line-height:1.65">Geometric SAE Invariance pitch deck (PDF)</p>
+                <a class="btn" href="Geometric_SAE_Invariance Pitch v1.pdf">View PDF →</a>
               </div>
             </div>
           </body>
