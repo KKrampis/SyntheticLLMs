@@ -49,7 +49,7 @@ jobs:
           mkdir -p _site/paper
 
           # ── Copy pitch PDF ────────────────────────────────────────────────
-          cp "Geometric_SAE_Invariance Pitch v1.pdf" "_site/Geometric_SAE_Invariance Pitch v1.pdf"
+          cp "Geometric_SAE_Invariance Pitch v1.pdf" "_site/Geometric_SAE_Invariance v1.pdf"
 
           # ── reveal.js presentation (served under /presentation/) ──────────
           cp slides-reveal.js/semantic-constraints-presentation.html \
@@ -243,7 +243,7 @@ jobs:
             pandoc "$paper_file" \
               --standalone \
               --from=markdown+tex_math_dollars \
-              --metadata title="${base//-/ }" \
+              --metadata title="Geometric Feature Invariance in SAEs" \
               --highlight-style=espresso \
               -H /tmp/doc-style.html \
               -B /tmp/paper-nav.html \
@@ -351,7 +351,7 @@ jobs:
               <div class="card">
                 <h2>Presentation</h2>
                 <p style="color:var(--muted);font-size:.9rem;line-height:1.65">Geometric SAE Invariance pitch deck (PDF)</p>
-                <a class="btn" href="Geometric_SAE_Invariance Pitch v1.pdf">View PDF →</a>
+                <a class="btn" href="Geometric_SAE_Invariance v1.pdf">View PDF →</a>
               </div>
               <div class="card">
                 <h2>Research Paper</h2>
