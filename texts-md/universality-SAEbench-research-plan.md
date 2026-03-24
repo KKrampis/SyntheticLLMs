@@ -2,7 +2,7 @@
 
 ## Research Document: Detailed Implementation of Joint Research Directions
 
-**Authors:** Research Team  
+
 **Date:** February 2026  
 **Version:** 1.0
 
