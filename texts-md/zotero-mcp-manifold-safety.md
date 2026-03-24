@@ -1,4 +1,4 @@
-I'll search your Zotero collection for papers related to invariant geometric structures and feature transferability in AI safety contexts.Now let me get more detailed information on the most relevant papers for understanding invariant geometric structures and transferability in the context of AI safety:Let me get one more key paper on representation similarity:Now let me search for papers specifically related to AI safety features:Based on the papers in your Manifolds collection and related AI safety research, I can now provide a comprehensive analysis of invariant geometric structure transferability for AI safety-related features in models.
+
 
 ---
 

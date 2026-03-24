@@ -2,7 +2,6 @@
 
 **Extended Technical Research Plan**
 
-**Authors:** Research Team
 **Date:** February 2026
 **Based on:** SynthSAEBench: Evaluating Sparse Autoencoders on Scalable Realistic Synthetic Data
 
