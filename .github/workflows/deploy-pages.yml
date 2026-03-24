@@ -49,7 +49,7 @@ jobs:
           mkdir -p _site/paper
 
           # ── Copy pitch PDF ────────────────────────────────────────────────
-          cp "Geometric_SAE_Invariance Pitch v1.pdf" "_site/Geometric_SAE_Invariance v1.pdf"
+          cp "Geometric_SAE_Invariance v1.pdf" "_site/Geometric_SAE_Invariance v1.pdf"
 
           # ── reveal.js presentation (served under /presentation/) ──────────
           cp slides-reveal.js/semantic-constraints-presentation.html \
