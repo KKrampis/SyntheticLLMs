@@ -80,15 +80,7 @@ The resulting feature directions integrate directly into SynthSAEBench's hierarc
 
 ## 4. Results
 
-[Results generation plan]
-
- **Week 1:** Mar. 4 – Mar. 8, set up SynthSAEBench and start running sample data.
-
- **Week 2:** Mar. 9 – Mar. 15, domain knowledge hierachy set, encoding into hierarchy following theoretical framework described in earlier sections, initial SAE runs.
-
- **Week 3:** Mar. 16 – Mar. 22, a set of parametrized runs, output colletion and visualization. 
-
- **Week 4:** Mar. 23 – Mar. 27, results section writing and discussion, overall polishing of manuscript.
+[Results to be developed]
 
 ## 5. Discussion
 
