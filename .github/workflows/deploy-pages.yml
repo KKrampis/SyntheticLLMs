@@ -239,7 +239,6 @@ jobs:
           echo "Found ${#paper_files[@]} research paper files: ${paper_files[*]}"
           
           for paper_file in "${paper_files[@]}"; do
-            base=$(basename "$paper_file" .md)
             pandoc "$paper_file" \
               --standalone \
               --from=markdown+tex_math_dollars \
@@ -247,8 +246,8 @@ jobs:
               --highlight-style=espresso \
               -H /tmp/doc-style.html \
               -B /tmp/paper-nav.html \
-              -o "_site/paper/${base}.html"
-            echo "Converted research paper: $base"
+              -o "_site/paper/Krampis-Mar03-2026.html"
+            echo "Converted research paper"
           done
 
           # ── Paper index page ──────────────────────────────────────────────
@@ -288,9 +287,7 @@ jobs:
           PAPEREOF
 
           for paper_file in "${paper_files[@]}"; do
-            base=$(basename "$paper_file" .md)
-            label="${base//-/ }"
-            echo "      <li><a href=\"${base}.html\">${label}</a></li>" \
+            echo "      <li><a href=\"Krampis-Mar03-2026.html\">Geometric Feature Invariance in SAEs</a></li>" \
               >> _site/paper/index.html
           done
 
@@ -355,7 +352,7 @@ jobs:
               </div>
               <div class="card">
                 <h2>Research Paper</h2>
-                <a class="btn" href="paper/Krampis-Midpoint-Mar03-2026.html">Read paper →</a>
+                <a class="btn" href="paper/Krampis-Mar03-2026.html">Read paper →</a>
               </div>
               <div class="card">
                 <h2>Research Documents</h2>
