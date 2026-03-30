@@ -91,14 +91,14 @@ jobs:
           <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
           <style>
             :root {
-              --bg:       #2b2b2b;
-              --bg2:      #353535;
-              --bg3:      #404040;
-              --text:     #e8e8e8;
-              --muted:    #aaa;
+              --bg:       #3c3c3c;
+              --bg2:      #484848;
+              --bg3:      #545454;
+              --text:     #f0f0f0;
+              --muted:    #c0c0c0;
               --accent:   #d4774a;
               --link:     #60a5fa;
-              --border:   #4a4a4a;
+              --border:   #5e5e5e;
             }
             *{box-sizing:border-box}
             body{
@@ -140,7 +140,7 @@ jobs:
 
           # ── Shared nav bar injected before body content via pandoc -B ─────
           cat > /tmp/doc-nav.html << 'NAVEOF'
-          <nav style="margin-bottom:2.5rem;padding-bottom:1rem;border-bottom:1px solid #4a4a4a;
+          <nav style="margin-bottom:2.5rem;padding-bottom:1rem;border-bottom:1px solid #5e5e5e;
                       font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
                       font-size:.875rem">
             <a href="../" style="color:#60a5fa;text-decoration:none">← Home</a>
@@ -151,7 +151,7 @@ jobs:
 
           # ── Shared nav bar for paper section ──────────────────────────────
           cat > /tmp/paper-nav.html << 'PAPERNAVEOF'
-          <nav style="margin-bottom:2.5rem;padding-bottom:1rem;border-bottom:1px solid #4a4a4a;
+          <nav style="margin-bottom:2.5rem;padding-bottom:1rem;border-bottom:1px solid #5e5e5e;
                       font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
                       font-size:.875rem">
             <a href="../" style="color:#60a5fa;text-decoration:none">← Home</a>
@@ -193,8 +193,8 @@ jobs:
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
             <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
             <style>
-              :root{--bg:#2b2b2b;--bg2:#353535;--text:#e8e8e8;--accent:#d4774a;
-                    --link:#60a5fa;--border:#4a4a4a;--muted:#aaa}
+              :root{--bg:#3c3c3c;--bg2:#484848;--text:#f0f0f0;--accent:#d4774a;
+                    --link:#60a5fa;--border:#5e5e5e;--muted:#c0c0c0}
               *{box-sizing:border-box}
               body{font-family:"Open Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
                    max-width:880px;margin:2rem auto;padding:0 1.5rem;
@@ -260,8 +260,8 @@ jobs:
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
             <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
             <style>
-              :root{--bg:#2b2b2b;--bg2:#353535;--text:#e8e8e8;--accent:#d4774a;
-                    --link:#60a5fa;--border:#4a4a4a;--muted:#aaa}
+              :root{--bg:#3c3c3c;--bg2:#484848;--text:#f0f0f0;--accent:#d4774a;
+                    --link:#60a5fa;--border:#5e5e5e;--muted:#c0c0c0}
               *{box-sizing:border-box}
               body{font-family:"Open Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
                    max-width:880px;margin:2rem auto;padding:0 1.5rem;
@@ -307,8 +307,8 @@ jobs:
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
             <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
             <style>
-              :root{--bg:#2b2b2b;--bg2:#353535;--text:#e8e8e8;--accent:#d4774a;
-                    --link:#60a5fa;--border:#4a4a4a;--muted:#aaa}
+              :root{--bg:#3c3c3c;--bg2:#484848;--text:#f0f0f0;--accent:#d4774a;
+                    --link:#60a5fa;--border:#5e5e5e;--muted:#c0c0c0}
               *{box-sizing:border-box}
               body{
                 font-family:"Open Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
