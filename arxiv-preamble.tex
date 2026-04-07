@@ -1,0 +1,61 @@
+% arXiv-style preamble for pandoc PDF compilation
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{microtype}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{parskip}
+\usepackage{enumitem}
+\usepackage{mdframed}
+
+% Color palette
+\definecolor{arxivblue}{RGB}{0,113,188}
+\definecolor{lightgray}{RGB}{245,245,245}
+\definecolor{borderblue}{RGB}{0,113,188}
+
+% Hyperref (must load after most packages)
+\usepackage[colorlinks=true,linkcolor=arxivblue,citecolor=arxivblue,urlcolor=arxivblue]{hyperref}
+
+% Page style
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\small\textit{Geometric Feature Invariance in SAEs}}
+\fancyhead[R]{\small\thepage}
+\fancyfoot[C]{}
+
+% Section formatting — arXiv style
+\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}[\vspace{0.2em}\hrule\vspace{0.4em}]
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\itshape}{\thesubsubsection}{1em}{}
+
+% Paragraph spacing
+\setlength{\parskip}{0.45em}
+\setlength{\parindent}{0pt}
+
+% Abstract box
+\usepackage{abstract}
+\renewcommand{\abstractnamefont}{\normalfont\bfseries}
+\renewcommand{\abstracttextfont}{\normalfont\small}
+\setlength{\absleftindent}{1.5em}
+\setlength{\absrightindent}{1.5em}
+
+% Math display spacing
+\AtBeginDocument{%
+  \setlength{\abovedisplayskip}{8pt}
+  \setlength{\belowdisplayskip}{8pt}
+}
+
+% Code / verbatim styling
+\usepackage{fancyvrb}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{%
+  commandchars=\\\{\},
+  fontsize=\small,
+  xleftmargin=1.5em,
+  frame=leftline,
+  framesep=4pt,
+  rulecolor=\color{lightgray}
+}

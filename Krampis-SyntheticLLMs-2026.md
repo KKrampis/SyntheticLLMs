@@ -1,10 +1,10 @@
 # Geometric Feature Invariance in SAEs: A Framework for Transferable Mechanistic Interpretability and Scalable AI Safety
 
-**Authors:** Konstantinos Krampis  
+**Authors:** Konstantinos Krampis, David Williams-King, David Chanin  
 **Affiliation:** [Institution]  
-**Date:** March 3, 2026
+**Date:** 2026
 
-**Targeted output:** NeurIPS, deadline April 06 - May 7th 2027.
+**Targeted output:** NeurIPS 2026.
 
 ## Abstract
 
