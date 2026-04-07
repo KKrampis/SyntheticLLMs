@@ -43,42 +43,61 @@
       --footer-bg:   #fafafa;
       --footer-bd:   #EDEDED;
     }
-    /* ── Monokai dark theme ── */
+    /* ── One Dark theme ── */
     html.dark {
-      --bg:          #272822;
-      --bg2:         #3E3D32;
-      --text:        #F8F8F2;
-      --muted:       #75715E;
-      --border:      #49483E;
-      --card-bg:     #3E3D32;
-      --card-border: #49483E;
-      --math-bg:     #1E1D18;
-      --math-bl:     #66D9EF;
-      --tbl-border:  #49483E;
-      --can-bg:      #1A280A;
-      --can-bd:      #A6E22E;
-      --cant-bg:     #280A15;
-      --cant-bd:     #F92672;
-      --ref-bd:      #3E3D32;
-      --toggle-bg:   #3E3D32;
-      --footer-bg:   #1E1D18;
-      --footer-bd:   #3E3D32;
+      --bg:          #282C34;   /* Atom One Dark background   */
+      --bg2:         #21252B;   /* deeper surface             */
+      --text:        #ABB2BF;   /* main body text             */
+      --muted:       #9DA5B4;   /* secondary text — readable  */
+      --border:      #3E4451;   /* subtle dividers            */
+      --card-bg:     #2C313C;   /* card / panel surface       */
+      --card-border: #3E4451;
+      --math-bg:     #21252B;
+      --math-bl:     #61AFEF;   /* One Dark blue              */
+      --tbl-border:  #3E4451;
+      --can-bg:      #1B2B1B;
+      --can-bd:      #98C379;   /* One Dark green             */
+      --cant-bg:     #2B1B1B;
+      --cant-bd:     #E06C75;   /* One Dark red               */
+      --ref-bd:      #3E4451;
+      --toggle-bg:   #3E4451;
+      --footer-bg:   #21252B;
+      --footer-bd:   #3E4451;
     }
-    /* Monokai accent overrides in dark mode */
-    html.dark .hl-green  { color: #A6E22E; }
-    html.dark .hl-purple { color: #AE81FF; }
-    html.dark .hl-blue   { color: #66D9EF; }
-    html.dark .hl-red    { color: #F92672; }
-    html.dark .publication-authors a  { color: #66D9EF; }
-    html.dark .ref-num                { color: #66D9EF; }
-    html.dark .title                  { color: var(--text) !important; }
+    /* One Dark accent + contrast overrides */
+    html.dark .hl-green               { color: #98C379; }
+    html.dark .hl-purple              { color: #C678DD; }
+    html.dark .hl-blue                { color: #61AFEF; }
+    html.dark .hl-red                 { color: #E06C75; }
+    html.dark .publication-authors a  { color: #61AFEF; }
+    html.dark .ref-num                { color: #61AFEF; }
+    /* Ensure all text layers are visible */
+    html.dark .title                  { color: #FFFFFF !important; }
+    html.dark .subtitle               { color: var(--muted) !important; }
     html.dark .content p,
-    html.dark .content li             { color: var(--text); }
+    html.dark .content li,
+    html.dark .content strong         { color: var(--text); }
+    html.dark .content strong         { color: #E5C07B; }  /* One Dark yellow */
+    html.dark .is-size-5,
     html.dark .is-size-6              { color: var(--muted) !important; }
-    /* SVG dark-mode: dim bright backgrounds, keep figure legible */
-    html.dark .figure-wrap .fig-bg    { fill: #3E3D32 !important; stroke: #49483E !important; }
-    html.dark .figure-wrap .fig-panel { fill: #272822 !important; stroke: #49483E !important; }
-    html.dark .figure-wrap svg        { filter: contrast(0.95); }
+    html.dark .toc-table td           { color: var(--text) !important; border-color: var(--border) !important; }
+    html.dark .figure-caption         { color: var(--muted) !important; }
+    html.dark .venue-badge            { color: var(--muted) !important; background: var(--bg2) !important;
+                                        border-color: var(--border) !important; }
+    html.dark .supp-card h3           { color: var(--text) !important; }
+    html.dark .ref-list li            { color: var(--text) !important; border-color: var(--border) !important; }
+    html.dark .can-box p,
+    html.dark .can-box li             { color: var(--text) !important; }
+    html.dark .cannot-box p,
+    html.dark .cannot-box li          { color: var(--text) !important; }
+    html.dark .can-box strong         { color: #98C379 !important; }
+    html.dark .cannot-box strong      { color: #E06C75 !important; }
+    html.dark .math-box               { color: var(--text) !important; }
+    html.dark .hero                   { background: var(--bg) !important; }
+    /* SVG dark-mode backgrounds */
+    html.dark .figure-wrap .fig-bg    { fill: #2C313C !important; stroke: #3E4451 !important; }
+    html.dark .figure-wrap .fig-panel { fill: #21252B !important; stroke: #3E4451 !important; }
+    html.dark .figure-wrap svg        { filter: contrast(0.97); }
 
     html { font-size: 12pt; }
     body {
