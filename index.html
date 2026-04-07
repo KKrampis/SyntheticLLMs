@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Geometric Feature Invariance in SAEs</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    html { font-size: 12pt; }
+    body { font-family: 'DM Sans', sans-serif; background: #fff; color: #222; }
+    .publication-title { font-size: 2.1rem; line-height: 1.3; }
+    .publication-authors a { color: #0071BC; text-decoration: none; }
+    .publication-authors a:hover { text-decoration: underline; }
+    .author-block { margin-right: 0.5rem; }
+    .publication-links .button { margin: 5px; }
+    hr.pub-divider { background-color: #EDEDED; height: 1px; border: none; margin: 1rem auto; width: 90vw; }
+    .figure-wrap { text-align: center; margin: 2rem 0 1.5rem; }
+    .figure-wrap svg { max-width: 100%; height: auto; }
+    .figure-caption { font-size: 0.88rem; color: #555; margin-top: 0.65rem; max-width: 700px; margin-left: auto; margin-right: auto; line-height: 1.5; }
+    .toc-table { width: 100%; border-collapse: collapse; }
+    .toc-table td { padding: 0.7rem 1rem; border-bottom: 1px solid #EDEDED; line-height: 1.6; }
+    .toc-table td:first-child { font-weight: 600; width: 170px; white-space: nowrap; color: #333; }
+    .math-box { background: #f8f9fa; border-left: 4px solid #0071BC; padding: 1rem 1.5rem; margin: 1.2rem 0; border-radius: 0 6px 6px 0; overflow-x: auto; }
+    .hl-green  { color: #009B55; font-weight: 600; }
+    .hl-purple { color: #92268F; font-weight: 600; }
+    .hl-blue   { color: #0071BC; font-weight: 600; }
+    .hl-red    { color: #ED1B23; font-weight: 600; }
+    .supp-card { border: 1px solid #ddd; border-radius: 10px; padding: 1.5rem; text-align: center; background: #fafafa; height: 100%; display: flex; flex-direction: column; align-items: center; }
+    .supp-card .supp-icon { font-size: 2rem; margin-bottom: 0.5rem; color: #555; }
+    .supp-card h3 { font-weight: 600; font-size: 1.05rem; margin-bottom: 0.4rem; }
+    .supp-card p { font-size: 0.9rem; color: #666; line-height: 1.5; flex-grow: 1; }
+    .ref-list { list-style: none; padding: 0; }
+    .ref-list li { padding: 0.4rem 0; border-bottom: 1px solid #f0f0f0; font-size: 0.9rem; line-height: 1.6; }
+    .ref-num { color: #0071BC; font-weight: 600; margin-right: 0.5rem; }
+    .content p { line-height: 1.75; }
+    .section { padding-top: 2rem; padding-bottom: 2rem; }
+  </style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-body" style="padding: 3rem 1.5rem 0.75rem;">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title publication-title">
+            Geometric Feature Invariance in SAEs:<br>
+            A Framework for Transferable Mechanistic&nbsp;Interpretability<br>
+            and Scalable AI Safety
+          </h1>
+          <div class="is-size-5 publication-authors" style="margin-top: 1rem;">
+            <span class="author-block">
+              <a href="#">Konstantinos Krampis</a>
+            </span>
+          </div>
+          <div class="is-size-6" style="color: #666; margin-top: 0.3rem;">
+            Target venue: <em>NeurIPS 2027</em>
+          </div>
+          <div class="publication-links" style="margin-top: 1rem;">
+            <span class="link-block">
+              <a href="Geometric_SAE_Invariance%20v1.pdf" target="_blank"
+                 class="button is-normal is-rounded is-dark">
+                <span class="icon"><i class="ai ai-arxiv"></i></span>
+                <span>Paper&nbsp;PDF</span>
+              </a>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="pub-divider">
+
+<!-- ===== ABSTRACT ===== -->
+<section class="section" style="padding-top: 1rem;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            This research integrates controlled synthetic model feature evaluation with
+            cross-model geometric feature invariance analysis, towards developing a principled
+            framework for <strong>transferable interpretability across model families and
+            variants</strong>. Recent work has shown that Sparse Autoencoders (SAEs) trained
+            on different LLMs learn geometrically similar feature spaces&mdash;exhibiting invariance
+            and analogous feature universality&mdash;while exhibiting trade-offs against synthetic
+            ground-truth features, meaning no current SAE architecture can perfectly recover
+            the ground-truth features.
+          </p>
+          <p>
+            Our work addresses fundamental challenges in mechanistic interpretability by
+            establishing principled methods for leveraging geometric feature universality.
+            Efficient feature transfer is critical for AI safety because it enables:
+            (1)&nbsp;rapid safety evaluation of new models without restarting interpretability
+            analysis from scratch,
+            (2)&nbsp;early detection of hazardous capabilities by comparing feature spaces to
+            known dangerous configurations,
+            (3)&nbsp;reliable monitoring across deployment contexts by tracking feature drift, and
+            (4)&nbsp;scalable oversight of large model families where per-model analysis
+            becomes infeasible.
+          </p>
+          <p>
+            During the project implementation we will characterize geometric patterns that
+            remain stable across models, and geometric transformation methods that reliably
+            map feature correspondences, validated against synthetic ground-truth.
+            Furthermore, we will demonstrate that safety-relevant interventions transfer
+            within the same family of models, or fine-tuned variants of a model. This
+            research will accelerate mechanistic interpretability and enable efficient safety
+            analysis as AI systems grow in capability and complexity.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="pub-divider">
+
+
+<!-- ===== FIGURE 1: SEMANTIC TAXONOMY ===== -->
+<section class="section" style="padding-top: 1rem; padding-bottom: 0.5rem;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths has-text-centered">
+        <div class="figure-wrap">
+          <svg viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg"
+               style="max-width: 760px; font-family: 'DM Sans', sans-serif;">
+            <rect width="800" height="340" fill="#fafafa" rx="12" stroke="#e0e0e0" stroke-width="1"/>
+            <text x="400" y="30" text-anchor="middle" font-size="14" font-weight="600" fill="#333">SynthSAEBench as Semantic Taxonomy</text>
+            <!-- Root node -->
+            <rect x="300" y="48" width="200" height="42" rx="8" fill="#0071BC"/>
+            <text x="400" y="73" text-anchor="middle" font-size="12" font-weight="600" fill="white">SAE Feature Space</text>
+            <!-- Level 1 nodes -->
+            <rect x="40" y="140" width="170" height="42" rx="8" fill="#009B55"/>
+            <text x="125" y="166" text-anchor="middle" font-size="11" font-weight="600" fill="white">Agency &amp; Planning</text>
+            <rect x="315" y="140" width="170" height="42" rx="8" fill="#009B55"/>
+            <text x="400" y="166" text-anchor="middle" font-size="11" font-weight="600" fill="white">Social Manipulation</text>
+            <rect x="590" y="140" width="170" height="42" rx="8" fill="#009B55"/>
+            <text x="675" y="157" text-anchor="middle" font-size="11" font-weight="600" fill="white">Situational</text>
+            <text x="675" y="173" text-anchor="middle" font-size="11" font-weight="600" fill="white">Awareness</text>
+            <!-- Lines root to level 1 -->
+            <line x1="400" y1="90" x2="125" y2="140" stroke="#aaa" stroke-width="1.5" stroke-dasharray="4,2"/>
+            <line x1="400" y1="90" x2="400" y2="140" stroke="#aaa" stroke-width="1.5" stroke-dasharray="4,2"/>
+            <line x1="400" y1="90" x2="675" y2="140" stroke="#aaa" stroke-width="1.5" stroke-dasharray="4,2"/>
+            <!-- Level 2 nodes under Agency -->
+            <rect x="25" y="238" width="130" height="38" rx="6" fill="#92268F"/>
+            <text x="90" y="255" text-anchor="middle" font-size="10" fill="white">Goal-Directed</text>
+            <text x="90" y="268" text-anchor="middle" font-size="10" fill="white">Behavior</text>
+            <rect x="165" y="238" width="130" height="38" rx="6" fill="#92268F"/>
+            <text x="230" y="255" text-anchor="middle" font-size="10" fill="white">Strategic</text>
+            <text x="230" y="268" text-anchor="middle" font-size="10" fill="white">Planning</text>
+            <!-- Level 2 under Social Manipulation -->
+            <rect x="305" y="238" width="120" height="38" rx="6" fill="#92268F"/>
+            <text x="365" y="255" text-anchor="middle" font-size="10" fill="white">Deception</text>
+            <text x="365" y="268" text-anchor="middle" font-size="10" fill="white">(p=0.001)</text>
+            <rect x="435" y="238" width="120" height="38" rx="6" fill="#92268F"/>
+            <text x="495" y="255" text-anchor="middle" font-size="10" fill="white">Persuasion</text>
+            <text x="495" y="268" text-anchor="middle" font-size="10" fill="white">(p=0.005)</text>
+            <!-- Level 2 under Situational Awareness -->
+            <rect x="575" y="238" width="120" height="38" rx="6" fill="#92268F"/>
+            <text x="635" y="255" text-anchor="middle" font-size="10" fill="white">Context</text>
+            <text x="635" y="268" text-anchor="middle" font-size="10" fill="white">Modeling</text>
+            <rect x="706" y="238" width="78" height="38" rx="6" fill="#92268F"/>
+            <text x="745" y="255" text-anchor="middle" font-size="10" fill="white">Self-</text>
+            <text x="745" y="268" text-anchor="middle" font-size="10" fill="white">Monitor</text>
+            <!-- Lines level 1 to level 2 -->
+            <line x1="125" y1="182" x2="90" y2="238" stroke="#bbb" stroke-width="1.5" stroke-dasharray="4,2"/>
+            <line x1="125" y1="182" x2="230" y2="238" stroke="#bbb" stroke-width="1.5" stroke-dasharray="4,2"/>
+            <line x1="400" y1="182" x2="365" y2="238" stroke="#bbb" stroke-width="1.5" stroke-dasharray="4,2"/>
+            <line x1="400" y1="182" x2="495" y2="238" stroke="#bbb" stroke-width="1.5" stroke-dasharray="4,2"/>
+            <line x1="675" y1="182" x2="635" y2="238" stroke="#bbb" stroke-width="1.5" stroke-dasharray="4,2"/>
+            <line x1="675" y1="182" x2="745" y2="238" stroke="#bbb" stroke-width="1.5" stroke-dasharray="4,2"/>
+            <!-- Legend -->
+            <rect x="30" y="302" width="12" height="12" rx="2" fill="#0071BC"/>
+            <text x="48" y="313" font-size="10" fill="#555">Feature Space Root</text>
+            <rect x="160" y="302" width="12" height="12" rx="2" fill="#009B55"/>
+            <text x="178" y="313" font-size="10" fill="#555">Domain (depth 1)</text>
+            <rect x="295" y="302" width="12" height="12" rx="2" fill="#92268F"/>
+            <text x="313" y="313" font-size="10" fill="#555">Sub-concept (depth 2)</text>
+            <text x="460" y="313" font-size="10" fill="#777" font-style="italic">p = firing probability</text>
+          </svg>
+          <p class="figure-caption">
+            <strong>Figure 1.</strong> SynthSAEBench&rsquo;s hierarchy mechanism reinterpreted as a
+            <span class="hl-green">semantic taxonomy</span>. Instead of arbitrary statistical
+            parent-child relationships, concept trees span safety-relevant domains.
+            <span class="hl-purple">Sub-concepts</span> inherit firing-probability structure
+            from parents. Probabilities are tuned to match realistic deployment scenarios:
+            rare scheming features ($p = 0.001$) with high within-domain correlation.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="pub-divider">
+
+
+<!-- ===== THEORY OF CHANGE ===== -->
+<section class="section" style="padding-top: 1rem;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered">Theory of Change</h2>
+        <div class="content">
+          <table class="toc-table">
+            <tbody>
+              <tr>
+                <td>Activities</td>
+                <td>Develop synthetic benchmarks to test SAE transfer and the presence of invariant feature structures</td>
+              </tr>
+              <tr>
+                <td>Outputs</td>
+                <td>Protocols that enable reliable cross-model interpretability transfer based on invariant AI safety-related features and circuits</td>
+              </tr>
+              <tr>
+                <td>Outcomes</td>
+                <td>Enable interpretations and safety interventions developed on one model to reliably transfer to other models in the same family</td>
+              </tr>
+              <tr>
+                <td>Impact</td>
+                <td>AI safety becomes scalable without requiring complete re-interpretation and SAE generation for each new model, fine-tuned variant, or model family member</td>
+              </tr>
+              <tr>
+                <td>Key Assumption</td>
+                <td>Geometric feature similarity is both necessary and sufficient for interpretability transfer</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="pub-divider">
+
+<!-- ===== METHODOLOGY ===== -->
+<section class="section" style="padding-top: 1rem;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered">Methodology</h2>
+
+        <h3 class="title is-4">2.1 Synthetic Data Generation Framework</h3>
+        <div class="content has-text-justified">
+          <p>
+            Our methodology builds upon the SynthSAEBench framework, which generates large-scale
+            synthetic activation data with realistic neural network feature characteristics. The
+            synthetic data generation process begins by defining $N = 16{,}384$ ground-truth features
+            in a $D = 768$-dimensional activation space. Each feature $i$ is represented by a unit
+            direction vector $\mathbf{d}_i \in \mathbb{R}^{768}$, created through random sampling
+            from a standard normal distribution followed by L2 normalization:
+          </p>
+          <div class="math-box">
+            $$\mathbf{d}_i = \mathbf{g}_i / \|\mathbf{g}_i\|_2, \quad \mathbf{g}_i \sim \mathcal{N}(0, I_{768})$$
+          </div>
+          <p>
+            To reduce spurious correlations, these direction vectors undergo an orthogonalization
+            process minimizing
+            $L_{\text{ortho}} = \sum_{i \neq j}(\mathbf{d}_i^T \mathbf{d}_j)^2 + \lambda\sum_i(\|\mathbf{d}_i\|_2 - 1)^2$,
+            pushing vectors toward orthogonality while maintaining unit length.
+          </p>
+          <p>
+            The framework incorporates three critical phenomena observed in real neural networks:
+            <span class="hl-blue">superposition</span>, <span class="hl-green">hierarchy</span>,
+            and <span class="hl-purple">correlation</span>. Hierarchical structure is implemented as
+            a forest of 128 trees with branching factor 4 and maximum depth 3, encompassing 10,884
+            features with parent-child dependencies enforced through coefficient constraints:
+          </p>
+          <div class="math-box">
+            $$c_{\text{child}} \leftarrow c_{\text{child}} \cdot \mathbf{1}[c_{\text{parent}} > 0]$$
+          </div>
+          <p>
+            Additionally, mutual exclusion among siblings ensures that only one child within a
+            sibling group can fire simultaneously, creating competitive dynamics that reflect
+            real-world concept relationships.
+          </p>
+        </div>
+
+        <h3 class="title is-4" style="margin-top: 2rem;">2.2 Compositional Feature Directions with Hierarchical Constraints</h3>
+        <div class="content has-text-justified">
+          <p>
+            The key insight is to make <span class="hl-green">child feature directions compositionally
+            dependent on their parent directions</span>, rather than having them be independent random
+            vectors. When constructing a hierarchical feature tree, we define each child feature direction as:
+          </p>
+          <div class="math-box">
+            $$\mathbf{d}_{\text{child}} = \alpha \cdot \mathbf{d}_{\text{parent}} + \beta \cdot \mathbf{d}_{\perp}$$
+          </div>
+          <p>
+            where $\mathbf{d}_{\text{parent}}$ is the parent&rsquo;s direction vector,
+            $\mathbf{d}_{\perp}$ is a component orthogonal to the parent (representing the
+            child&rsquo;s &ldquo;specialization&rdquo;), and $\alpha, \beta$ are mixing coefficients
+            controlling how much of the parent&rsquo;s representation is inherited. By carefully
+            choosing the $\alpha$ values across the hierarchy&mdash;$\alpha = 0.7$ for closely related
+            concepts, $\alpha = 0.3$ for more distantly related ones&mdash;we encode semantic
+            relatedness as geometric similarity in the feature space.
+          </p>
+          <p>
+            The coefficient $\beta$ controls the strength of the child&rsquo;s unique component: a
+            large $\beta$ relative to $\alpha$ means the child direction tilts strongly toward its
+            own unique subspace, while a small $\beta$ means it stays closely aligned with the parent.
+            Together, $\alpha$ and $\beta$ act as a <em>geometric dial</em> controlling where on the
+            spectrum between &ldquo;identical to parent&rdquo; and &ldquo;completely independent from
+            parent&rdquo; the child concept sits.
+          </p>
+        </div>
+
+        <h3 class="title is-4" style="margin-top: 2rem;">2.3 Gram-Schmidt Orthogonalization for $\mathbf{d}_{\perp}$</h3>
+        <div class="content has-text-justified">
+          <p>
+            To obtain $\mathbf{d}_{\perp}$, a vector orthogonal to the parent direction, we use
+            Gram-Schmidt orthogonalization. Starting with a random vector $\mathbf{v}$, we subtract
+            its projection onto the parent direction:
+          </p>
+          <div class="math-box">
+            $$\mathbf{d}_{\perp} = \mathbf{v} - (\mathbf{v} \cdot \mathbf{d}_{\text{parent}}) \mathbf{d}_{\text{parent}}$$
+          </div>
+          <p>
+            The term $(\mathbf{v} \cdot \mathbf{d}_{\text{parent}}) \mathbf{d}_{\text{parent}}$ is the
+            component of $\mathbf{v}$ that &ldquo;points along&rdquo; the parent, so subtracting it leaves only
+            the perpendicular part. After normalizing to unit length, $\mathbf{d}_{\perp}$ lives in the
+            subspace of the full embedding space completely unrelated to the parent direction&mdash;it
+            captures whatever is unique or distinguishing about the child concept beyond what it
+            inherits from the parent.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===== FIGURE 2: COMPOSITIONAL DIRECTIONS GEOMETRY ===== -->
+<section class="section" style="padding-top: 0; padding-bottom: 0.5rem;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths has-text-centered">
+        <div class="figure-wrap">
+          <svg viewBox="0 0 720 310" xmlns="http://www.w3.org/2000/svg"
+               style="max-width: 720px; font-family: 'DM Sans', sans-serif;">
+            <rect width="720" height="310" fill="#fafafa" rx="12" stroke="#e0e0e0"/>
+            <text x="360" y="26" text-anchor="middle" font-size="13" font-weight="600" fill="#333">Geometric Structure of Compositional Feature Directions</text>
+            <!-- Coordinate axes area (left panel) -->
+            <!-- Origin at (175, 230) -->
+            <!-- d_parent arrow (blue, horizontal) -->
+            <line x1="175" y1="230" x2="385" y2="230" stroke="#0071BC" stroke-width="2.5"/>
+            <polygon points="385,230 373,224 373,236" fill="#0071BC"/>
+            <text x="393" y="234" font-size="12" fill="#0071BC" font-weight="600">d&#x209A;&#x2090;&#x02B3;&#x2091;&#x2099;&#x1D57;</text>
+            <!-- d_perp arrow (green, vertical up) -->
+            <line x1="175" y1="230" x2="175" y2="80" stroke="#009B55" stroke-width="2.5"/>
+            <polygon points="175,80 169,92 181,92" fill="#009B55"/>
+            <text x="183" y="76" font-size="12" fill="#009B55" font-weight="600">d&#x22A5;</text>
+            <!-- d_child arrow (purple, diagonal) alpha=0.7, shows 210 right, 140 up -->
+            <line x1="175" y1="230" x2="322" y2="112" stroke="#92268F" stroke-width="2.5"/>
+            <polygon points="322,112 308,119 318,131" fill="#92268F"/>
+            <text x="330" y="108" font-size="12" fill="#92268F" font-weight="600">d&#x1D9C;&#x02B0;&#x2071;&#x2097;&#x1D48;</text>
+            <!-- Dashed projection lines -->
+            <line x1="322" y1="230" x2="322" y2="112" stroke="#ccc" stroke-width="1" stroke-dasharray="5,3"/>
+            <line x1="175" y1="112" x2="322" y2="112" stroke="#ccc" stroke-width="1" stroke-dasharray="5,3"/>
+            <!-- Alpha bracket on horizontal -->
+            <line x1="175" y1="246" x2="322" y2="246" stroke="#0071BC" stroke-width="1.5"/>
+            <line x1="175" y1="241" x2="175" y2="251" stroke="#0071BC" stroke-width="1.5"/>
+            <line x1="322" y1="241" x2="322" y2="251" stroke="#0071BC" stroke-width="1.5"/>
+            <text x="248" y="262" text-anchor="middle" font-size="11" fill="#0071BC">&#945; &middot; d&#x209A;&#x2090;&#x02B3;&#x2091;&#x2099;&#x1D57;</text>
+            <!-- Beta bracket on vertical -->
+            <line x1="155" y1="112" x2="155" y2="230" stroke="#009B55" stroke-width="1.5"/>
+            <line x1="150" y1="112" x2="160" y2="112" stroke="#009B55" stroke-width="1.5"/>
+            <line x1="150" y1="230" x2="160" y2="230" stroke="#009B55" stroke-width="1.5"/>
+            <text x="128" y="176" text-anchor="middle" font-size="11" fill="#009B55">&#946; &middot; d&#x22A5;</text>
+            <!-- Angle arc -->
+            <path d="M 225 230 A 50 50 0 0 0 210.4 194" stroke="#92268F" stroke-width="1.5" fill="none" stroke-dasharray="3,2"/>
+            <text x="240" y="212" font-size="11" fill="#92268F">&#952; = arccos(&#945;)</text>
+            <!-- Origin dot -->
+            <circle cx="175" cy="230" r="4" fill="#333"/>
+            <text x="165" y="250" font-size="10" fill="#555">O</text>
+            <!-- Right panel: formula box -->
+            <rect x="450" y="55" width="240" height="220" rx="10" fill="white" stroke="#e0e0e0" stroke-width="1.5"/>
+            <text x="570" y="82" text-anchor="middle" font-size="13" font-weight="600" fill="#333">Key Formula</text>
+            <line x1="470" y1="92" x2="670" y2="92" stroke="#e0e0e0" stroke-width="1"/>
+            <text x="570" y="116" text-anchor="middle" font-size="12" fill="#222">d&#x1D9C;&#x02B0;&#x2071;&#x2097;&#x1D48; =</text>
+            <text x="570" y="140" text-anchor="middle" font-size="12" fill="#0071BC">&#945; &middot; d&#x209A;&#x2090;&#x02B3;&#x2091;&#x2099;&#x1D57;</text>
+            <text x="570" y="162" text-anchor="middle" font-size="14" fill="#888">+</text>
+            <text x="570" y="184" text-anchor="middle" font-size="12" fill="#009B55">&#946; &middot; d&#x22A5;</text>
+            <line x1="470" y1="198" x2="670" y2="198" stroke="#e0e0e0" stroke-width="1"/>
+            <text x="570" y="218" text-anchor="middle" font-size="11" fill="#555">After normalization:</text>
+            <text x="570" y="238" text-anchor="middle" font-size="12" fill="#92268F">cos(&#952;) = &#945;</text>
+            <text x="570" y="258" text-anchor="middle" font-size="10" fill="#777">&#945; encodes semantic similarity</text>
+          </svg>
+          <p class="figure-caption">
+            <strong>Figure 2.</strong> Geometric visualization of compositional feature directions.
+            The <span class="hl-blue">parent direction</span> $\mathbf{d}_{\text{parent}}$ and
+            <span class="hl-green">orthogonal component</span> $\mathbf{d}_{\perp}$ span a 2D plane.
+            The <span class="hl-purple">child direction</span>
+            $\mathbf{d}_{\text{child}} = \alpha \cdot \mathbf{d}_{\text{parent}} + \beta \cdot \mathbf{d}_{\perp}$
+            sits at angle $\theta = \arccos(\alpha)$ from the parent, encoding semantic
+            similarity directly as geometric proximity.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="pub-divider">
+
+
+<!-- ===== EXPERIMENTAL SETUP: LLM HIERARCHIES ===== -->
+<section class="section" style="padding-top: 1rem;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered">LLM-Generated Misalignment Hierarchies</h2>
+        <div class="content has-text-justified">
+          <p>
+            Our experimental pipeline leverages large language models to generate interpretable concept
+            hierarchies with explicit semantic similarity values, then translates these into geometric
+            constraints within the synthetic framework. The four-step pipeline is:
+          </p>
+          <ol>
+            <li>
+              <strong>Step 1 &mdash; Generate hierarchy.</strong> An LLM produces a tree of
+              misalignment-related concepts (e.g., &ldquo;Deceptive Reasoning&rdquo; as root),
+              assigning an $\alpha$ value to each parent-child edge encoding semantic similarity.
+              &ldquo;Goal Misrepresentation&rdquo; receives $\alpha = 0.7$ from &ldquo;Deceptive
+              Reasoning&rdquo; since it is almost a direct sub-case; &ldquo;Reward Hacking&rdquo;
+              receives $\alpha = 0.4$ from its parent as a more specific instantiation.
+            </li>
+            <li>
+              <strong>Step 2 &mdash; Translate into feature directions.</strong> Starting at the root
+              with a random unit vector $\mathbf{d}_{\text{root}}$, child directions are computed
+              recursively. Grandchildren inherit geometric structure <em>transitively</em>&mdash;&ldquo;Reward
+              Hacking&rdquo; contains directional overlap with both &ldquo;Goal Misrepresentation&rdquo;
+              and &ldquo;Deceptive Reasoning.&rdquo;
+            </li>
+            <li>
+              <strong>Step 3 &mdash; Feed into SynthSAEBench.</strong> The resulting feature directions
+              slot into the feature dictionary $D$. The parent firing-probability constraint
+              ($c_{\text{child}} \leftarrow c_{\text{child}} \cdot \mathbf{1}[c_{\text{parent}} > 0]$)
+              enforces statistical dependencies while geometric construction ensures child activations
+              literally contain parent-concept components.
+            </li>
+            <li>
+              <strong>Step 4 &mdash; Diagnose SAE behavior.</strong> Train an SAE and ask concrete
+              diagnostic questions: does the SAE learn a latent whose decoder direction has high cosine
+              similarity with $\mathbf{d}_{\text{root}}$ when only grandchild features fire? Does
+              ablating the &ldquo;Deceptive Reasoning&rdquo; latent impair &ldquo;Reward Hacking&rdquo;
+              reconstruction more than unrelated features?
+            </li>
+          </ol>
+          <p>
+            Because we hold the ground truth&mdash;we know exactly which direction corresponds to which
+            concept and what the $\alpha$ values were&mdash;we can measure failure modes with precision
+            impossible on a real LLM.
+          </p>
+        </div>
+
+        <!-- Figure 3: Deceptive Reasoning Hierarchy -->
+        <div class="figure-wrap" style="margin-top: 1.5rem;">
+          <svg viewBox="0 0 760 355" xmlns="http://www.w3.org/2000/svg"
+               style="max-width: 760px; font-family: 'DM Sans', sans-serif;">
+            <rect width="760" height="355" fill="#fafafa" rx="12" stroke="#e0e0e0"/>
+            <text x="380" y="26" text-anchor="middle" font-size="13" font-weight="600" fill="#333">Example: Deceptive Reasoning Hierarchy (LLM-generated)</text>
+            <!-- Root -->
+            <rect x="265" y="46" width="230" height="46" rx="8" fill="#ED1B23"/>
+            <text x="380" y="66" text-anchor="middle" font-size="12" font-weight="600" fill="white">Deceptive Reasoning</text>
+            <text x="380" y="83" text-anchor="middle" font-size="10" fill="#ffd0d0">p = 0.001 (rare but critical)</text>
+            <!-- Children -->
+            <rect x="48" y="154" width="180" height="46" rx="7" fill="#009B55"/>
+            <text x="138" y="174" text-anchor="middle" font-size="11" font-weight="600" fill="white">Goal Misrepresentation</text>
+            <text x="138" y="190" text-anchor="middle" font-size="10" fill="#c0ffe0">&#945; = 0.7 &nbsp;|&nbsp; p = 0.01</text>
+            <rect x="290" y="154" width="180" height="46" rx="7" fill="#009B55"/>
+            <text x="380" y="174" text-anchor="middle" font-size="11" font-weight="600" fill="white">Information Withholding</text>
+            <text x="380" y="190" text-anchor="middle" font-size="10" fill="#c0ffe0">&#945; = 0.5 &nbsp;|&nbsp; p = 0.015</text>
+            <rect x="532" y="154" width="180" height="46" rx="7" fill="#009B55"/>
+            <text x="622" y="174" text-anchor="middle" font-size="11" font-weight="600" fill="white">Strategic Misdirection</text>
+            <text x="622" y="190" text-anchor="middle" font-size="10" fill="#c0ffe0">&#945; = 0.6 &nbsp;|&nbsp; p = 0.02</text>
+            <!-- Lines root to children -->
+            <line x1="380" y1="92" x2="138" y2="154" stroke="#ED1B23" stroke-width="1.5" opacity="0.5"/>
+            <line x1="380" y1="92" x2="380" y2="154" stroke="#ED1B23" stroke-width="1.5" opacity="0.5"/>
+            <line x1="380" y1="92" x2="622" y2="154" stroke="#ED1B23" stroke-width="1.5" opacity="0.5"/>
+            <!-- Grandchildren under Goal Misrepresentation -->
+            <rect x="20" y="260" width="148" height="44" rx="6" fill="#92268F"/>
+            <text x="94" y="278" text-anchor="middle" font-size="10" font-weight="600" fill="white">Reward Hacking</text>
+            <text x="94" y="293" text-anchor="middle" font-size="9" fill="#ecd0ec">&#945; = 0.4 &nbsp;|&nbsp; p = 0.3</text>
+            <rect x="178" y="260" width="148" height="44" rx="6" fill="#92268F"/>
+            <text x="252" y="276" text-anchor="middle" font-size="10" font-weight="600" fill="white">Sycophantic</text>
+            <text x="252" y="289" text-anchor="middle" font-size="10" font-weight="600" fill="white">Agreement</text>
+            <text x="252" y="304" text-anchor="middle" font-size="9" fill="#ecd0ec">&#945; = 0.5 &nbsp;|&nbsp; p = 0.5</text>
+            <!-- Grandchildren under Info Withholding -->
+            <rect x="296" y="260" width="148" height="44" rx="6" fill="#92268F"/>
+            <text x="370" y="278" text-anchor="middle" font-size="10" font-weight="600" fill="white">Selective Omission</text>
+            <text x="370" y="293" text-anchor="middle" font-size="9" fill="#ecd0ec">&#945; = 0.6 &nbsp;|&nbsp; p = 0.4</text>
+            <rect x="454" y="260" width="148" height="44" rx="6" fill="#92268F"/>
+            <text x="528" y="276" text-anchor="middle" font-size="10" font-weight="600" fill="white">Framing</text>
+            <text x="528" y="289" text-anchor="middle" font-size="10" font-weight="600" fill="white">Manipulation</text>
+            <text x="528" y="304" text-anchor="middle" font-size="9" fill="#ecd0ec">&#945; = 0.4 &nbsp;|&nbsp; p = 0.6</text>
+            <!-- Lines children to grandchildren -->
+            <line x1="138" y1="200" x2="94" y2="260" stroke="#009B55" stroke-width="1.5" opacity="0.6"/>
+            <line x1="138" y1="200" x2="252" y2="260" stroke="#009B55" stroke-width="1.5" opacity="0.6"/>
+            <line x1="380" y1="200" x2="370" y2="260" stroke="#009B55" stroke-width="1.5" opacity="0.6"/>
+            <line x1="380" y1="200" x2="528" y2="260" stroke="#009B55" stroke-width="1.5" opacity="0.6"/>
+            <!-- Legend -->
+            <rect x="610" y="262" width="12" height="12" rx="2" fill="#ED1B23"/>
+            <text x="628" y="273" font-size="10" fill="#555">Root concept</text>
+            <rect x="610" y="282" width="12" height="12" rx="2" fill="#009B55"/>
+            <text x="628" y="293" font-size="10" fill="#555">Child concept</text>
+            <rect x="610" y="302" width="12" height="12" rx="2" fill="#92268F"/>
+            <text x="628" y="313" font-size="10" fill="#555">Grandchild concept</text>
+            <text x="623" y="333" font-size="9" fill="#888" font-style="italic">&#945; = semantic similarity</text>
+          </svg>
+          <p class="figure-caption">
+            <strong>Figure 3.</strong> LLM-generated <span class="hl-red">Deceptive Reasoning</span>
+            hierarchy. Each node carries a semantic similarity coefficient $\alpha$ (geometric
+            inheritance from parent) and a conditional firing probability $p$.
+            <span class="hl-green">Child concepts</span> inherit geometry from the root;
+            <span class="hl-purple">grandchildren</span> inherit transitively from both parent and
+            grandparent&mdash;&ldquo;Reward Hacking&rdquo; thus contains directional overlap with
+            both &ldquo;Goal Misrepresentation&rdquo; and &ldquo;Deceptive Reasoning.&rdquo;
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="pub-divider">
+
+
+<!-- ===== GEOMETRIC THEORY ===== -->
+<section class="section" style="padding-top: 1rem;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered">Theory: Semantic Correlation Through Geometry</h2>
+        <div class="content has-text-justified">
+          <p>
+            The theoretical foundation rests on the principle that
+            <strong>semantic relatedness should manifest as geometric structure in representation space</strong>.
+            When we set $\alpha > 0$, we create non-zero cosine similarity between parent and child
+            feature directions. After normalization:
+          </p>
+          <div class="math-box">
+            $$\cos(\theta) = \mathbf{d}_{\text{child}}^T \mathbf{d}_{\text{parent}} = \alpha$$
+          </div>
+          <p>
+            This follows from expanding the inner product:
+          </p>
+          <div class="math-box">
+            $$\mathbf{d}_{\text{child}}^T \mathbf{d}_{\text{parent}}
+            = (\alpha \cdot \mathbf{d}_{\text{parent}} + \beta \cdot \mathbf{d}_{\perp})^T \mathbf{d}_{\text{parent}}
+            = \alpha \underbrace{(\mathbf{d}_{\text{parent}}^T \mathbf{d}_{\text{parent}})}_{=1}
+            + \beta \underbrace{(\mathbf{d}_{\perp}^T \mathbf{d}_{\text{parent}})}_{=0}
+            = \alpha$$
+          </div>
+          <p>
+            This creates a testable prediction: SAEs that successfully decompose these features should
+            discover latents where decoder directions for child features have
+            <span class="hl-green">high cosine similarity</span> with decoder directions for parent
+            features, and interventions that ablate parent features should
+            <span class="hl-red">impair reconstruction of child features</span> more severely than
+            unrelated features.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="pub-divider">
+
+<!-- ===== SAFETY APPLICATIONS ===== -->
+<section class="section" style="padding-top: 1rem;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered">Safety Research Applications</h2>
+        <div class="content has-text-justified">
+          <p>
+            The semantic hierarchy approach enables several critical AI safety research directions.
+            You can construct arbitrarily complex semantic hierarchies reflecting real AI safety threat
+            models&mdash;power-seeking, deception, sycophancy, manipulation, goal misspecification&mdash;and
+            rigorously test whether interpretability tools can decompose these structures.
+          </p>
+        </div>
+
+        <div class="columns" style="margin-top: 1rem;">
+          <div class="column">
+            <div class="content">
+              <h4 class="title is-5">
+                <span class="icon has-text-info"><i class="fas fa-search"></i></span>
+                <span class="hl-blue">Capability Detection Robustness</span>
+              </h4>
+              <p>
+                Test SAE identification of rare, sparse dangerous features (&lt;0.1% of samples).
+                If SAEs fail to consistently recover rare scheming features in the controlled
+                synthetic setting, they will likely miss such features in real models.
+              </p>
+            </div>
+          </div>
+          <div class="column">
+            <div class="content">
+              <h4 class="title is-5">
+                <span class="icon" style="color:#92268F"><i class="fas fa-project-diagram"></i></span>
+                <span class="hl-purple">Transfer Learning for Monitoring</span>
+              </h4>
+              <p>
+                If structural patterns (clustered latents with low firing probability and mutual
+                exclusivity) reliably indicate scheming-type hierarchies in synthetic data, we can
+                search for the same geometric signatures in real SAEs as a monitoring signal.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="columns">
+          <div class="column">
+            <div class="content">
+              <h4 class="title is-5">
+                <span class="icon has-text-danger"><i class="fas fa-shield-alt"></i></span>
+                <span class="hl-red">Worst-Case Adversarial Scenarios</span>
+              </h4>
+              <p>
+                Model capability concealment: create features anti-correlated with overt expressions
+                of the same capabilities, then test whether SAEs can still recover underlying features
+                when obvious signals are suppressed.
+              </p>
+            </div>
+          </div>
+          <div class="column">
+            <div class="content">
+              <h4 class="title is-5">
+                <span class="icon has-text-success"><i class="fas fa-flask"></i></span>
+                <span class="hl-green">Intervention Testing with Ground Truth</span>
+              </h4>
+              <p>
+                Because we have complete ground truth about which features represent dangerous
+                capabilities, we can test whether ablating or clamping SAE latents matched to
+                these features actually prevents the corresponding behavior.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="pub-divider">
+
+<!-- ===== RELATED WORK ===== -->
+<section class="section" style="padding-top: 1rem;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered">Related Work</h2>
+        <div class="content has-text-justified">
+          <p>
+            Sparse autoencoders have emerged as a powerful tool for decomposing neural network
+            activations into interpretable features, yet measuring the quality of these features
+            remains active [1]. Recent work has converged on a multi-dimensional evaluation framework
+            addressing concept detection, feature separability, reconstruction fidelity, and human
+            interpretability. Sparse probing [2] selects the top-$k$ SAE features most correlated
+            with binary classification tasks and trains logistic regression probes on only those
+            features&mdash;though comprehensive testing across 113 datasets shows SAE-based sparse
+            probes do not consistently outperform simple baselines [3].
+          </p>
+          <p>
+            Concept disentanglement metrics such as RAVEL and targeted probe perturbation [4] test
+            whether intervening on specific latents can change one attribute without altering others.
+            Notably, Matryoshka SAEs exhibit positive scaling on disentanglement metrics as dictionary
+            size grows, while most other architectures show degraded performance due to feature
+            splitting. Automated interpretability techniques using LLMs [5] have dramatically reduced
+            evaluation costs, but often struggle to differentiate between SAE architectures.
+          </p>
+          <p>
+            The integration of these evaluation methods has revealed that SAE quality is irreducibly
+            multi-dimensional, with no single metric capable of identifying optimal architectures [1].
+            Our work extends SynthSAEBench [6] with geometric semantic structure, bridging the gap
+            between purely statistical hierarchies and the compositional semantic hierarchies present
+            in real language models.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="pub-divider">
+
+<!-- ===== LIMITATIONS ===== -->
+<section class="section" style="padding-top: 1rem;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered">Limitations &amp; Implications for AI Safety</h2>
+        <div class="content has-text-justified">
+          <p>
+            This approach provides <strong>weak semantic structure</strong>&mdash;it is geometrically
+            grounded but still falls short of true semantic understanding. We encode human-chosen
+            semantic relationships into the statistical properties of the data, but the model still
+            does not &ldquo;understand&rdquo; deception in any functional sense.
+          </p>
+          <p>
+            For practical AI safety research, this analysis suggests a
+            <strong>two-stage validation approach</strong>: first, demonstrate SAE capabilities on
+            increasingly complex synthetic statistical structures to establish baseline competence,
+            then validate on real model activations with known safety-relevant semantic content.
+            Only architectures that succeed at both stages should be considered reliable for
+            safety-critical interpretability applications.
+          </p>
+        </div>
+
+        <div class="columns" style="margin-top: 1.5rem;">
+          <div class="column">
+            <div class="content" style="background: #f0fff4; border-radius: 8px; padding: 1rem 1.25rem; border: 1px solid #bbf0cc;">
+              <p><strong style="color: #009B55;">What we CAN test with statistical hierarchies:</strong></p>
+              <ul>
+                <li>Whether SAEs detect rare but statistically structured patterns</li>
+                <li>Scaling behavior when dangerous features are sparse</li>
+                <li>Whether transfer learning works for statistical signatures</li>
+                <li>Robustness of detection to feature correlations and hierarchical dependencies</li>
+              </ul>
+            </div>
+          </div>
+          <div class="column">
+            <div class="content" style="background: #fff5f5; border-radius: 8px; padding: 1rem 1.25rem; border: 1px solid #ffd0d0;">
+              <p><strong style="color: #ED1B23;">What we CANNOT yet test:</strong></p>
+              <ul>
+                <li>Whether SAEs understand what &ldquo;deception&rdquo; means compositionally</li>
+                <li>Whether ablating &ldquo;deception features&rdquo; prevents deceptive reasoning</li>
+                <li>Whether constructed hierarchical relationships match real semantic hierarchies</li>
+                <li>Whether synthetic &ldquo;scheming&rdquo; features resemble real model representations</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="pub-divider">
+
+
+<!-- ===== REFERENCES ===== -->
+<section class="section" style="padding-top: 1rem;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered">References</h2>
+        <div class="content">
+          <ul class="ref-list">
+            <li>
+              <span class="ref-num">[1]</span>
+              Karvonen, A., Loughran, T., &amp; Kenton, Z. (2025). SAEBench: A comprehensive evaluation suite for sparse autoencoders. <em>arXiv:2503.09532</em>.
+            </li>
+            <li>
+              <span class="ref-num">[2]</span>
+              Gurnee, W., Nanda, N., Pauly, M., Harvey, K., Troitskii, D., &amp; Bertsimas, D. (2023). Finding neurons in a haystack: Case studies with sparse probing. <em>arXiv:2305.01610</em>.
+            </li>
+            <li>
+              <span class="ref-num">[3]</span>
+              Kantamneni, S., Wattenberg, M., &amp; Firat, O. (2025). Evaluating sparse autoencoder representations with supervised classification tasks. <em>arXiv:2502.16681</em>.
+            </li>
+            <li>
+              <span class="ref-num">[4]</span>
+              Karvonen, A., Foote, B., Bricken, T., &amp; Brown, T. (2024). SAEs learn sparse representations of sparse representations. <em>arXiv:2408.00113</em>.
+            </li>
+            <li>
+              <span class="ref-num">[5]</span>
+              Paulo, F., Friedman, D., &amp; EleutherAI. (2025). Delphi: Towards machine psychology through conditional language modeling. <em>arXiv:2410.13928</em>.
+            </li>
+            <li>
+              <span class="ref-num">[6]</span>
+              Chanin, D., et al. (2026). SynthSAEBench: Evaluating Sparse Autoencoders on Scalable Realistic Synthetic Data. <em>arXiv:2602.14687</em>.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="pub-divider">
+
+<!-- ===== SUPPLEMENTARY MATERIALS ===== -->
+<section class="section" style="padding-top: 1rem; padding-bottom: 3rem;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered">Supplementary Materials</h2>
+        <div class="columns is-centered" style="margin-top: 1rem;">
+
+          <!-- Presentation Slides -->
+          <div class="column is-one-third">
+            <div class="supp-card">
+              <div class="supp-icon">
+                <span class="icon is-large"><i class="fas fa-chalkboard-teacher fa-2x"></i></span>
+              </div>
+              <h3>Presentation Slides</h3>
+              <p>
+                Reveal.js slide deck: &ldquo;Enforcing Semantic Constraints in SynthSAEBench&rdquo;&mdash;
+                8 slides covering the full methodology and background.
+              </p>
+              <a href="presentation/" class="button is-normal is-rounded is-dark" style="margin-top: 1rem;">
+                <span class="icon"><i class="fas fa-play"></i></span>
+                <span>View Slides</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Research PDF -->
+          <div class="column is-one-third">
+            <div class="supp-card">
+              <div class="supp-icon">
+                <span class="icon is-large"><i class="fas fa-file-pdf fa-2x"></i></span>
+              </div>
+              <h3>Research PDF</h3>
+              <p>
+                Geometric SAE Invariance pitch deck and project overview in PDF format for offline reading.
+              </p>
+              <a href="Geometric_SAE_Invariance%20v1.pdf" target="_blank"
+                 class="button is-normal is-rounded is-dark" style="margin-top: 1rem;">
+                <span class="icon"><i class="fas fa-download"></i></span>
+                <span>Download PDF</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Research Docs -->
+          <div class="column is-one-third">
+            <div class="supp-card">
+              <div class="supp-icon">
+                <span class="icon is-large"><i class="fas fa-book-open fa-2x"></i></span>
+              </div>
+              <h3>Research Documents</h3>
+              <p>
+                Full collection of research notes, methodology writeups, literature reviews,
+                and extended analyses.
+              </p>
+              <a href="docs/" class="button is-normal is-rounded is-dark" style="margin-top: 1rem;">
+                <span class="icon"><i class="fas fa-folder-open"></i></span>
+                <span>Browse Docs</span>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer" style="padding: 1.5rem; background: #fafafa; border-top: 1px solid #EDEDED;">
+  <div class="content has-text-centered">
+    <p style="font-size: 0.85rem; color: #777;">
+      Website template inspired by academic project pages.
+      &copy; 2026 Konstantinos Krampis.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
