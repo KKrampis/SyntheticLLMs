@@ -43,26 +43,42 @@
       --footer-bg:   #fafafa;
       --footer-bd:   #EDEDED;
     }
+    /* ── Monokai dark theme ── */
     html.dark {
-      --bg:          #0f172a;
-      --bg2:         #1e293b;
-      --text:        #e2e8f0;
-      --muted:       #94a3b8;
-      --border:      #334155;
-      --card-bg:     #1e293b;
-      --card-border: #334155;
-      --math-bg:     #1e2a3a;
-      --math-bl:     #60a5fa;
-      --tbl-border:  #334155;
-      --can-bg:      #0d2818;
-      --can-bd:      #166534;
-      --cant-bg:     #2a0a0a;
-      --cant-bd:     #7f1d1d;
-      --ref-bd:      #1e293b;
-      --toggle-bg:   #334155;
-      --footer-bg:   #1e293b;
-      --footer-bd:   #334155;
+      --bg:          #272822;
+      --bg2:         #3E3D32;
+      --text:        #F8F8F2;
+      --muted:       #75715E;
+      --border:      #49483E;
+      --card-bg:     #3E3D32;
+      --card-border: #49483E;
+      --math-bg:     #1E1D18;
+      --math-bl:     #66D9EF;
+      --tbl-border:  #49483E;
+      --can-bg:      #1A280A;
+      --can-bd:      #A6E22E;
+      --cant-bg:     #280A15;
+      --cant-bd:     #F92672;
+      --ref-bd:      #3E3D32;
+      --toggle-bg:   #3E3D32;
+      --footer-bg:   #1E1D18;
+      --footer-bd:   #3E3D32;
     }
+    /* Monokai accent overrides in dark mode */
+    html.dark .hl-green  { color: #A6E22E; }
+    html.dark .hl-purple { color: #AE81FF; }
+    html.dark .hl-blue   { color: #66D9EF; }
+    html.dark .hl-red    { color: #F92672; }
+    html.dark .publication-authors a  { color: #66D9EF; }
+    html.dark .ref-num                { color: #66D9EF; }
+    html.dark .title                  { color: var(--text) !important; }
+    html.dark .content p,
+    html.dark .content li             { color: var(--text); }
+    html.dark .is-size-6              { color: var(--muted) !important; }
+    /* SVG dark-mode: dim bright backgrounds, keep figure legible */
+    html.dark .figure-wrap .fig-bg    { fill: #3E3D32 !important; stroke: #49483E !important; }
+    html.dark .figure-wrap .fig-panel { fill: #272822 !important; stroke: #49483E !important; }
+    html.dark .figure-wrap svg        { filter: contrast(0.95); }
 
     html { font-size: 12pt; }
     body {
@@ -288,7 +304,7 @@
         <div class="figure-wrap">
           <svg viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg"
                style="max-width: 760px; font-family: 'DM Sans', sans-serif;">
-            <rect width="800" height="340" fill="#fafafa" rx="12" stroke="#e0e0e0" stroke-width="1"/>
+            <rect class="fig-bg" width="800" height="340" fill="#fafafa" rx="12" stroke="#e0e0e0" stroke-width="1"/>
             <text x="400" y="30" text-anchor="middle" font-size="14" font-weight="600" fill="#333">SynthSAEBench as Semantic Taxonomy</text>
             <!-- Root node -->
             <rect x="300" y="48" width="200" height="42" rx="8" fill="#0071BC"/>
@@ -503,22 +519,22 @@
         <div class="figure-wrap">
           <svg viewBox="0 0 720 310" xmlns="http://www.w3.org/2000/svg"
                style="max-width: 720px; font-family: 'DM Sans', sans-serif;">
-            <rect width="720" height="310" fill="#fafafa" rx="12" stroke="#e0e0e0"/>
+            <rect class="fig-bg" width="720" height="310" fill="#fafafa" rx="12" stroke="#e0e0e0"/>
             <text x="360" y="26" text-anchor="middle" font-size="13" font-weight="600" fill="#333">Geometric Structure of Compositional Feature Directions</text>
             <!-- Coordinate axes area (left panel) -->
             <!-- Origin at (175, 230) -->
             <!-- d_parent arrow (blue, horizontal) -->
             <line x1="175" y1="230" x2="385" y2="230" stroke="#0071BC" stroke-width="2.5"/>
             <polygon points="385,230 373,224 373,236" fill="#0071BC"/>
-            <text x="393" y="234" font-size="12" fill="#0071BC" font-weight="600">d&#x209A;&#x2090;&#x02B3;&#x2091;&#x2099;&#x1D57;</text>
+            <text x="393" y="234" font-size="12" fill="#0071BC" font-weight="600">d<tspan dy="5" font-size="9">parent</tspan><tspan dy="-5" font-size="1"> </tspan></text>
             <!-- d_perp arrow (green, vertical up) -->
             <line x1="175" y1="230" x2="175" y2="80" stroke="#009B55" stroke-width="2.5"/>
             <polygon points="175,80 169,92 181,92" fill="#009B55"/>
-            <text x="183" y="76" font-size="12" fill="#009B55" font-weight="600">d&#x22A5;</text>
+            <text x="183" y="76" font-size="12" fill="#009B55" font-weight="600">d<tspan dy="5" font-size="9">&#x22A5;</tspan><tspan dy="-5" font-size="1"> </tspan></text>
             <!-- d_child arrow (purple, diagonal) alpha=0.7, shows 210 right, 140 up -->
             <line x1="175" y1="230" x2="322" y2="112" stroke="#92268F" stroke-width="2.5"/>
             <polygon points="322,112 308,119 318,131" fill="#92268F"/>
-            <text x="330" y="108" font-size="12" fill="#92268F" font-weight="600">d&#x1D9C;&#x02B0;&#x2071;&#x2097;&#x1D48;</text>
+            <text x="330" y="108" font-size="12" fill="#92268F" font-weight="600">d<tspan dy="5" font-size="9">child</tspan><tspan dy="-5" font-size="1"> </tspan></text>
             <!-- Dashed projection lines -->
             <line x1="322" y1="230" x2="322" y2="112" stroke="#ccc" stroke-width="1" stroke-dasharray="5,3"/>
             <line x1="175" y1="112" x2="322" y2="112" stroke="#ccc" stroke-width="1" stroke-dasharray="5,3"/>
@@ -526,12 +542,12 @@
             <line x1="175" y1="246" x2="322" y2="246" stroke="#0071BC" stroke-width="1.5"/>
             <line x1="175" y1="241" x2="175" y2="251" stroke="#0071BC" stroke-width="1.5"/>
             <line x1="322" y1="241" x2="322" y2="251" stroke="#0071BC" stroke-width="1.5"/>
-            <text x="248" y="262" text-anchor="middle" font-size="11" fill="#0071BC">&#945; &middot; d&#x209A;&#x2090;&#x02B3;&#x2091;&#x2099;&#x1D57;</text>
+            <text x="248" y="262" text-anchor="middle" font-size="11" fill="#0071BC">&#945; &middot; d<tspan dy="5" font-size="9">parent</tspan><tspan dy="-5" font-size="1"> </tspan></text>
             <!-- Beta bracket on vertical -->
             <line x1="155" y1="112" x2="155" y2="230" stroke="#009B55" stroke-width="1.5"/>
             <line x1="150" y1="112" x2="160" y2="112" stroke="#009B55" stroke-width="1.5"/>
             <line x1="150" y1="230" x2="160" y2="230" stroke="#009B55" stroke-width="1.5"/>
-            <text x="128" y="176" text-anchor="middle" font-size="11" fill="#009B55">&#946; &middot; d&#x22A5;</text>
+            <text x="128" y="176" text-anchor="middle" font-size="11" fill="#009B55">&#946; &middot; d<tspan dy="5" font-size="9">&#x22A5;</tspan><tspan dy="-5" font-size="1"> </tspan></text>
             <!-- Angle arc -->
             <path d="M 225 230 A 50 50 0 0 0 210.4 194" stroke="#92268F" stroke-width="1.5" fill="none" stroke-dasharray="3,2"/>
             <text x="240" y="212" font-size="11" fill="#92268F">&#952; = arccos(&#945;)</text>
@@ -539,13 +555,13 @@
             <circle cx="175" cy="230" r="4" fill="#333"/>
             <text x="165" y="250" font-size="10" fill="#555">O</text>
             <!-- Right panel: formula box -->
-            <rect x="450" y="55" width="240" height="220" rx="10" fill="white" stroke="#e0e0e0" stroke-width="1.5"/>
+            <rect class="fig-panel" x="450" y="55" width="240" height="220" rx="10" fill="white" stroke="#e0e0e0" stroke-width="1.5"/>
             <text x="570" y="82" text-anchor="middle" font-size="13" font-weight="600" fill="#333">Key Formula</text>
             <line x1="470" y1="92" x2="670" y2="92" stroke="#e0e0e0" stroke-width="1"/>
-            <text x="570" y="116" text-anchor="middle" font-size="12" fill="#222">d&#x1D9C;&#x02B0;&#x2071;&#x2097;&#x1D48; =</text>
-            <text x="570" y="140" text-anchor="middle" font-size="12" fill="#0071BC">&#945; &middot; d&#x209A;&#x2090;&#x02B3;&#x2091;&#x2099;&#x1D57;</text>
+            <text x="570" y="116" text-anchor="middle" font-size="12" fill="#222">d<tspan dy="5" font-size="9">child</tspan><tspan dy="-5" font-size="12"> =</tspan></text>
+            <text x="570" y="140" text-anchor="middle" font-size="12" fill="#0071BC">&#945; &middot; d<tspan dy="5" font-size="9">parent</tspan><tspan dy="-5" font-size="1"> </tspan></text>
             <text x="570" y="162" text-anchor="middle" font-size="14" fill="#888">+</text>
-            <text x="570" y="184" text-anchor="middle" font-size="12" fill="#009B55">&#946; &middot; d&#x22A5;</text>
+            <text x="570" y="184" text-anchor="middle" font-size="12" fill="#009B55">&#946; &middot; d<tspan dy="5" font-size="9">&#x22A5;</tspan><tspan dy="-5" font-size="1"> </tspan></text>
             <line x1="470" y1="198" x2="670" y2="198" stroke="#e0e0e0" stroke-width="1"/>
             <text x="570" y="218" text-anchor="middle" font-size="11" fill="#555">After normalization:</text>
             <text x="570" y="238" text-anchor="middle" font-size="12" fill="#92268F">cos(&#952;) = &#945;</text>
@@ -623,7 +639,7 @@
         <div class="figure-wrap" style="margin-top: 1.5rem;">
           <svg viewBox="0 0 760 355" xmlns="http://www.w3.org/2000/svg"
                style="max-width: 760px; font-family: 'DM Sans', sans-serif;">
-            <rect width="760" height="355" fill="#fafafa" rx="12" stroke="#e0e0e0"/>
+            <rect class="fig-bg" width="760" height="355" fill="#fafafa" rx="12" stroke="#e0e0e0"/>
             <text x="380" y="26" text-anchor="middle" font-size="13" font-weight="600" fill="#333">Example: Deceptive Reasoning Hierarchy (LLM-generated)</text>
             <!-- Root -->
             <rect x="265" y="46" width="230" height="46" rx="8" fill="#ED1B23"/>
