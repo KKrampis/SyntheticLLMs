@@ -476,7 +476,70 @@
           </p>
         </div>
 
-        <h3 class="title is-4" style="margin-top: 2rem;">2.2 Compositional Feature Directions with Hierarchical Constraints</h3>
+        <h3 class="title is-4" style="margin-top: 2rem;">2.2 Feature Dictionary Construction and Correlation Structure</h3>
+        <div class="content has-text-justified">
+          <p>
+            The synthetic activation generation follows the linear superposition model where each sample
+            activation is constructed as $\mathbf{a} = \sum_{i=1}^N c_i \mathbf{d}_i$, with coefficients
+            $c_i$ sampled from hierarchically-constrained distributions. Each feature $i$ receives a
+            firing probability $p_i$ drawn from a <span class="hl-blue">Zipfian distribution</span> to
+            model realistic feature frequency patterns, with firing magnitudes $\mu_i$ linearly
+            interpolated from 27.0 to 18.0 across the frequency spectrum. Standard deviations $\sigma_i$
+            follow a folded normal distribution to capture realistic activation variance patterns observed
+            in language models.
+          </p>
+          <p>
+            To model realistic feature co-occurrence patterns while maintaining computational tractability,
+            the framework employs a <span class="hl-purple">low-rank factorization</span> of the
+            correlation matrix:
+          </p>
+          <div class="math-box">
+            $$\Sigma = \mathbf{F}\mathbf{F}^T + \operatorname{diag}(\boldsymbol{\delta})$$
+          </div>
+          <p>
+            This reduces memory requirements from 268 million entries to 1.6 million entries&mdash;a
+            163&times; reduction compared to storing the full correlation matrix. The correlation scale
+            parameter controls the strength of feature dependencies, with typical values around 0.075
+            producing realistic but manageable correlation patterns.
+          </p>
+          <p>
+            Superposition emerges naturally from the dimensional constraints: packing $N = 16{,}384$
+            features into $D = 768$ dimensions necessitates overlap. The degree of feature interference
+            scales approximately as $O(1/\sqrt{D})$ with increasing dimensionality, while growing with
+            the number of packed features. For example, increasing from 4,096 to 16,384 features raises
+            $\rho_{mm}$ from ~0.12 to ~0.18 without orthogonalization, demonstrating how representational
+            crowding intensifies with feature density. This superposition creates fundamental ambiguity
+            in activation interpretation: a given activation vector $\mathbf{a} = [1.9, 0.436]$ could
+            arise from multiple coefficient combinations when features overlap significantly.
+          </p>
+        </div>
+
+        <h3 class="title is-4" style="margin-top: 2rem;">2.3 Hierarchical Constraint Enforcement and Tree Structure</h3>
+        <div class="content has-text-justified">
+          <p>
+            The hierarchical structure implements realistic concept taxonomies where child features can
+            only activate when their parent features are active, mimicking how abstract concepts enable
+            more specific subcategories. The enforcement algorithm processes constraints level-by-level
+            from roots to leaves: for each node with parent index $\text{parent}_{idx}$ and child index
+            $\text{child}_{idx}$, if $c_{\text{parent}_{idx}} = 0$ then $c_{\text{child}_{idx}} = 0$.
+            Additionally, <span class="hl-red">mutual exclusion among siblings</span> ensures that only
+            one child within a sibling group can fire simultaneously, creating competitive dynamics that
+            reflect real-world concept relationships.
+          </p>
+          <p>
+            This hierarchical distribution creates a realistic mix of 10,884 features subject to
+            conceptual constraints alongside 5,500 independent features. The tree structure follows
+            a <span class="hl-green">balanced branching pattern</span>: 128 root features at depth 0,
+            512 features at depth 1, 2,048 at depth 2, and 8,192 leaf features at depth 3. This
+            distribution models how natural language concepts organize from broad categories
+            (like &ldquo;animal&rdquo;) through intermediate levels (&ldquo;mammal,&rdquo; &ldquo;dog&rdquo;)
+            to specific instantiations (&ldquo;golden retriever&rdquo;), providing a controlled testbed
+            for evaluating whether sparse autoencoders can recover and respect compositional semantic
+            structure embedded in neural representations.
+          </p>
+        </div>
+
+        <h3 class="title is-4" style="margin-top: 2rem;">3.3 Compositional Feature Directions with Hierarchical Constraints</h3>
         <div class="content has-text-justified">
           <p>
             The key insight is to make <span class="hl-green">child feature directions compositionally
@@ -505,7 +568,7 @@
           </p>
         </div>
 
-        <h3 class="title is-4" style="margin-top: 2rem;">2.3 Gram-Schmidt Orthogonalization for $\mathbf{d}_{\perp}$</h3>
+        <h3 class="title is-4" style="margin-top: 2rem;">3.3 (cont.) Gram-Schmidt Orthogonalization for $\mathbf{d}_{\perp}$</h3>
         <div class="content has-text-justified">
           <p>
             To obtain $\mathbf{d}_{\perp}$, a vector orthogonal to the parent direction, we use
@@ -604,12 +667,102 @@
 <hr class="pub-divider">
 
 
+<!-- ===== EXPERIMENTAL SETUP: SEMANTIC STRUCTURE ===== -->
+<section class="section" style="padding-top: 1rem;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered">Experimental Setup</h2>
+
+        <h3 class="title is-4">3.1 Addressing Semantic Structure Limitations in Representation Space</h3>
+        <div class="content has-text-justified">
+          <p>
+            The fundamental challenge in evaluating sparse autoencoders on semantic structures lies in
+            the gap between <span class="hl-blue">statistical</span> and
+            <span class="hl-red">semantic</span> hierarchies. Current synthetic benchmarks, while
+            powerful for controlled experimentation, implement purely statistical dependencies that lack
+            semantic meaning. The core limitation is that semantics requires compositional structure in
+            the representation itself, not merely correlated firing probabilities.
+          </p>
+          <p>
+            In real language models, semantic relationships like &ldquo;deceptive reasoning&rdquo; and
+            &ldquo;goal misrepresentation&rdquo; exhibit meaningful connections because the activation
+            patterns for child concepts literally contain components of parent concepts, creating genuine
+            compositional structure where child representations are built from parent representations
+            plus additional information. In contrast, existing synthetic frameworks treat hierarchical
+            features as independent random directions with statistical dependency rules. When a child
+            feature fires, it adds an arbitrary vector to the activation that bears no compositional
+            relationship to its parent&rsquo;s contribution.
+          </p>
+          <p>
+            This disconnect means that while we can test whether SAEs handle hierarchical statistical
+            dependencies, we cannot evaluate whether they recover semantically meaningful compositional
+            structures. The semantic labels assigned to features (&ldquo;Deceptive Reasoning,&rdquo;
+            &ldquo;Goal Misrepresentation&rdquo;) serve only human interpretation&mdash;the synthetic
+            model possesses no semantic understanding of these concepts.
+          </p>
+        </div>
+
+        <h3 class="title is-4" style="margin-top: 2rem;">3.2 Semantic Hierarchy Requirements and Practical Implementation Approaches</h3>
+        <div class="content has-text-justified">
+          <p>
+            Implementing genuinely semantic hierarchies in synthetic evaluation frameworks would require
+            fundamental architectural changes. <span class="hl-purple">Semantic basis vectors</span>
+            with interpretable meaning would replace random orthogonal directions, defining fundamental
+            semantic concepts like intentionality, truthfulness, goal-oriented behavior, and theory of
+            mind as basis vectors, then constructing complex features as meaningful combinations of
+            these primitives.
+          </p>
+          <p>
+            Given the <strong>fundamental paradox</strong> that creating semantically meaningful synthetic
+            features requires knowing what semantic structure looks like in representation space&mdash;precisely
+            what we aim to investigate&mdash;we implement three practical approaches:
+          </p>
+          <div class="columns" style="margin-top: 0.5rem;">
+            <div class="column">
+              <div class="content">
+                <p><strong class="hl-blue">Approach 1: Weak Semantic Structure</strong></p>
+                <p>
+                  Create statistical signatures that correlate with potential semantic patterns:
+                  features related to deception are highly correlated with each other and
+                  anti-correlated with honesty features, while manifold structures capture continuous
+                  semantic dimensions. This tests whether SAEs can handle the statistical patterns
+                  that real semantic structures might produce.
+                </p>
+              </div>
+            </div>
+            <div class="column">
+              <div class="content">
+                <p><strong class="hl-green">Approach 2: Hybrid Real Model Guidance</strong></p>
+                <p>
+                  Collect LLM activations on curated datasets with known semantic properties, use
+                  PCA/ICA/sparse coding to find empirical feature directions, then use these directions
+                  as synthetic feature vectors. This grounds synthetic features in real semantics while
+                  maintaining control and ground truth.
+                </p>
+              </div>
+            </div>
+          </div>
+          <p>
+            <strong>Approach 3</strong> explicitly acknowledges that SynthSAEBench tests statistical
+            decomposition capabilities rather than semantic understanding, focusing on measurable
+            properties: handling hierarchical statistical dependencies, decomposing correlated versus
+            independent features, and scaling behavior under various statistical constraints.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="pub-divider">
+
 <!-- ===== EXPERIMENTAL SETUP: LLM HIERARCHIES ===== -->
 <section class="section" style="padding-top: 1rem;">
   <div class="container is-max-desktop">
     <div class="columns is-centered">
       <div class="column is-four-fifths">
-        <h2 class="title is-3 has-text-centered">LLM-Generated Misalignment Hierarchies</h2>
+        <h2 class="title is-3 has-text-centered">3.4 LLM-Generated Misalignment Hierarchies</h2>
         <div class="content has-text-justified">
           <p>
             Our experimental pipeline leverages large language models to generate interpretable concept
@@ -892,7 +1045,7 @@
   <div class="container is-max-desktop">
     <div class="columns is-centered">
       <div class="column is-four-fifths">
-        <h2 class="title is-3 has-text-centered">Limitations &amp; Implications for AI Safety</h2>
+        <h2 class="title is-3 has-text-centered">6.1 Limitations &amp; Implications for AI Safety</h2>
         <div class="content has-text-justified">
           <p>
             This approach provides <strong>weak semantic structure</strong>&mdash;it is geometrically
@@ -901,12 +1054,33 @@
             does not &ldquo;understand&rdquo; deception in any functional sense.
           </p>
           <p>
+            The limitations of statistical versus semantic hierarchies carry significant implications
+            for AI safety applications of sparse autoencoder research. Current synthetic evaluation
+            frameworks enable testing of <em>necessary but insufficient</em> conditions for
+            safety-relevant interpretability. We can reliably assess whether SAEs can detect rare but
+            statistically structured patterns, which matters if scheming behaviors exhibit characteristic
+            correlation signatures. The frameworks also allow evaluation of scaling behavior when
+            dangerous features are sparse, robustness of detection mechanisms to feature correlations
+            and hierarchical dependencies, and whether transfer learning approaches work effectively
+            for statistical signatures of concerning behaviors.
+          </p>
+          <p>
+            However, these capabilities come with critical limitations for safety applications. We
+            cannot test whether SAEs <em>actually understand</em> what concepts like &ldquo;deception&rdquo;
+            mean compositionally, whether ablating supposed &ldquo;deception features&rdquo; prevents
+            deceptive reasoning in functionally meaningful ways, whether the hierarchical relationships
+            we construct in synthetic data match real semantic hierarchies in deployed models, or whether
+            synthetic representations of concerning behaviors bear any resemblance to how actual models
+            represent such capabilities.
+          </p>
+          <p>
             For practical AI safety research, this analysis suggests a
             <strong>two-stage validation approach</strong>: first, demonstrate SAE capabilities on
             increasingly complex synthetic statistical structures to establish baseline competence,
             then validate on real model activations with known safety-relevant semantic content.
             Only architectures that succeed at both stages should be considered reliable for
-            safety-critical interpretability applications.
+            safety-critical interpretability applications, ensuring that statistical decomposition
+            capabilities translate to meaningful understanding of dangerous model behaviors.
           </p>
         </div>
 
