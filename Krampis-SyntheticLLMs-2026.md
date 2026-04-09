@@ -14,6 +14,54 @@ This research will integrate controlled synthetic model features evaluation with
 
 Our approach involves developing synthetic benchmarks to test SAE transfer and the presence of invariant feature structures, which will produce protocols that enable reliable cross-model interpretability transfer based on invariant AI safety-related features and circuits. This will enable interpretations and safety interventions developed on one model to reliably transfer to other models in the same family, ultimately making AI safety scalable without requiring complete re-interpretation and SAE generation for each new model, fine-tuned variant, or model family member. The key assumption underlying this work is that geometric feature similarity is both necessary and sufficient for interpretability transfer.
 
+| Component | Description |
+|:---|:---|
+| **Activities** | Develop synthetic benchmarks to test SAE transfer and the presence of invariant feature structures |
+| **Outputs** | Protocols that enable reliable cross-model interpretability transfer based on invariant AI safety-related features and circuits |
+| **Outcomes** | Enable interpretations and safety interventions developed on one model to reliably transfer to other models in the same family |
+| **Impact** | AI safety becomes scalable without requiring complete re-interpretation and SAE generation for each new model, fine-tuned variant, or model family member |
+| **Key Assumption** | Geometric feature similarity is both necessary and sufficient for interpretability transfer |
+
+```{=latex}
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  scale=0.85,
+  every node/.style={rounded corners=2pt, font=\footnotesize\sffamily, align=center,
+                     draw, minimum width=2.1cm, minimum height=0.6cm, inner sep=3pt},
+  root/.style={fill=blue!22, draw=blue!65, font=\footnotesize\bfseries\sffamily},
+  lvl1/.style={fill=green!22, draw=green!65},
+  lvl2/.style={fill=violet!18, draw=violet!55},
+  lvl3/.style={fill=orange!22, draw=orange!60},
+  lbl/.style={draw=none, fill=none, font=\tiny\itshape, minimum width=0pt, minimum height=0pt,
+              inner sep=1pt}
+]
+  \node[root] (animal) at (0,0) {Animal};
+  \node[lvl1] (mammal) at (-3,-2) {Mammal};
+  \node[lvl1] (reptile) at (3,-2) {Reptile};
+  \node[lvl2] (dog) at (-4.5,-4) {Dog};
+  \node[lvl2] (whale) at (-1.5,-4) {Whale};
+  \node[lvl2] (gecko) at (1.8,-4) {Gecko};
+  \node[lvl2] (python) at (4.2,-4) {Python};
+  \node[lvl3] (goldenret) at (-4.5,-6) {Golden\\Retriever};
+  \draw[->,>=Stealth] (animal) -- (mammal) node[lbl,midway,left=2pt] {$\alpha\!=\!0.8$};
+  \draw[->,>=Stealth] (animal) -- (reptile) node[lbl,midway,right=2pt] {$\alpha\!=\!0.5$};
+  \draw[->,>=Stealth] (mammal) -- (dog) node[lbl,midway,left=2pt] {$\alpha\!=\!0.7$};
+  \draw[->,>=Stealth] (mammal) -- (whale) node[lbl,midway,right=2pt] {$\alpha\!=\!0.6$};
+  \draw[->,>=Stealth] (reptile) -- (gecko) node[lbl,midway,left=2pt] {$\alpha\!=\!0.4$};
+  \draw[->,>=Stealth] (reptile) -- (python) node[lbl,midway,right=2pt] {$\alpha\!=\!0.5$};
+  \draw[->,>=Stealth] (dog) -- (goldenret) node[lbl,midway,left=2pt] {$\alpha\!=\!0.5$};
+\end{tikzpicture}
+\caption{\textbf{Semantic Feature Taxonomy: Geometric Embedding.}
+Each parent--child edge carries a semantic similarity coefficient $\alpha$ used to construct the
+child feature direction $\mathbf{d}_\text{child} = \alpha\mathbf{d}_\text{parent} + \beta\mathbf{d}_\perp$.
+Root concepts (blue) spawn child concepts (green) and grandchild concepts (violet/orange) with
+progressively specialized feature directions. The $\alpha$ values encode how much of the parent
+representation is inherited, making semantic relatedness a geometric property of the feature space.}
+\label{fig:taxonomy}
+\end{figure}
+```
+
 ## 1. Related Work
 
 Sparse autoencoders have emerged as a powerful tool for decomposing neural network activations into interpretable features, yet measuring the quality of these features remains an active area of research. Recent work has converged on a multi-dimensional evaluation framework that addresses different aspects of SAE quality: concept detection, feature separability, reconstruction fidelity, and human interpretability [1]. The development of comprehensive evaluation suites has revealed that gains on traditional proxy metrics, such as reconstruction loss at a given sparsity level, do not reliably translate to better practical performance, highlighting the need for more sophisticated assessment methods.
@@ -68,7 +116,55 @@ We introduce partial semantic structure by modifying how feature direction vecto
 
 To obtain the orthogonal component $\mathbf{d}_{\perp}$, we employ Gram-Schmidt orthogonalization starting with a random vector $\mathbf{v}$  and subtracting its projection onto the parent direction: $\mathbf{d}_{\perp} = \mathbf{v} - (\mathbf{v} \cdot \mathbf{d}_{parent}) \mathbf{d}_{parent}$. The coefficient$ $  $\beta$ controls how much orthogonal specialization enters the final child direction—a large $\beta$ relative to $\alpha$ means the child direction tilts strongly toward its unique subspace, while a small $\beta$ means the child remains closely aligned with the parent direction. This creates genuine compositional structure where activations containing child features literally contain components of parent features in their vector representations.
 
-The theoretical foundation rests on semantic relatedness manifesting as geometric structure in representation space. When we set $\alpha > 0$, we create non-zero cosine similarity between parent and child feature directions: $\cos(\theta) = \mathbf{d}_{child}^T \mathbf{d}_{parent} = \alpha$ after normalization. This creates testable predictions: SAEs that successfully decompose these features should discover latents where decoder directions for child features have high cosine similarity with decoder directions for parent features, and interventions that ablate parent features should impair reconstruction of child features more severely than unrelated features.
+The theoretical foundation rests on semantic relatedness manifesting as geometric structure in representation space. When we set $\alpha > 0$, we create non-zero cosine similarity between parent and child feature directions. Expanding the inner product after normalization:
+
+$$\mathbf{d}_{\text{child}}^T \mathbf{d}_{\text{parent}}
+= (\alpha \cdot \mathbf{d}_{\text{parent}} + \beta \cdot \mathbf{d}_\perp)^T \mathbf{d}_{\text{parent}}
+= \alpha \underbrace{(\mathbf{d}_{\text{parent}}^T \mathbf{d}_{\text{parent}})}_{=1}
++ \beta \underbrace{(\mathbf{d}_\perp^T \mathbf{d}_{\text{parent}})}_{=0}
+= \alpha$$
+
+This creates testable predictions: SAEs that successfully decompose these features should discover latents where decoder directions for child features have high cosine similarity with decoder directions for parent features, and interventions that ablate parent features should impair reconstruction of child features more severely than unrelated features.
+
+```{=latex}
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[scale=1.1, >=Stealth]
+  \draw[->, gray!60, thin] (-0.3,0) -- (4.8,0);
+  \draw[->, gray!60, thin] (0,-0.3) -- (0,3.4);
+  % d_parent (blue)
+  \draw[->, blue!80!black, line width=2pt] (0,0) -- (4.0,0)
+    node[below right, font=\small, blue!80!black] {$\mathbf{d}_{\text{parent}}$};
+  % d_perp (green)
+  \draw[->, green!60!black, line width=2pt] (0,0) -- (0,3.0)
+    node[above left, font=\small, green!60!black] {$\mathbf{d}_\perp$};
+  % d_child (orange, alpha=0.7 => angle~45.6 deg)
+  \draw[->, orange!80!black, line width=2pt] (0,0) -- (2.8,2.86)
+    node[above right, font=\small, orange!80!black] {$\mathbf{d}_{\text{child}}$};
+  % angle arc
+  \draw[-] (1.0,0) arc (0:45.6:1.0) node[midway, right, font=\scriptsize] {$\theta$};
+  % dashed projections
+  \draw[dashed, gray!70, thin] (2.8,2.86) -- (2.8,0)
+    node[below, font=\scriptsize, black] {$\alpha$};
+  \draw[dashed, gray!70, thin] (2.8,2.86) -- (0,2.86)
+    node[left, font=\scriptsize, black] {$\beta$};
+  % formula box
+  \node[draw=blue!30, fill=blue!5, rounded corners=3pt, font=\small, align=left,
+        inner sep=7pt] at (7.2,2.0) {
+    $\mathbf{d}_\text{child} = \alpha\mathbf{d}_\text{parent} + \beta\mathbf{d}_\perp$\\[4pt]
+    $\cos\theta = \alpha$\\[4pt]
+    $\alpha^2 + \beta^2 = 1$
+  };
+\end{tikzpicture}
+\caption{\textbf{Geometric Structure of Compositional Feature Directions.}
+The child feature direction $\mathbf{d}_\text{child}$ (orange) is a weighted sum of the parent
+direction $\mathbf{d}_\text{parent}$ (blue) and an orthogonal component $\mathbf{d}_\perp$ (green),
+obtained via Gram-Schmidt orthogonalization. The angle $\theta$ satisfies $\cos\theta = \alpha$,
+directly encoding semantic relatedness as geometric proximity in the feature space. Dashed lines show
+the $\alpha$ and $\beta$ components along each axis.}
+\label{fig:geometry}
+\end{figure}
+```
 
 ### 3.4 LLM-Generated Misalignment Hierarchies and Geometric Implementation
 
@@ -77,6 +173,64 @@ Our experimental pipeline leverages large language models to generate interpreta
 In the second step, we translate the tree into feature directions by starting at the root with a random unit vector $\mathbf{d}_{root}$ and recursively computing child directions using the compositional formula. The mixing coefficient $\beta$ is derived from $\alpha$ to achieve the specified cosine similarity after normalization. Grandchildren inherit geometric structure transitively from both parents and grandparents—"Reward Hacking" contains directional overlap with both "Goal Misrepresentation" and "Deceptive Reasoning," capturing the correct semantic property of compositional concept inheritance.
 
 The resulting feature directions integrate directly into SynthSAEBench's hierarchy mechanism, where the parent firing-probability constraint $c_{child} \leftarrow c_{child} \cdot \mathbf{1}[c_{parent} > 0]$ enforces statistical dependencies while the geometric construction ensures that hidden activations for child concept samples literally contain components pointing toward parent concept directions. This enables precise diagnostic evaluation: we can test whether SAEs learn latents whose decoder directions maintain high cosine similarity with ground-truth concept directions, whether ablating latents aligned with "Deceptive Reasoning" impairs reconstruction of "Reward Hacking" more than unrelated features, and whether SAEs correctly split hierarchies or inappropriately absorb child concepts into parent latents.
+
+```{=latex}
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  scale=0.82,
+  every node/.style={rounded corners=3pt, font=\scriptsize\sffamily, align=center,
+                     draw, minimum width=2.5cm, minimum height=0.85cm, inner sep=3pt},
+  root/.style={fill=red!28, draw=red!70, font=\scriptsize\bfseries\sffamily},
+  child1/.style={fill=green!20, draw=green!60},
+  gchild/.style={fill=violet!20, draw=violet!60}
+]
+  \node[root] (dr) at (0,0) {\textbf{Deceptive Reasoning}\\\scriptsize\textit{p\,=\,0.001}};
+  \node[child1] (gm) at (-5.5,-2.8)
+    {Goal Misrepresentation\\\tiny$\alpha\!=\!0.7,\;p\!=\!0.01$};
+  \node[child1] (iw) at (0,-2.8)
+    {Information Withholding\\\tiny$\alpha\!=\!0.5,\;p\!=\!0.015$};
+  \node[child1] (sm) at (5.5,-2.8)
+    {Strategic Misdirection\\\tiny$\alpha\!=\!0.6,\;p\!=\!0.02$};
+  \draw[->,>=Stealth] (dr) -- (gm);
+  \draw[->,>=Stealth] (dr) -- (iw);
+  \draw[->,>=Stealth] (dr) -- (sm);
+  \node[gchild] (rh) at (-7,-5.5)
+    {Reward Hacking\\\tiny$\alpha\!=\!0.4,\;p\!=\!0.3$};
+  \node[gchild] (sa) at (-4,-5.5)
+    {Sycophantic Agreement\\\tiny$\alpha\!=\!0.5,\;p\!=\!0.5$};
+  \node[gchild] (so) at (-1.3,-5.5)
+    {Selective Omission\\\tiny$\alpha\!=\!0.6,\;p\!=\!0.4$};
+  \node[gchild] (fm) at (1.9,-5.5)
+    {Framing Manipulation\\\tiny$\alpha\!=\!0.4,\;p\!=\!0.6$};
+  \draw[->,>=Stealth] (gm) -- (rh);
+  \draw[->,>=Stealth] (gm) -- (sa);
+  \draw[->,>=Stealth] (iw) -- (so);
+  \draw[->,>=Stealth] (iw) -- (fm);
+\end{tikzpicture}
+\caption{\textbf{LLM-Generated Deceptive Reasoning Hierarchy.}
+An example hierarchy produced by prompting an LLM to generate misalignment-related concept trees
+with semantic similarity coefficients $\alpha$ and conditional firing probabilities $p$.
+Each parent--child edge carries the LLM-assigned $\alpha$ value used to construct the child
+feature direction $\mathbf{d}_\text{child} = \alpha\mathbf{d}_\text{parent} + \beta\mathbf{d}_\perp$.
+Grandchildren inherit geometry transitively: ``Reward Hacking'' (violet) therefore contains
+directional overlap with both ``Goal Misrepresentation'' and ``Deceptive Reasoning'', correctly
+capturing compositional concept inheritance.}
+\label{fig:hierarchy}
+\end{figure}
+```
+
+### 3.5 Safety Research Applications
+
+The semantic hierarchy approach enables several critical AI safety research directions. We can construct arbitrarily complex semantic hierarchies reflecting real AI safety threat models---power-seeking, deception, sycophancy, manipulation, goal misspecification---and rigorously test whether interpretability tools can decompose these structures. Four concrete evaluation axes emerge from this framework:
+
+**Capability Detection Robustness.** Test SAE identification of rare, sparse dangerous features (appearing in fewer than 0.1% of samples). If SAEs fail to consistently recover rare scheming features in the controlled synthetic setting, they will likely miss such features in real models where dangerous behaviors are inherently infrequent.
+
+**Transfer Learning for Monitoring.** If structural patterns---clustered latents with low firing probability and mutual exclusivity---reliably indicate scheming-type hierarchies in synthetic data, we can search for the same geometric signatures in real SAEs trained on large language models as a monitoring signal, enabling scalable safety auditing without labeling every feature manually.
+
+**Worst-Case Adversarial Scenarios.** Model capability concealment can be simulated by creating features that are anti-correlated with overt expressions of the same capabilities. This tests whether SAEs can still recover underlying dangerous features when obvious activation signals are suppressed, mimicking how a deceptively aligned model might hide its true capabilities during evaluation.
+
+**Intervention Testing with Ground Truth.** Because we have complete ground truth about which features represent dangerous capabilities, we can test whether ablating or clamping SAE latents matched to these features actually prevents the corresponding behavior in downstream tasks---providing principled validation that interpretability interventions have the intended causal effect.
 
 ## 4. Results
 
