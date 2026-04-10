@@ -135,6 +135,9 @@ jobs:
           # Landing page
           cp index.html _site/index.html
 
+          # Feature hierarchy assets (heatmap image referenced by index.html and paper)
+          cp -r feature_hierarchies _site/feature_hierarchies
+
           touch _site/.nojekyll
 
       - name: Configure Pages
