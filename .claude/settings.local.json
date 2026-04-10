@@ -17,7 +17,8 @@
       "Bash(git commit -m \"$(cat <<''EOF''\nUpdate Claude settings configuration\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
       "Bash(git checkout claude/github-pages-reveal-js-QCbwc)",
       "Bash(git add -A)",
-      "Bash(git commit -m \"Temporary commit before subtree update\")"
+      "Bash(git commit -m \"Temporary commit before subtree update\")",
+      "Bash(git subtree pull --prefix=feature_hierarchies/ feature-hierarchies-remote main --squash)"
     ],
     "deny": [],
     "ask": []
