@@ -14,13 +14,13 @@ This research will integrate controlled synthetic model features evaluation with
 
 Our approach involves developing synthetic benchmarks to test SAE transfer and the presence of invariant feature structures, which will produce protocols that enable reliable cross-model interpretability transfer based on invariant AI safety-related features and circuits. This will enable interpretations and safety interventions developed on one model to reliably transfer to other models in the same family, ultimately making AI safety scalable without requiring complete re-interpretation and SAE generation for each new model, fine-tuned variant, or model family member. The key assumption underlying this work is that geometric feature similarity is both necessary and sufficient for interpretability transfer.
 
-| Component | Description |
-|:---|:---|
-| **Activities** | Develop synthetic benchmarks to test SAE transfer and the presence of invariant feature structures |
-| **Outputs** | Protocols that enable reliable cross-model interpretability transfer based on invariant AI safety-related features and circuits |
-| **Outcomes** | Enable interpretations and safety interventions developed on one model to reliably transfer to other models in the same family |
-| **Impact** | AI safety becomes scalable without requiring complete re-interpretation and SAE generation for each new model, fine-tuned variant, or model family member |
-| **Key Assumption** | Geometric feature similarity is both necessary and sufficient for interpretability transfer |
+| Component          | Description                                                                                                                                               |
+|:------------------ |:--------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Activities**     | Develop synthetic benchmarks to test SAE transfer and the presence of invariant feature structures                                                        |
+| **Outputs**        | Protocols that enable reliable cross-model interpretability transfer based on invariant AI safety-related features and circuits                           |
+| **Outcomes**       | Enable interpretations and safety interventions developed on one model to reliably transfer to other models in the same family                            |
+| **Impact**         | AI safety becomes scalable without requiring complete re-interpretation and SAE generation for each new model, fine-tuned variant, or model family member |
+| **Key Assumption** | Geometric feature similarity is both necessary and sufficient for interpretability transfer                                                               |
 
 ```{=latex}
 \begin{figure}[htbp]
@@ -121,8 +121,9 @@ The theoretical foundation rests on semantic relatedness manifesting as geometri
 $$\mathbf{d}_{\text{child}}^T \mathbf{d}_{\text{parent}}
 = (\alpha \cdot \mathbf{d}_{\text{parent}} + \beta \cdot \mathbf{d}_\perp)^T \mathbf{d}_{\text{parent}}
 = \alpha \underbrace{(\mathbf{d}_{\text{parent}}^T \mathbf{d}_{\text{parent}})}_{=1}
+
 + \beta \underbrace{(\mathbf{d}_\perp^T \mathbf{d}_{\text{parent}})}_{=0}
-= \alpha$$
+  = \alpha$$
 
 This creates testable predictions: SAEs that successfully decompose these features should discover latents where decoder directions for child features have high cosine similarity with decoder directions for parent features, and interventions that ablate parent features should impair reconstruction of child features more severely than unrelated features.
 

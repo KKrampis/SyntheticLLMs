@@ -15,7 +15,9 @@
       "Bash(git commit -m \"$(cat <<''EOF''\nUpdate Claude settings and add new markdown content\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
       "Bash(git add .claude/settings.local.json)",
       "Bash(git commit -m \"$(cat <<''EOF''\nUpdate Claude settings configuration\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
-      "Bash(git checkout claude/github-pages-reveal-js-QCbwc)"
+      "Bash(git checkout claude/github-pages-reveal-js-QCbwc)",
+      "Bash(git add -A)",
+      "Bash(git commit -m \"Temporary commit before subtree update\")"
     ],
     "deny": [],
     "ask": []
