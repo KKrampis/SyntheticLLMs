@@ -121,9 +121,8 @@ The theoretical foundation rests on semantic relatedness manifesting as geometri
 $$\mathbf{d}_{\text{child}}^T \mathbf{d}_{\text{parent}}
 = (\alpha \cdot \mathbf{d}_{\text{parent}} + \beta \cdot \mathbf{d}_\perp)^T \mathbf{d}_{\text{parent}}
 = \alpha \underbrace{(\mathbf{d}_{\text{parent}}^T \mathbf{d}_{\text{parent}})}_{=1}
-
 + \beta \underbrace{(\mathbf{d}_\perp^T \mathbf{d}_{\text{parent}})}_{=0}
-  = \alpha$$
+= \alpha$$
 
 This creates testable predictions: SAEs that successfully decompose these features should discover latents where decoder directions for child features have high cosine similarity with decoder directions for parent features, and interventions that ablate parent features should impair reconstruction of child features more severely than unrelated features.
 
