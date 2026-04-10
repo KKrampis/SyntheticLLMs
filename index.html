@@ -1000,6 +1000,165 @@
 
 <hr class="pub-divider">
 
+<!-- ===== RESULTS ===== -->
+<section class="section" style="padding-top: 1rem;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3 has-text-centered">4. Results</h2>
+
+        <!-- Heatmap figure -->
+        <div class="figure-wrap" style="margin-bottom: 1.5rem;">
+          <img src="feature_hierarchies/visualizations/cosim_heatmap.png"
+               alt="Pairwise cosine similarity heatmap for SAE features"
+               style="max-width:100%; border-radius:8px; border:1px solid var(--border);">
+          <p class="figure-caption">
+            <strong>Figure 4.</strong> Pairwise cosine similarity heatmap for SAE features
+            organized into MITRE ATLAS taxonomy trees. Rows and columns correspond to the same
+            set of features, ordered breadth-first within each tree (root, then level-1 children,
+            then level-2 leaves). Colored rectangles outline level-1 subtree blocks. The pronounced
+            <span class="hl-blue">columnar banding</span> within each block reflects the shared
+            parent-vector component inherited by sibling features under the same tactic node.
+          </p>
+        </div>
+
+        <h3 class="title is-4">Columnar Symmetry in the Cosine Similarity Heatmap</h3>
+        <div class="content has-text-justified">
+          <p>
+            The heatmap displays pairwise cosine similarities between SAE feature vectors
+            organized according to MITRE ATLAS tactic hierarchies. Features within the same
+            subtree share a common parent direction because each child feature is constructed as
+            $\mathbf{d}_\text{child} = \alpha \cdot \mathbf{d}_\text{parent} + \beta \cdot \mathbf{d}_\perp$.
+            As a result, any two siblings $i$ and $j$ under the same parent have cosine similarity
+            with an arbitrary third feature $x$ that is approximately equal&mdash;
+            $\cos(\mathbf{d}_i, x) \approx \cos(\mathbf{d}_j, x)$&mdash;since both are dominated
+            by the same $\alpha \cdot \mathbf{d}_\text{parent}$ term. This makes entire columns
+            within a subtree block appear nearly uniform in color, producing the characteristic
+            vertical stripes visible inside the colored bounding boxes.
+          </p>
+          <p>
+            Features from different tactics have lower mutual similarities because their respective
+            parent vectors are mutually orthogonal by construction. The columnar symmetry thus
+            serves as a <strong>geometric fingerprint</strong> of the construction rule: the more
+            features share ancestry, the more their similarity profiles align, collapsing distinct
+            rows into visually indistinguishable columns.
+          </p>
+        </div>
+
+        <h3 class="title is-4" style="margin-top: 2rem;">Taxonomy: MITRE ATLAS Semantic Dictionary</h3>
+        <div class="content has-text-justified">
+          <p>
+            The starting point is <code>feature_hierarchies/mitre_atlas_adversarial_ml.json</code>,
+            encoding the MITRE ATLAS adversarial machine learning threat taxonomy as a forest of
+            concept trees. The file contains 13 root nodes&mdash;one per ATLAS tactic, including
+            <em>Adversarial Evasion</em>, <em>Data Poisoning</em>, <em>Model Extraction and
+            Stealing</em>, and <em>Prompt Injection and LLM Exploitation</em>&mdash;each heading
+            a subtree of depth 2. Internal nodes represent tactic families and leaves represent
+            individual techniques. Across all 13 trees the taxonomy defines 148 hierarchical
+            feature slots, with individual tree sizes ranging from 10 to 13 nodes.
+          </p>
+          <p>
+            Each node carries an <code>alpha</code> ($\alpha$) value specifying the desired cosine
+            similarity between the node&rsquo;s feature vector and its parent&rsquo;s, a
+            <code>beta</code> ($\beta$) value satisfying $\alpha^2 + \beta^2 = 1$, a
+            <code>mutually_exclusive_children</code> flag, and a <code>children</code> array.
+            Root nodes are assigned $\alpha = 0, \beta = 1$, meaning they are initialised as
+            free unit vectors with no inherited direction.
+          </p>
+        </div>
+
+        <h3 class="title is-4" style="margin-top: 2rem;">Synthetic Model Construction &amp; Geometric Verification</h3>
+        <div class="content has-text-justified">
+          <p>
+            A <code>SyntheticModel</code> is instantiated with 512 features embedded in a
+            128-dimensional hidden space, giving a 4&times; superposition ratio. The initialiser
+            traverses the JSON forest depth-first, constructing each child vector as
+            $\mathbf{d}_\text{child} = \alpha\mathbf{d}_\text{parent} + \beta\mathbf{d}_\perp$
+            via Gram&ndash;Schmidt orthogonalisation. This guarantees
+            $\cos(\mathbf{d}_\text{child}, \mathbf{d}_\text{parent}) = \alpha$ exactly.
+          </p>
+          <p>
+            Before any training, the geometry is verified across all 135 parent&ndash;child pairs.
+            The maximum absolute deviation from the specified $\alpha$ value is below
+            $2 \times 10^{-7}$&mdash;consistent with single-precision floating-point
+            rounding&mdash;confirming the Gram&ndash;Schmidt procedure realises the intended
+            similarities to essentially exact precision.
+          </p>
+          <p>
+            <strong>Firing distribution:</strong> Firing probabilities are drawn from a Zipfian
+            distribution with exponent 0.5, clipped to $[10^{-3}, 0.3]$. The hierarchy
+            enforces a conditional firing rule: a child feature may only be active if its parent
+            is also active. The notebook verifies this constraint over 10,000 sampled batches,
+            finding zero violations. Mean active features per token (L0) $\approx$ 2.7.
+          </p>
+        </div>
+
+        <h3 class="title is-4" style="margin-top: 2rem;">SAE Training &amp; Recovery Metrics</h3>
+        <div class="content has-text-justified">
+          <p>
+            A BatchTopK Sparse Autoencoder is trained on hidden activations sampled from the
+            synthetic model: encoder projects 128-d hidden state into 512-d latent space,
+            retains top-$k = 15$ activations per token, decoder reconstructs. Training:
+            10M tokens, batch size 1024, learning rate $3 \times 10^{-4}$.
+          </p>
+          <p>
+            The $k = 15$ against a true L0 of 2.7 is deliberately generous, biasing toward
+            high recall at the expense of precision. Recovery is evaluated by matching each SAE
+            latent to its closest ground-truth feature via cosine similarity.
+          </p>
+        </div>
+
+        <div class="content" style="margin-top: 1rem;">
+          <table class="table is-striped is-hoverable is-fullwidth" style="font-size: 0.92rem;">
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th style="text-align:right;">Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Explained variance (R²)</td><td style="text-align:right;">0.971</td></tr>
+              <tr><td>Matthews Correlation Coefficient</td><td style="text-align:right;">0.732</td></tr>
+              <tr><td>Uniqueness</td><td style="text-align:right;">0.773</td></tr>
+              <tr><td>F1 score</td><td style="text-align:right;">0.475</td></tr>
+              <tr><td>Precision</td><td style="text-align:right;">0.372</td></tr>
+              <tr><td>Recall</td><td style="text-align:right;">0.783</td></tr>
+              <tr><td>SAE L0</td><td style="text-align:right;">15.0</td></tr>
+              <tr><td>True L0</td><td style="text-align:right;">2.7</td></tr>
+              <tr><td>Dead latents</td><td style="text-align:right;">72 / 512</td></tr>
+              <tr><td>Shrinkage</td><td style="text-align:right;">0.985</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="content has-text-justified">
+          <p>
+            The high explained variance (0.97) confirms faithful reconstruction. Recall of 0.78
+            indicates most ground-truth features have a corresponding SAE latent. Precision of
+            0.37 reflects spurious activations&mdash;the expected consequence of the 5.6&times;
+            mismatch between permitted L0 and true signal sparsity. Of 512 SAE latents, 72 remain
+            permanently inactive, likely corresponding to features too rare under the Zipfian
+            schedule for the SAE to learn. Shrinkage near 1.0 confirms BatchTopK prevents the
+            magnitude collapse that afflicts L1-penalised autoencoders.
+          </p>
+          <p>
+            The block-diagonal similarity structure visible in the heatmap represents exactly the
+            geometric correlations the SAE must disentangle. When a leaf feature shares $\alpha = 0.65$
+            with its level-1 parent, their hidden representations differ by only
+            $\arccos(0.65) \approx 49°$, making it genuinely difficult for the encoder to resolve
+            whether parent, child, or both were active. This ambiguity is the proximate cause of
+            the precision shortfall, and it grows with $\alpha$: trees whose level-1 groups have
+            large mixing coefficients show more tightly clustered blocks in the heatmap and
+            correspondingly lower precision in SAE recovery metrics.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="pub-divider">
+
 <!-- ===== RELATED WORK ===== -->
 <section class="section" style="padding-top: 1rem;">
   <div class="container is-max-desktop">
