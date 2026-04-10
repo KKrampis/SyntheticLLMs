@@ -1093,6 +1093,33 @@
           </p>
         </div>
 
+        <h3 class="title is-4" style="margin-top: 2rem;">Cosine Similarity Heatmap Construction</h3>
+        <div class="content has-text-justified">
+          <p>
+            For each of four randomly selected tactic trees the heatmap is constructed as follows.
+            All nodes in the tree are enumerated in breadth-first order&mdash;root, then level-1
+            children in left-to-right order, then level-2 leaves grouped under their respective
+            level-1 parents. This ordering places nodes that share a level-1 ancestor in contiguous
+            index ranges, which is what makes the block structure visible. The model&rsquo;s feature
+            dictionary matrix <em>W</em> of shape (512, 128) is L2-normalised row-wise to produce
+            unit vectors, and the cosine similarity matrix for the selected nodes is computed as
+            the inner product of the corresponding submatrix with its own transpose, yielding a
+            symmetric $n \times n$ matrix.
+          </p>
+          <p>
+            The entries follow directly from the construction rule. Diagonal entries are identically 1.
+            Parent&ndash;child entries equal the child&rsquo;s $\alpha$ value by the geometric
+            invariant. Sibling entries&mdash;between two leaves sharing a level-1 parent&mdash;are
+            elevated above zero because both vectors contain the term $\alpha \cdot \mathbf{d}_\text{parent}$;
+            the expected similarity between siblings with coefficients $(\alpha_1, \beta_1)$ and
+            $(\alpha_2, \beta_2)$ is approximately $\alpha_1\alpha_2$. Cross-subtree entries are close
+            to zero because the corresponding parent vectors are mutually orthogonal, so the
+            shared-direction term that elevates within-block similarities is absent across boundaries.
+            A colored rectangle is drawn over each level-1 diagonal block to make the grouping
+            explicit, with distinct colors assigned to each subtree.
+          </p>
+        </div>
+
         <h3 class="title is-4" style="margin-top: 2rem;">SAE Training &amp; Recovery Metrics</h3>
         <div class="content has-text-justified">
           <p>
