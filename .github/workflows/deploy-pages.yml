@@ -11,6 +11,7 @@ on:
       - '_templates/**'
       - 'slides-reveal.js/**'
       - 'feature_hierarchies/**'
+      - 'figures/**'
       - '.github/workflows/deploy-pages.yml'
   workflow_dispatch:
 
@@ -51,7 +52,16 @@ jobs:
             texlive-fonts-recommended \
             texlive-science \
             texlive-fonts-extra \
-            lmodern
+            lmodern \
+            poppler-utils
+
+      - name: Generate TikZ figures as PNG
+        run: |
+          for n in 1 2 3; do
+            (cd figures && pdflatex -interaction=nonstopmode fig${n}.tex)
+            pdftocairo -png -r 150 -singlefile figures/fig${n}.pdf figures/fig${n}
+            echo "Generated figures/fig${n}.png"
+          done
 
       - name: Assemble site
         run: |
@@ -133,6 +143,9 @@ jobs:
           # Feature hierarchy assets (heatmap image referenced by index.html and paper)
           cp -r feature_hierarchies _site/feature_hierarchies
 
+          # TikZ figures rendered as PNG (referenced by manuscript and website)
+          cp -r figures _site/figures
+
           touch _site/.nojekyll
 
       - name: Commit generated files back to repository
@@ -141,7 +154,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           cp _site/paper.pdf Krampis-SyntheticLLMs-2026.pdf
           cp _site/index.html index.html
-          git add Krampis-SyntheticLLMs-2026.pdf index.html
+          git add Krampis-SyntheticLLMs-2026.pdf index.html figures/fig1.png figures/fig2.png figures/fig3.png
           git diff --staged --quiet || git commit -m "chore: regenerate index.html and Krampis-SyntheticLLMs-2026.pdf from manuscript"
           git pull --rebase origin main
           git push origin main
