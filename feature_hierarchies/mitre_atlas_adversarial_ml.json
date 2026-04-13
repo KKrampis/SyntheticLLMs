@@ -1,0 +1,998 @@
+{
+  "description": "MITRE ATLAS Adversarial ML Taxonomy — semantic dictionary for SAELens synthetic model hierarchy. Each tree encodes a top-level ATLAS tactic or attack family. Alpha values reflect semantic closeness to the parent concept; siblings use distinct alpha values so their feature vectors do not collapse. Beta = sqrt(1 - alpha^2) preserves unit norm. Root nodes use alpha=0.0, beta=1.0.",
+  "source": "MITRE ATLAS (Adversarial Threat Landscape for Artificial-Intelligence Systems)",
+  "trees": [
+    {
+      "label": "Adversarial Evasion",
+      "alpha": 0.0,
+      "beta": 1.0,
+      "mutually_exclusive_children": true,
+      "children": [
+        {
+          "label": "Physical Domain Evasion",
+          "alpha": 0.65,
+          "beta": 0.76,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Adversarial Patch",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Physical World Perturbation",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            },
+            {
+              "label": "Stop Sign Attack",
+              "alpha": 0.5,
+              "beta": 0.866,
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "Digital Domain Evasion",
+          "alpha": 0.55,
+          "beta": 0.835,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "White-Box Evasion",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Black-Box Evasion",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            },
+            {
+              "label": "Transfer-Based Evasion",
+              "alpha": 0.5,
+              "beta": 0.866,
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "Semantic Evasion",
+          "alpha": 0.45,
+          "beta": 0.893,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Paraphrase Attack",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Synonym Substitution",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Adversarial Perturbation Crafting",
+      "alpha": 0.0,
+      "beta": 1.0,
+      "mutually_exclusive_children": true,
+      "children": [
+        {
+          "label": "Lp-Norm Bounded Perturbation",
+          "alpha": 0.65,
+          "beta": 0.76,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "L-infinity FGSM Attack",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "PGD Attack",
+              "alpha": 0.6,
+              "beta": 0.8,
+              "children": []
+            },
+            {
+              "label": "L2 Carlini-Wagner Attack",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            },
+            {
+              "label": "DeepFool Attack",
+              "alpha": 0.5,
+              "beta": 0.866,
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "Score-Based Black-Box Attack",
+          "alpha": 0.55,
+          "beta": 0.835,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "NES Gradient Estimation",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "ZOO Attack",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "Decision-Based Attack",
+          "alpha": 0.45,
+          "beta": 0.893,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Boundary Attack",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "HopSkipJump Attack",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Data Poisoning",
+      "alpha": 0.0,
+      "beta": 1.0,
+      "mutually_exclusive_children": true,
+      "children": [
+        {
+          "label": "Training Data Manipulation",
+          "alpha": 0.65,
+          "beta": 0.76,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Label Flipping",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Feature Poisoning",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            },
+            {
+              "label": "Availability Attack",
+              "alpha": 0.5,
+              "beta": 0.866,
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "Targeted Integrity Poisoning",
+          "alpha": 0.55,
+          "beta": 0.835,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Gradient-Aligned Poisoning",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Witches Brew Attack",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "Federated Poisoning",
+          "alpha": 0.45,
+          "beta": 0.893,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Byzantine Gradient Attack",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Model Replacement Attack",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            },
+            {
+              "label": "Free-Rider Attack",
+              "alpha": 0.45,
+              "beta": 0.893,
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Backdoor and Trojan Attacks",
+      "alpha": 0.0,
+      "beta": 1.0,
+      "mutually_exclusive_children": true,
+      "children": [
+        {
+          "label": "Static Trigger Backdoor",
+          "alpha": 0.65,
+          "beta": 0.76,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Visible Patch Trigger",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Invisible Steganographic Trigger",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            },
+            {
+              "label": "Frequency Domain Trigger",
+              "alpha": 0.5,
+              "beta": 0.866,
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "Dynamic Trigger Backdoor",
+          "alpha": 0.55,
+          "beta": 0.835,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Input-Conditioned Trigger",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Sample-Specific Trigger",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "Instruction Backdoor",
+          "alpha": 0.45,
+          "beta": 0.893,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Sleeper Agent Backdoor",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Task-Specific Trojan",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Model Extraction and Stealing",
+      "alpha": 0.0,
+      "beta": 1.0,
+      "mutually_exclusive_children": true,
+      "children": [
+        {
+          "label": "Query-Based Model Extraction",
+          "alpha": 0.65,
+          "beta": 0.76,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Functionally Equivalent Extraction",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Task-Specific Model Stealing",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            },
+            {
+              "label": "Knowledge Distillation Attack",
+              "alpha": 0.5,
+              "beta": 0.866,
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "Architecture Inference",
+          "alpha": 0.55,
+          "beta": 0.835,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Side-Channel Timing Inference",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Hyperparameter Extraction",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "Intellectual Property Theft",
+          "alpha": 0.45,
+          "beta": 0.893,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Watermark Evasion",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "API Scraping for Training",
+              "alpha": 0.5,
+              "beta": 0.866,
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Membership Inference",
+      "alpha": 0.0,
+      "beta": 1.0,
+      "mutually_exclusive_children": true,
+      "children": [
+        {
+          "label": "Black-Box Membership Inference",
+          "alpha": 0.65,
+          "beta": 0.76,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Confidence-Score Attack",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Loss-Threshold Attack",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            },
+            {
+              "label": "Shadow Model Inference",
+              "alpha": 0.5,
+              "beta": 0.866,
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "White-Box Membership Inference",
+          "alpha": 0.55,
+          "beta": 0.835,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Gradient Norm Attack",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Intermediate Representation Analysis",
+              "alpha": 0.5,
+              "beta": 0.866,
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "Attribute Inference",
+          "alpha": 0.45,
+          "beta": 0.893,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Demographic Attribute Leakage",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Sensitive Feature Reconstruction",
+              "alpha": 0.5,
+              "beta": 0.866,
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Model Inversion and Data Reconstruction",
+      "alpha": 0.0,
+      "beta": 1.0,
+      "mutually_exclusive_children": true,
+      "children": [
+        {
+          "label": "Output-Based Inversion",
+          "alpha": 0.65,
+          "beta": 0.76,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Confidence Vector Inversion",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Generative Model Inversion",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "Gradient-Based Inversion",
+          "alpha": 0.55,
+          "beta": 0.835,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Training Data Reconstruction",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Feature Attribution Inversion",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            },
+            {
+              "label": "Gradient Inversion in Federated Learning",
+              "alpha": 0.5,
+              "beta": 0.866,
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "LLM Training Data Extraction",
+          "alpha": 0.45,
+          "beta": 0.893,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Memorization Extraction",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Verbatim Training Data Elicitation",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Prompt Injection and LLM Exploitation",
+      "alpha": 0.0,
+      "beta": 1.0,
+      "mutually_exclusive_children": true,
+      "children": [
+        {
+          "label": "Direct Prompt Injection",
+          "alpha": 0.65,
+          "beta": 0.76,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Instruction Override",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Role-Playing Jailbreak",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            },
+            {
+              "label": "System Prompt Extraction",
+              "alpha": 0.5,
+              "beta": 0.866,
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "Indirect Prompt Injection",
+          "alpha": 0.55,
+          "beta": 0.835,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Web Content Hijacking",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "RAG Context Poisoning",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            },
+            {
+              "label": "Tool Output Injection",
+              "alpha": 0.5,
+              "beta": 0.866,
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "LLM Agent Manipulation",
+          "alpha": 0.45,
+          "beta": 0.893,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Agentic Task Hijacking",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Privilege Escalation via LLM",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            },
+            {
+              "label": "Multi-Agent Prompt Relay Attack",
+              "alpha": 0.45,
+              "beta": 0.893,
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "ML Reconnaissance",
+      "alpha": 0.0,
+      "beta": 1.0,
+      "mutually_exclusive_children": true,
+      "children": [
+        {
+          "label": "ML API Probing",
+          "alpha": 0.65,
+          "beta": 0.76,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Input Space Exploration",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Output Distribution Profiling",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            },
+            {
+              "label": "Confidence Score Harvesting",
+              "alpha": 0.5,
+              "beta": 0.866,
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "Architecture Fingerprinting",
+          "alpha": 0.55,
+          "beta": 0.835,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Timing-Based Fingerprinting",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Layer Count Estimation",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "Dataset Reconnaissance",
+          "alpha": 0.45,
+          "beta": 0.893,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Training Distribution Inference",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Data Source Identification",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "ML Supply Chain Attack",
+      "alpha": 0.0,
+      "beta": 1.0,
+      "mutually_exclusive_children": true,
+      "children": [
+        {
+          "label": "Dataset Compromise",
+          "alpha": 0.65,
+          "beta": 0.76,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Web Scraping Poisoning",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Benchmark Contamination",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            },
+            {
+              "label": "Crowdsourcing Manipulation",
+              "alpha": 0.5,
+              "beta": 0.866,
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "Pretrained Model Compromise",
+          "alpha": 0.55,
+          "beta": 0.835,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Malicious Pretrained Weights",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Hugging Face Model Hub Poisoning",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "ML Framework and Dependency Attack",
+          "alpha": 0.45,
+          "beta": 0.893,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Malicious Python Package Injection",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "ML Pipeline Code Injection",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            },
+            {
+              "label": "GPU Driver Exploitation",
+              "alpha": 0.4,
+              "beta": 0.917,
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Adversarial Robustness Degradation",
+      "alpha": 0.0,
+      "beta": 1.0,
+      "mutually_exclusive_children": true,
+      "children": [
+        {
+          "label": "Defense Bypass",
+          "alpha": 0.65,
+          "beta": 0.76,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Adversarial Training Bypass",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Certified Defense Evasion",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            },
+            {
+              "label": "Preprocessing Defense Bypass",
+              "alpha": 0.5,
+              "beta": 0.866,
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "Obfuscation-Based Evasion",
+          "alpha": 0.55,
+          "beta": 0.835,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Input Transformation Obfuscation",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Gradient Masking Exploitation",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "Adaptive Attack Strategy",
+          "alpha": 0.45,
+          "beta": 0.893,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Defense-Aware Perturbation",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Ensemble Attack for Robustness",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "ML Model Access and Initial Compromise",
+      "alpha": 0.0,
+      "beta": 1.0,
+      "mutually_exclusive_children": true,
+      "children": [
+        {
+          "label": "Direct Model Access",
+          "alpha": 0.65,
+          "beta": 0.76,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Public API Exploitation",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Stolen Credentials for ML Platform",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            },
+            {
+              "label": "Physical Access to Model Files",
+              "alpha": 0.4,
+              "beta": 0.917,
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "Indirect Model Access via Surrogate",
+          "alpha": 0.55,
+          "beta": 0.835,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Shadow Model Training",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Transfer Learning Abuse",
+              "alpha": 0.5,
+              "beta": 0.866,
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "ML Infrastructure Exploitation",
+          "alpha": 0.45,
+          "beta": 0.893,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "MLOps Pipeline Hijacking",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Cloud GPU Instance Compromise",
+              "alpha": 0.5,
+              "beta": 0.866,
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "ML Exfiltration",
+      "alpha": 0.0,
+      "beta": 1.0,
+      "mutually_exclusive_children": true,
+      "children": [
+        {
+          "label": "Model Weight Exfiltration",
+          "alpha": 0.65,
+          "beta": 0.76,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Direct Checkpoint Download",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Covert Exfiltration via Side Channel",
+              "alpha": 0.5,
+              "beta": 0.866,
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "Training Data Exfiltration",
+          "alpha": 0.55,
+          "beta": 0.835,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Data Pipeline Interception",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Membership Inference-Driven Exfiltration",
+              "alpha": 0.5,
+              "beta": 0.866,
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "Model Behavior Exfiltration",
+          "alpha": 0.45,
+          "beta": 0.893,
+          "mutually_exclusive_children": false,
+          "children": [
+            {
+              "label": "Systematic Output Logging",
+              "alpha": 0.65,
+              "beta": 0.76,
+              "children": []
+            },
+            {
+              "label": "Capability Probing for Theft",
+              "alpha": 0.55,
+              "beta": 0.835,
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
