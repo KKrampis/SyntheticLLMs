@@ -1,172 +1,13 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="pandoc" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Geometric Feature Invariance in SAEs</title>
-  <style>
-    html {
-      color: #1a1a1a;
-      background-color: #fdfdfd;
-    }
-    body {
-      margin: 0 auto;
-      max-width: 36em;
-      padding-left: 50px;
-      padding-right: 50px;
-      padding-top: 50px;
-      padding-bottom: 50px;
-      hyphens: auto;
-      overflow-wrap: break-word;
-      text-rendering: optimizeLegibility;
-      font-kerning: normal;
-    }
-    @media (max-width: 600px) {
-      body {
-        font-size: 0.9em;
-        padding: 12px;
-      }
-      h1 {
-        font-size: 1.8em;
-      }
-    }
-    @media print {
-      html {
-        background-color: white;
-      }
-      body {
-        background-color: transparent;
-        color: black;
-        font-size: 12pt;
-      }
-      p, h2, h3 {
-        orphans: 3;
-        widows: 3;
-      }
-      h2, h3, h4 {
-        page-break-after: avoid;
-      }
-    }
-    p {
-      margin: 1em 0;
-    }
-    a {
-      color: #1a1a1a;
-    }
-    a:visited {
-      color: #1a1a1a;
-    }
-    img {
-      max-width: 100%;
-    }
-    h1, h2, h3, h4, h5, h6 {
-      margin-top: 1.4em;
-    }
-    h5, h6 {
-      font-size: 1em;
-      font-style: italic;
-    }
-    h6 {
-      font-weight: normal;
-    }
-    ol, ul {
-      padding-left: 1.7em;
-      margin-top: 1em;
-    }
-    li > ol, li > ul {
-      margin-top: 0;
-    }
-    blockquote {
-      margin: 1em 0 1em 1.7em;
-      padding-left: 1em;
-      border-left: 2px solid #e6e6e6;
-      color: #606060;
-    }
-    code {
-      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
-      font-size: 85%;
-      margin: 0;
-      hyphens: manual;
-    }
-    pre {
-      margin: 1em 0;
-      overflow: auto;
-    }
-    pre code {
-      padding: 0;
-      overflow: visible;
-      overflow-wrap: normal;
-    }
-    .sourceCode {
-     background-color: transparent;
-     overflow: visible;
-    }
-    hr {
-      background-color: #1a1a1a;
-      border: none;
-      height: 1px;
-      margin: 1em 0;
-    }
-    table {
-      margin: 1em 0;
-      border-collapse: collapse;
-      width: 100%;
-      overflow-x: auto;
-      display: block;
-      font-variant-numeric: lining-nums tabular-nums;
-    }
-    table caption {
-      margin-bottom: 0.75em;
-    }
-    tbody {
-      margin-top: 0.5em;
-      border-top: 1px solid #1a1a1a;
-      border-bottom: 1px solid #1a1a1a;
-    }
-    th {
-      border-top: 1px solid #1a1a1a;
-      padding: 0.25em 0.5em 0.25em 0.5em;
-    }
-    td {
-      padding: 0.125em 0.5em 0.25em 0.5em;
-    }
-    header {
-      margin-bottom: 4em;
-      text-align: center;
-    }
-    #TOC li {
-      list-style: none;
-    }
-    #TOC ul {
-      padding-left: 1.3em;
-    }
-    #TOC > ul {
-      padding-left: 0;
-    }
-    #TOC a:not(:hover) {
-      text-decoration: none;
-    }
-    code{white-space: pre-wrap;}
-    span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
-    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    /* The extra [class] is a hack that increases specificity enough to
-       override a similar rule in reveal.js */
-    ul.task-list[class]{list-style: none;}
-    ul.task-list li input[type="checkbox"] {
-      font-size: inherit;
-      width: 0.8em;
-      margin: 0 0.8em 0.2em -1.6em;
-      vertical-align: middle;
-    }
-    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
-  </style>
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
   <script>
     MathJax = {
       tex: {
@@ -174,79 +15,200 @@
         displayMath: [['$$', '$$'], ['\\[', '\\]']],
         processEscapes: true
       },
-      options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'] }
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
     };
   </script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <style>
-    /* One Dark theme */
-    * { box-sizing: border-box; }
-    html { font-size: 12pt; }
+    :root {
+      --bg:       #1e2127;
+      --bg2:      #282c34;
+      --bg3:      #2c313c;
+      --border:   #3e4451;
+      --text:     #abb2bf;
+      --heading:  #ffffff;
+      --blue:     #61afef;
+      --green:    #98c379;
+      --red:      #e06c75;
+    }
+
+    html { font-size: 11pt; }
+
     body {
       font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      max-width: 820px; margin: 2rem auto; padding: 0 1.5rem;
-      color: #ABB2BF; background: #282C34; line-height: 1.75; font-size: 1rem;
+      background: var(--bg);
+      color: var(--text);
     }
-    h1 { font-size: 1.8rem; font-weight: 700; color: #FFFFFF;
-         border-bottom: 1px solid #3E4451; padding-bottom: 0.5rem; margin-top: 2rem; }
-    h2 { font-size: 1.4rem; font-weight: 600; color: #98C379; margin-top: 2rem; }
-    h3 { font-size: 1.1rem; font-weight: 600; color: #61AFEF; margin-top: 1.5rem; }
-    h4 { font-size: 1rem; font-weight: 600; color: #E5C07B; margin-top: 1.25rem; }
-    a { color: #61AFEF; text-decoration: none; }
-    a:hover { text-decoration: underline; color: #98C379; }
-    p { margin: 0.75rem 0; }
-    strong { color: #E5C07B; }
-    em { color: #C678DD; font-style: italic; }
-    code {
+
+    /* ── Hero ── */
+    .pub-hero {
+      background: var(--bg2);
+      border-bottom: 2px solid var(--blue);
+      padding: 3rem 1.5rem 2.5rem;
+      text-align: center;
+    }
+    .pub-hero .pub-title {
+      font-size: clamp(1.3rem, 3vw, 1.9rem);
+      font-weight: 700;
+      color: var(--heading);
+      line-height: 1.3;
+      max-width: 860px;
+      margin: 0 auto 1rem;
+    }
+    .pub-hero .pub-authors {
+      font-size: 1rem;
+      color: var(--text);
+      margin-bottom: 0.35rem;
+    }
+    .pub-hero .pub-affil {
+      font-size: 0.85rem;
+      color: #636d83;
+      margin-bottom: 1.5rem;
+    }
+    .pub-hero .buttons { justify-content: center; gap: 0.6rem; }
+    .pub-hero .button {
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+    .btn-pdf   { background: var(--blue);   color: #fff !important; border: none; }
+    .btn-pdf:hover { background: #4d9ede; }
+    .btn-ghost { background: transparent; color: var(--blue) !important;
+                 border: 1.5px solid var(--blue); }
+    .btn-ghost:hover { background: var(--bg3); }
+
+    /* ── Content wrapper ── */
+    .pub-content {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    /* ── Headings ── */
+    .pub-content h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--heading);
+      margin-top: 2.5rem;
+      margin-bottom: 0.6rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .pub-content h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--blue);
+      margin-top: 1.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .pub-content h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--heading);
+      margin-top: 1.25rem;
+      margin-bottom: 0.4rem;
+    }
+
+    /* ── Body text ── */
+    .pub-content p  { margin: 0.7rem 0; line-height: 1.75; }
+    .pub-content strong { color: var(--heading); }
+    .pub-content em     { color: var(--text); font-style: italic; }
+
+    /* ── Links ── */
+    .pub-content a { color: var(--blue); text-decoration: none; }
+    .pub-content a:hover { text-decoration: underline; color: var(--green); }
+
+    /* ── Code ── */
+    .pub-content code {
       font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-      font-size: 0.875em; background: #2C313C; border-radius: 4px;
-      padding: 0.15em 0.4em; border: 1px solid #3E4451; color: #ABB2BF;
+      font-size: 0.85em;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.15em 0.4em;
+      color: var(--text);
     }
-    pre {
-      background: #21252B; padding: 1em 1.25em; border-radius: 6px;
-      overflow-x: auto; border: 1px solid #3E4451; margin: 1.25rem 0;
+    .pub-content pre {
+      background: #21252b;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1em 1.25em;
+      overflow-x: auto;
+      margin: 1.25rem 0;
     }
-    pre code { padding: 0; background: none; border: none; font-size: 0.85em; }
-    blockquote {
-      border-left: 3px solid #61AFEF; margin: 1.25rem 0;
-      padding: 0.5rem 1rem; background: #21252B; border-radius: 0 4px 4px 0;
-      color: #9DA5B4;
+    .pub-content pre code { background: none; border: none; padding: 0; font-size: 0.85em; }
+
+    /* ── Tables ── */
+    .pub-content table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 1.25rem 0;
+      font-size: 0.9rem;
     }
-    table { border-collapse: collapse; width: 100%; margin: 1.25rem 0; font-size: 0.9rem; }
-    th, td { border: 1px solid #3E4451; padding: 0.5em 0.85em; text-align: left; color: #ABB2BF; }
-    th { background: #2C313C; font-weight: 600; color: #98C379; }
-    tr:nth-child(even) td { background: #2C313C; }
-    img { max-width: 100%; border-radius: 4px; }
-    hr { border: none; border-top: 1px solid #3E4451; margin: 2rem 0; }
+    .pub-content th, .pub-content td {
+      border: 1px solid var(--border);
+      padding: 0.5em 0.85em;
+      text-align: left;
+      color: var(--text);
+    }
+    .pub-content th { background: var(--bg3); font-weight: 600; color: var(--green); }
+    .pub-content tr:nth-child(even) td { background: var(--bg3); }
+
+    /* ── Figures ── */
+    .pub-content img {
+      max-width: 100%;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      display: block;
+      margin: 1.5rem auto;
+    }
+    .pub-content figure { margin: 1.5rem 0; text-align: center; }
+    .pub-content figcaption {
+      font-size: 0.875rem;
+      color: #636d83;
+      margin-top: 0.5rem;
+    }
+
+    /* ── Blockquote ── */
+    .pub-content blockquote {
+      border-left: 3px solid var(--blue);
+      background: var(--bg3);
+      border-radius: 0 4px 4px 0;
+      margin: 1.25rem 0;
+      padding: 0.6rem 1rem;
+      color: #9da5b4;
+    }
+
+    /* ── HR ── */
+    .pub-content hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+    /* ── Footer ── */
+    .pub-footer {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      padding: 1.25rem 1.5rem;
+      text-align: center;
+      font-size: 0.82rem;
+      color: #636d83;
+    }
   </style>
 </head>
 <body>
-<header style="margin-bottom: 2.5rem; padding-bottom: 1rem; border-bottom: 2px solid #61AFEF;
-             font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
-  <h1 style="margin:0 0 0.35rem; font-size:1.5rem; font-weight:700; color:#FFFFFF; line-height:1.3;">
-    Geometric Feature Invariance in SAEs
-  </h1>
-  <p style="margin:0 0 0.75rem; color:#9DA5B4; font-size:0.9rem;">
-    Konstantinos Krampis &middot; David Williams-King &middot; David Chanin
-    &nbsp;&nbsp;|&nbsp;&nbsp; City University of New York &middot; ERA &middot; UCL
-    &nbsp;&nbsp;|&nbsp;&nbsp; 2026
-  </p>
-  <div style="font-size:0.875rem; display:flex; gap:1.5rem; flex-wrap:wrap;">
-    <a href="Krampis-SyntheticLLMs-2026.pdf"
-       style="color:#61AFEF; text-decoration:none; font-weight:500;">
-      &#8595;&nbsp;Download PDF
-    </a>
-    <a href="presentation/"
-       style="color:#61AFEF; text-decoration:none;">Slides</a>
-    <a href="docs/"
-       style="color:#61AFEF; text-decoration:none;">Docs</a>
-    <a href="https://github.com/KKrampis/SyntheticLLMs"
-       style="color:#61AFEF; text-decoration:none;">GitHub</a>
+
+<!-- ── Hero ── -->
+<header class="pub-hero">
+  <p class="pub-title">Geometric Feature Invariance in SAEs: A Framework for Transferable Mechanistic Interpretability and Scalable AI Safety</p>
+  <p class="pub-authors">Konstantinos Krampis &nbsp;&middot;&nbsp; David Williams-King &nbsp;&middot;&nbsp; David Chanin</p>
+  <p class="pub-affil">City University of New York &nbsp;&middot;&nbsp; ERA &nbsp;&middot;&nbsp; University College London &nbsp;&middot;&nbsp; 2026</p>
+  <div class="buttons">
+    <a href="Krampis-SyntheticLLMs-2026.pdf" class="button btn-pdf">&#8595;&nbsp; Download PDF</a>
+    <a href="docs/" class="button btn-ghost">Docs</a>
+    <a href="https://github.com/KKrampis/SyntheticLLMs" class="button btn-ghost">GitHub</a>
   </div>
 </header>
-<header id="title-block-header">
-<h1 class="title">Geometric Feature Invariance in SAEs</h1>
-</header>
+
+<!-- ── Paper content rendered from markdown ── -->
+<main class="pub-content">
 <h2 id="abstract">Abstract</h2>
 <p>This research integrates controlled synthetic model feature
 evaluation with cross-model geometric feature invariance analysis,
@@ -327,6 +289,22 @@ necessary and sufficient for interpretability transfer</td>
 </tr>
 </tbody>
 </table>
+<figure>
+<img src="figures/fig1.png"
+alt="Semantic Feature Taxonomy: Geometric Embedding" />
+<figcaption aria-hidden="true">Semantic Feature Taxonomy: Geometric
+Embedding</figcaption>
+</figure>
+<p><strong>Figure 1: Semantic Feature Taxonomy.</strong> Each
+parent–child edge carries a semantic similarity coefficient <span
+class="math inline"><em>α</em></span> used to construct the child
+feature direction <span
+class="math inline"><strong>d</strong><sub>child</sub> = <em>α</em><strong>d</strong><sub>parent</sub> + <em>β</em><strong>d</strong><sub>⊥</sub></span>.
+Root concepts (blue) spawn child concepts (green) and grandchild
+concepts (violet/orange) with progressively specialized feature
+directions. The <span class="math inline"><em>α</em></span> values
+encode how much of the parent representation is inherited, making
+semantic relatedness a geometric property of the feature space.</p>
 <h2 id="related-work">1. Related Work</h2>
 <p>Sparse autoencoders have emerged as a powerful tool for decomposing
 neural network activations into interpretable features, yet measuring
@@ -599,6 +577,26 @@ child features have high cosine similarity with decoder directions for
 parent features, and interventions that ablate parent features should
 impair reconstruction of child features more severely than unrelated
 features.</p>
+<figure>
+<img src="figures/fig2.png"
+alt="Geometric Structure of Compositional Feature Directions" />
+<figcaption aria-hidden="true">Geometric Structure of Compositional
+Feature Directions</figcaption>
+</figure>
+<p><strong>Figure 2: Geometric Structure of Compositional Feature
+Directions.</strong> The child feature direction <span
+class="math inline"><strong>d</strong><sub>child</sub></span> (orange)
+is a weighted sum of the parent direction <span
+class="math inline"><strong>d</strong><sub>parent</sub></span> (blue)
+and an orthogonal component <span
+class="math inline"><strong>d</strong><sub>⊥</sub></span> (green),
+obtained via Gram–Schmidt orthogonalization. The angle <span
+class="math inline"><em>θ</em></span> satisfies <span
+class="math inline">cos <em>θ</em> = <em>α</em></span>, directly
+encoding semantic relatedness as geometric proximity in the feature
+space. Dashed lines show the <span class="math inline"><em>α</em></span>
+and <span class="math inline"><em>β</em></span> components along each
+axis.</p>
 <h3
 id="llm-generated-misalignment-hierarchies-and-geometric-implementation">3.4
 LLM-Generated Misalignment Hierarchies and Geometric Implementation</h3>
@@ -642,6 +640,25 @@ ground-truth concept directions, whether ablating latents aligned with
 “Deceptive Reasoning” impairs reconstruction of “Reward Hacking” more
 than unrelated features, and whether SAEs correctly split hierarchies or
 inappropriately absorb child concepts into parent latents.</p>
+<figure>
+<img src="figures/fig3.png"
+alt="LLM-Generated Deceptive Reasoning Hierarchy" />
+<figcaption aria-hidden="true">LLM-Generated Deceptive Reasoning
+Hierarchy</figcaption>
+</figure>
+<p><strong>Figure 3: LLM-Generated Deceptive Reasoning
+Hierarchy.</strong> An example hierarchy produced by prompting an LLM to
+generate misalignment-related concept trees with semantic similarity
+coefficients <span class="math inline"><em>α</em></span> and conditional
+firing probabilities <span class="math inline"><em>p</em></span>. Each
+parent–child edge carries the LLM-assigned <span
+class="math inline"><em>α</em></span> value used to construct the child
+feature direction <span
+class="math inline"><strong>d</strong><sub>child</sub> = <em>α</em><strong>d</strong><sub>parent</sub> + <em>β</em><strong>d</strong><sub>⊥</sub></span>.
+Grandchildren inherit geometry transitively: “Reward Hacking” (violet)
+therefore contains directional overlap with both “Goal
+Misrepresentation” and “Deceptive Reasoning”, correctly capturing
+compositional concept inheritance.</p>
 <h3 id="safety-research-applications">3.5 Safety Research
 Applications</h3>
 <p>The semantic hierarchy approach enables several critical AI safety
@@ -1012,5 +1029,13 @@ Additional Experimental Details</h3>
 <h3 id="appendix-b-supplementary-results">Appendix B: Supplementary
 Results</h3>
 <p>[Supplementary results to be developed]</p>
+</main>
+
+<!-- ── Footer ── -->
+<footer class="pub-footer">
+  Targeted output: NeurIPS 2026 &nbsp;&middot;&nbsp;
+  <a href="Krampis-SyntheticLLMs-2026.pdf" style="color:#61afef;">Download PDF</a>
+</footer>
+
 </body>
 </html>
