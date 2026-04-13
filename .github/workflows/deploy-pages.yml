@@ -5,17 +5,17 @@ on:
     branches:
       - main
     paths:
-      - 'Krampis-SyntheticLLMs-2026.md'   # primary manuscript — always triggers PDF recompile
+      - 'Krampis-SyntheticLLMs-2026.md'   # primary manuscript — always triggers PDF + HTML regen
       - 'paper-meta.yaml'
       - 'arxiv-preamble.tex'
-      - 'index.html'
       - '_templates/**'
       - 'slides-reveal.js/**'
+      - 'feature_hierarchies/**'
       - '.github/workflows/deploy-pages.yml'
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -132,13 +132,31 @@ jobs:
             -o "_site/paper/index.html"
           echo "Primary manuscript converted to HTML"
 
-          # Landing page
-          cp index.html _site/index.html
+          # Generate landing page (index.html) from manuscript
+          pandoc Krampis-SyntheticLLMs-2026.md \
+            --standalone \
+            --from=markdown+tex_math_dollars \
+            --metadata title="Geometric Feature Invariance in SAEs" \
+            --highlight-style=espresso \
+            -H _templates/doc-style.html \
+            -B _templates/home-nav.html \
+            -o _site/index.html
+          echo "Landing page generated from manuscript"
 
           # Feature hierarchy assets (heatmap image referenced by index.html and paper)
           cp -r feature_hierarchies _site/feature_hierarchies
 
           touch _site/.nojekyll
+
+      - name: Commit generated files back to repository
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          cp _site/paper.pdf Krampis-SyntheticLLMs-2026.pdf
+          cp _site/index.html index.html
+          git add Krampis-SyntheticLLMs-2026.pdf index.html
+          git diff --staged --quiet || git commit -m "chore: regenerate index.html and Krampis-SyntheticLLMs-2026.pdf from manuscript"
+          git push
 
       - name: Configure Pages
         uses: actions/configure-pages@v4

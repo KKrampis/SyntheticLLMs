@@ -1,15 +1,172 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>Geometric Feature Invariance in SAEs</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
   <script>
     MathJax = {
       tex: {
@@ -17,1451 +174,852 @@
         displayMath: [['$$', '$$'], ['\\[', '\\]']],
         processEscapes: true
       },
-      options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+      options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'] }
     };
   </script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <style>
-    /* ── Theme variables ── */
-    :root {
-      --bg:          #fff;
-      --bg2:         #fafafa;
-      --text:        #222;
-      --muted:       #666;
-      --border:      #EDEDED;
-      --card-bg:     #fafafa;
-      --card-border: #ddd;
-      --math-bg:     #f8f9fa;
-      --math-bl:     #0071BC;
-      --tbl-border:  #EDEDED;
-      --can-bg:      #f0fff4;
-      --can-bd:      #bbf0cc;
-      --cant-bg:     #fff5f5;
-      --cant-bd:     #ffd0d0;
-      --ref-bd:      #f0f0f0;
-      --toggle-bg:   #f0f0f0;
-      --footer-bg:   #fafafa;
-      --footer-bd:   #EDEDED;
-    }
-    /* ── One Dark theme ── */
-    html.dark {
-      --bg:          #282C34;   /* Atom One Dark background   */
-      --bg2:         #21252B;   /* deeper surface             */
-      --text:        #ABB2BF;   /* main body text             */
-      --muted:       #9DA5B4;   /* secondary text — readable  */
-      --border:      #3E4451;   /* subtle dividers            */
-      --card-bg:     #2C313C;   /* card / panel surface       */
-      --card-border: #3E4451;
-      --math-bg:     #21252B;
-      --math-bl:     #61AFEF;   /* One Dark blue              */
-      --tbl-border:  #3E4451;
-      --can-bg:      #1B2B1B;
-      --can-bd:      #98C379;   /* One Dark green             */
-      --cant-bg:     #2B1B1B;
-      --cant-bd:     #E06C75;   /* One Dark red               */
-      --ref-bd:      #3E4451;
-      --toggle-bg:   #3E4451;
-      --footer-bg:   #21252B;
-      --footer-bd:   #3E4451;
-    }
-    /* One Dark accent + contrast overrides */
-    html.dark .hl-green               { color: #98C379; }
-    html.dark .hl-purple              { color: #C678DD; }
-    html.dark .hl-blue                { color: #61AFEF; }
-    html.dark .hl-red                 { color: #E06C75; }
-    html.dark .publication-authors a  { color: #61AFEF; }
-    html.dark .ref-num                { color: #61AFEF; }
-    /* Ensure all text layers are visible */
-    html.dark .title                  { color: #FFFFFF !important; }
-    html.dark .subtitle               { color: var(--muted) !important; }
-    html.dark .content p,
-    html.dark .content li,
-    html.dark .content strong         { color: var(--text); }
-    html.dark .content strong         { color: #E5C07B; }  /* One Dark yellow */
-    html.dark .is-size-5,
-    html.dark .is-size-6              { color: var(--muted) !important; }
-    html.dark .toc-table td           { color: var(--text) !important; border-color: var(--border) !important; }
-    html.dark .figure-caption         { color: var(--muted) !important; }
-    html.dark .venue-badge            { color: var(--muted) !important; background: var(--bg2) !important;
-                                        border-color: var(--border) !important; }
-    html.dark .supp-card h3           { color: var(--text) !important; }
-    html.dark .ref-list li            { color: var(--text) !important; border-color: var(--border) !important; }
-    html.dark .can-box p,
-    html.dark .can-box li             { color: var(--text) !important; }
-    html.dark .cannot-box p,
-    html.dark .cannot-box li          { color: var(--text) !important; }
-    html.dark .can-box strong         { color: #98C379 !important; }
-    html.dark .cannot-box strong      { color: #E06C75 !important; }
-    html.dark .math-box               { color: var(--text) !important; }
-    html.dark .hero                   { background: var(--bg) !important; }
-    /* SVG dark-mode backgrounds */
-    html.dark .figure-wrap .fig-bg    { fill: #2C313C !important; stroke: #3E4451 !important; }
-    html.dark .figure-wrap .fig-panel { fill: #21252B !important; stroke: #3E4451 !important; }
-    html.dark .figure-wrap svg        { filter: contrast(0.97); }
-
+    /* One Dark theme */
+    * { box-sizing: border-box; }
     html { font-size: 12pt; }
     body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      transition: background 0.25s, color 0.25s;
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      max-width: 820px; margin: 2rem auto; padding: 0 1.5rem;
+      color: #ABB2BF; background: #282C34; line-height: 1.75; font-size: 1rem;
     }
-
-    /* ── Dark-mode toggle button ── */
-    #theme-toggle {
-      position: fixed;
-      top: 1rem; right: 1rem;
-      z-index: 9999;
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      border: 1px solid var(--border);
-      background: var(--toggle-bg);
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.25s, border-color 0.25s;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+    h1 { font-size: 1.8rem; font-weight: 700; color: #FFFFFF;
+         border-bottom: 1px solid #3E4451; padding-bottom: 0.5rem; margin-top: 2rem; }
+    h2 { font-size: 1.4rem; font-weight: 600; color: #98C379; margin-top: 2rem; }
+    h3 { font-size: 1.1rem; font-weight: 600; color: #61AFEF; margin-top: 1.5rem; }
+    h4 { font-size: 1rem; font-weight: 600; color: #E5C07B; margin-top: 1.25rem; }
+    a { color: #61AFEF; text-decoration: none; }
+    a:hover { text-decoration: underline; color: #98C379; }
+    p { margin: 0.75rem 0; }
+    strong { color: #E5C07B; }
+    em { color: #C678DD; font-style: italic; }
+    code {
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      font-size: 0.875em; background: #2C313C; border-radius: 4px;
+      padding: 0.15em 0.4em; border: 1px solid #3E4451; color: #ABB2BF;
     }
-    #theme-toggle svg { width: 18px; height: 18px; }
-
-    /* ── Typography ── */
-    .publication-title { font-size: 2.1rem; line-height: 1.3; }
-    .publication-authors a { color: #0071BC; text-decoration: none; }
-    .publication-authors a:hover { text-decoration: underline; }
-    .author-block { margin-right: 0.4rem; }
-    .publication-links .button { margin: 5px; }
-
-    /* ── Dividers ── */
-    hr.pub-divider {
-      background-color: var(--border);
-      height: 1px; border: none;
-      margin: 1rem auto; width: 90vw;
+    pre {
+      background: #21252B; padding: 1em 1.25em; border-radius: 6px;
+      overflow-x: auto; border: 1px solid #3E4451; margin: 1.25rem 0;
     }
-
-    /* ── Hero ── */
-    .hero { background: var(--bg); }
-
-    /* ── Figures ── */
-    .figure-wrap { text-align: center; margin: 2rem 0 1.5rem; }
-    .figure-wrap svg { max-width: 100%; height: auto; }
-    .figure-caption {
-      font-size: 0.88rem; color: var(--muted);
-      margin-top: 0.65rem; max-width: 700px;
-      margin-left: auto; margin-right: auto; line-height: 1.5;
+    pre code { padding: 0; background: none; border: none; font-size: 0.85em; }
+    blockquote {
+      border-left: 3px solid #61AFEF; margin: 1.25rem 0;
+      padding: 0.5rem 1rem; background: #21252B; border-radius: 0 4px 4px 0;
+      color: #9DA5B4;
     }
-
-    /* ── Theory-of-change table ── */
-    .toc-table { width: 100%; border-collapse: collapse; }
-    .toc-table td {
-      padding: 0.7rem 1rem;
-      border-bottom: 1px solid var(--tbl-border);
-      line-height: 1.6;
-      color: var(--text);
-    }
-    .toc-table td:first-child {
-      font-weight: 600; width: 170px;
-      white-space: nowrap; color: var(--text);
-    }
-
-    /* ── Math block ── */
-    .math-box {
-      background: var(--math-bg);
-      border-left: 4px solid var(--math-bl);
-      padding: 1rem 1.5rem; margin: 1.2rem 0;
-      border-radius: 0 6px 6px 0; overflow-x: auto;
-      color: var(--text);
-    }
-
-    /* ── Inline highlights ── */
-    .hl-green  { color: #009B55; font-weight: 600; }
-    .hl-purple { color: #92268F; font-weight: 600; }
-    .hl-blue   { color: #0071BC; font-weight: 600; }
-    .hl-red    { color: #ED1B23; font-weight: 600; }
-
-    /* ── Supplementary cards ── */
-    .supp-card {
-      border: 1px solid var(--card-border);
-      border-radius: 10px; padding: 1.5rem;
-      text-align: center; background: var(--card-bg);
-      height: 100%; display: flex; flex-direction: column; align-items: center;
-      transition: background 0.25s, border-color 0.25s;
-    }
-    .supp-card .supp-icon { font-size: 2rem; margin-bottom: 0.5rem; color: var(--muted); }
-    .supp-card h3 { font-weight: 600; font-size: 1.05rem; margin-bottom: 0.4rem; color: var(--text); }
-    .supp-card p  { font-size: 0.9rem; color: var(--muted); line-height: 1.5; flex-grow: 1; }
-
-    /* ── Can/cannot boxes ── */
-    .can-box {
-      background: var(--can-bg); border-radius: 8px;
-      padding: 1rem 1.25rem; border: 1px solid var(--can-bd);
-    }
-    .cannot-box {
-      background: var(--cant-bg); border-radius: 8px;
-      padding: 1rem 1.25rem; border: 1px solid var(--cant-bd);
-    }
-
-    /* ── References ── */
-    .ref-list { list-style: none; padding: 0; }
-    .ref-list li {
-      padding: 0.4rem 0;
-      border-bottom: 1px solid var(--ref-bd);
-      font-size: 0.9rem; line-height: 1.6; color: var(--text);
-    }
-    .ref-num { color: #0071BC; font-weight: 600; margin-right: 0.5rem; }
-
-    /* ── Footer ── */
-    .pub-footer {
-      background: var(--footer-bg);
-      border-top: 1px solid var(--footer-bd);
-      transition: background 0.25s;
-    }
-
-    /* ── Content text ── */
-    .content p { line-height: 1.75; color: var(--text); }
-    .content li { color: var(--text); }
-    .section { padding-top: 2rem; padding-bottom: 2rem; }
-
-    /* ── Venue badge ── */
-    .venue-badge {
-      display: inline-block;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 4px; padding: 2px 8px;
-      font-size: 0.85rem; color: var(--muted);
-    }
+    table { border-collapse: collapse; width: 100%; margin: 1.25rem 0; font-size: 0.9rem; }
+    th, td { border: 1px solid #3E4451; padding: 0.5em 0.85em; text-align: left; color: #ABB2BF; }
+    th { background: #2C313C; font-weight: 600; color: #98C379; }
+    tr:nth-child(even) td { background: #2C313C; }
+    img { max-width: 100%; border-radius: 4px; }
+    hr { border: none; border-top: 1px solid #3E4451; margin: 2rem 0; }
   </style>
 </head>
 <body>
-
-<!-- ===== HERO ===== -->
-<section class="hero">
-  <div class="hero-body" style="padding: 3rem 1.5rem 0.75rem;">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column has-text-centered">
-          <h1 class="title publication-title">
-            Geometric Feature Invariance in SAEs:<br>
-            A Framework for Transferable Mechanistic&nbsp;Interpretability<br>
-            and Scalable AI Safety
-          </h1>
-          <div class="is-size-5 publication-authors" style="margin-top: 1rem;">
-            <span class="author-block"><a href="#">Konstantinos Krampis</a>,</span>
-            <span class="author-block"><a href="#">David Williams-King</a>,</span>
-            <span class="author-block"><a href="#">David Chanin</a></span>
-          </div>
-          <div class="is-size-6" style="color: #666; margin-top: 0.3rem;">
-            Target venue: <em>NeurIPS 2026</em>
-          </div>
-          <div class="publication-links" style="margin-top: 1rem;">
-            <span class="link-block">
-              <a href="paper.pdf" target="_blank"
-                 class="button is-normal is-rounded is-dark">
-                <span class="icon"><i class="ai ai-arxiv"></i></span>
-                <span>Paper&nbsp;PDF</span>
-              </a>
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
+<header style="margin-bottom: 2.5rem; padding-bottom: 1rem; border-bottom: 2px solid #61AFEF;
+             font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+  <h1 style="margin:0 0 0.35rem; font-size:1.5rem; font-weight:700; color:#FFFFFF; line-height:1.3;">
+    Geometric Feature Invariance in SAEs
+  </h1>
+  <p style="margin:0 0 0.75rem; color:#9DA5B4; font-size:0.9rem;">
+    Konstantinos Krampis &middot; David Williams-King &middot; David Chanin
+    &nbsp;&nbsp;|&nbsp;&nbsp; City University of New York &middot; ERA &middot; UCL
+    &nbsp;&nbsp;|&nbsp;&nbsp; 2026
+  </p>
+  <div style="font-size:0.875rem; display:flex; gap:1.5rem; flex-wrap:wrap;">
+    <a href="Krampis-SyntheticLLMs-2026.pdf"
+       style="color:#61AFEF; text-decoration:none; font-weight:500;">
+      &#8595;&nbsp;Download PDF
+    </a>
+    <a href="presentation/"
+       style="color:#61AFEF; text-decoration:none;">Slides</a>
+    <a href="docs/"
+       style="color:#61AFEF; text-decoration:none;">Docs</a>
+    <a href="https://github.com/KKrampis/SyntheticLLMs"
+       style="color:#61AFEF; text-decoration:none;">GitHub</a>
   </div>
-</section>
-
-<hr class="pub-divider">
-
-<!-- ===== ABSTRACT ===== -->
-<section class="section" style="padding-top: 1rem;">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3 has-text-centered">Abstract</h2>
-        <div class="content has-text-justified">
-          <p>
-            This research integrates controlled synthetic model feature evaluation with
-            cross-model geometric feature invariance analysis, towards developing a principled
-            framework for <strong>transferable interpretability across model families and
-            variants</strong>. Recent work has shown that Sparse Autoencoders (SAEs) trained
-            on different LLMs learn geometrically similar feature spaces&mdash;exhibiting invariance
-            and analogous feature universality&mdash;while exhibiting trade-offs against synthetic
-            ground-truth features, meaning no current SAE architecture can perfectly recover
-            the ground-truth features.
-          </p>
-          <p>
-            Our work addresses fundamental challenges in mechanistic interpretability by
-            establishing principled methods for leveraging geometric feature universality.
-            Efficient feature transfer is critical for AI safety because it enables:
-            (1)&nbsp;rapid safety evaluation of new models without restarting interpretability
-            analysis from scratch,
-            (2)&nbsp;early detection of hazardous capabilities by comparing feature spaces to
-            known dangerous configurations,
-            (3)&nbsp;reliable monitoring across deployment contexts by tracking feature drift, and
-            (4)&nbsp;scalable oversight of large model families where per-model analysis
-            becomes infeasible.
-          </p>
-          <p>
-            During the project implementation we will characterize geometric patterns that
-            remain stable across models, and geometric transformation methods that reliably
-            map feature correspondences, validated against synthetic ground-truth.
-            Furthermore, we will demonstrate that safety-relevant interventions transfer
-            within the same family of models, or fine-tuned variants of a model. This
-            research will accelerate mechanistic interpretability and enable efficient safety
-            analysis as AI systems grow in capability and complexity.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<hr class="pub-divider">
-
-
-<!-- ===== FIGURE 1: SEMANTIC TAXONOMY ===== -->
-<section class="section" style="padding-top: 1rem; padding-bottom: 0.5rem;">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered">
-      <div class="column is-four-fifths has-text-centered">
-        <div class="figure-wrap">
-          <svg viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg"
-               style="max-width: 760px; font-family: 'DM Sans', sans-serif;">
-            <rect class="fig-bg" width="800" height="340" fill="#fafafa" rx="12" stroke="#e0e0e0" stroke-width="1"/>
-            <text x="400" y="30" text-anchor="middle" font-size="14" font-weight="600" fill="#333">SynthSAEBench as Semantic Taxonomy</text>
-            <!-- Root node -->
-            <rect x="300" y="48" width="200" height="42" rx="8" fill="#0071BC"/>
-            <text x="400" y="73" text-anchor="middle" font-size="12" font-weight="600" fill="white">SAE Feature Space</text>
-            <!-- Level 1 nodes -->
-            <rect x="40" y="140" width="170" height="42" rx="8" fill="#009B55"/>
-            <text x="125" y="166" text-anchor="middle" font-size="11" font-weight="600" fill="white">Agency &amp; Planning</text>
-            <rect x="315" y="140" width="170" height="42" rx="8" fill="#009B55"/>
-            <text x="400" y="166" text-anchor="middle" font-size="11" font-weight="600" fill="white">Social Manipulation</text>
-            <rect x="590" y="140" width="170" height="42" rx="8" fill="#009B55"/>
-            <text x="675" y="157" text-anchor="middle" font-size="11" font-weight="600" fill="white">Situational</text>
-            <text x="675" y="173" text-anchor="middle" font-size="11" font-weight="600" fill="white">Awareness</text>
-            <!-- Lines root to level 1 -->
-            <line x1="400" y1="90" x2="125" y2="140" stroke="#aaa" stroke-width="1.5" stroke-dasharray="4,2"/>
-            <line x1="400" y1="90" x2="400" y2="140" stroke="#aaa" stroke-width="1.5" stroke-dasharray="4,2"/>
-            <line x1="400" y1="90" x2="675" y2="140" stroke="#aaa" stroke-width="1.5" stroke-dasharray="4,2"/>
-            <!-- Level 2 nodes under Agency -->
-            <rect x="25" y="238" width="130" height="38" rx="6" fill="#92268F"/>
-            <text x="90" y="255" text-anchor="middle" font-size="10" fill="white">Goal-Directed</text>
-            <text x="90" y="268" text-anchor="middle" font-size="10" fill="white">Behavior</text>
-            <rect x="165" y="238" width="130" height="38" rx="6" fill="#92268F"/>
-            <text x="230" y="255" text-anchor="middle" font-size="10" fill="white">Strategic</text>
-            <text x="230" y="268" text-anchor="middle" font-size="10" fill="white">Planning</text>
-            <!-- Level 2 under Social Manipulation -->
-            <rect x="305" y="238" width="120" height="38" rx="6" fill="#92268F"/>
-            <text x="365" y="255" text-anchor="middle" font-size="10" fill="white">Deception</text>
-            <text x="365" y="268" text-anchor="middle" font-size="10" fill="white">(p=0.001)</text>
-            <rect x="435" y="238" width="120" height="38" rx="6" fill="#92268F"/>
-            <text x="495" y="255" text-anchor="middle" font-size="10" fill="white">Persuasion</text>
-            <text x="495" y="268" text-anchor="middle" font-size="10" fill="white">(p=0.005)</text>
-            <!-- Level 2 under Situational Awareness -->
-            <rect x="575" y="238" width="120" height="38" rx="6" fill="#92268F"/>
-            <text x="635" y="255" text-anchor="middle" font-size="10" fill="white">Context</text>
-            <text x="635" y="268" text-anchor="middle" font-size="10" fill="white">Modeling</text>
-            <rect x="706" y="238" width="78" height="38" rx="6" fill="#92268F"/>
-            <text x="745" y="255" text-anchor="middle" font-size="10" fill="white">Self-</text>
-            <text x="745" y="268" text-anchor="middle" font-size="10" fill="white">Monitor</text>
-            <!-- Lines level 1 to level 2 -->
-            <line x1="125" y1="182" x2="90" y2="238" stroke="#bbb" stroke-width="1.5" stroke-dasharray="4,2"/>
-            <line x1="125" y1="182" x2="230" y2="238" stroke="#bbb" stroke-width="1.5" stroke-dasharray="4,2"/>
-            <line x1="400" y1="182" x2="365" y2="238" stroke="#bbb" stroke-width="1.5" stroke-dasharray="4,2"/>
-            <line x1="400" y1="182" x2="495" y2="238" stroke="#bbb" stroke-width="1.5" stroke-dasharray="4,2"/>
-            <line x1="675" y1="182" x2="635" y2="238" stroke="#bbb" stroke-width="1.5" stroke-dasharray="4,2"/>
-            <line x1="675" y1="182" x2="745" y2="238" stroke="#bbb" stroke-width="1.5" stroke-dasharray="4,2"/>
-            <!-- Legend -->
-            <rect x="30" y="302" width="12" height="12" rx="2" fill="#0071BC"/>
-            <text x="48" y="313" font-size="10" fill="#555">Feature Space Root</text>
-            <rect x="160" y="302" width="12" height="12" rx="2" fill="#009B55"/>
-            <text x="178" y="313" font-size="10" fill="#555">Domain (depth 1)</text>
-            <rect x="295" y="302" width="12" height="12" rx="2" fill="#92268F"/>
-            <text x="313" y="313" font-size="10" fill="#555">Sub-concept (depth 2)</text>
-            <text x="460" y="313" font-size="10" fill="#777" font-style="italic">p = firing probability</text>
-          </svg>
-          <p class="figure-caption">
-            <strong>Figure 1.</strong> SynthSAEBench&rsquo;s hierarchy mechanism reinterpreted as a
-            <span class="hl-green">semantic taxonomy</span>. Instead of arbitrary statistical
-            parent-child relationships, concept trees span safety-relevant domains.
-            <span class="hl-purple">Sub-concepts</span> inherit firing-probability structure
-            from parents. Probabilities are tuned to match realistic deployment scenarios:
-            rare scheming features ($p = 0.001$) with high within-domain correlation.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<hr class="pub-divider">
-
-
-<!-- ===== THEORY OF CHANGE ===== -->
-<section class="section" style="padding-top: 1rem;">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3 has-text-centered">Theory of Change</h2>
-        <div class="content">
-          <table class="toc-table">
-            <tbody>
-              <tr>
-                <td>Activities</td>
-                <td>Develop synthetic benchmarks to test SAE transfer and the presence of invariant feature structures</td>
-              </tr>
-              <tr>
-                <td>Outputs</td>
-                <td>Protocols that enable reliable cross-model interpretability transfer based on invariant AI safety-related features and circuits</td>
-              </tr>
-              <tr>
-                <td>Outcomes</td>
-                <td>Enable interpretations and safety interventions developed on one model to reliably transfer to other models in the same family</td>
-              </tr>
-              <tr>
-                <td>Impact</td>
-                <td>AI safety becomes scalable without requiring complete re-interpretation and SAE generation for each new model, fine-tuned variant, or model family member</td>
-              </tr>
-              <tr>
-                <td>Key Assumption</td>
-                <td>Geometric feature similarity is both necessary and sufficient for interpretability transfer</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<hr class="pub-divider">
-
-<!-- ===== METHODOLOGY ===== -->
-<section class="section" style="padding-top: 1rem;">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3 has-text-centered">Methodology</h2>
-
-        <h3 class="title is-4">2.1 Synthetic Data Generation Framework</h3>
-        <div class="content has-text-justified">
-          <p>
-            Our methodology builds upon the SynthSAEBench framework, which generates large-scale
-            synthetic activation data with realistic neural network feature characteristics. The
-            synthetic data generation process begins by defining $N = 16{,}384$ ground-truth features
-            in a $D = 768$-dimensional activation space. Each feature $i$ is represented by a unit
-            direction vector $\mathbf{d}_i \in \mathbb{R}^{768}$, created through random sampling
-            from a standard normal distribution followed by L2 normalization:
-          </p>
-          <div class="math-box">
-            $$\mathbf{d}_i = \mathbf{g}_i / \|\mathbf{g}_i\|_2, \quad \mathbf{g}_i \sim \mathcal{N}(0, I_{768})$$
-          </div>
-          <p>
-            To reduce spurious correlations, these direction vectors undergo an orthogonalization
-            process minimizing
-            $L_{\text{ortho}} = \sum_{i \neq j}(\mathbf{d}_i^T \mathbf{d}_j)^2 + \lambda\sum_i(\|\mathbf{d}_i\|_2 - 1)^2$,
-            pushing vectors toward orthogonality while maintaining unit length.
-          </p>
-          <p>
-            The framework incorporates three critical phenomena observed in real neural networks:
-            <span class="hl-blue">superposition</span>, <span class="hl-green">hierarchy</span>,
-            and <span class="hl-purple">correlation</span>. Hierarchical structure is implemented as
-            a forest of 128 trees with branching factor 4 and maximum depth 3, encompassing 10,884
-            features with parent-child dependencies enforced through coefficient constraints:
-          </p>
-          <div class="math-box">
-            $$c_{\text{child}} \leftarrow c_{\text{child}} \cdot \mathbf{1}[c_{\text{parent}} > 0]$$
-          </div>
-          <p>
-            Additionally, mutual exclusion among siblings ensures that only one child within a
-            sibling group can fire simultaneously, creating competitive dynamics that reflect
-            real-world concept relationships.
-          </p>
-        </div>
-
-        <h3 class="title is-4" style="margin-top: 2rem;">2.2 Feature Dictionary Construction and Correlation Structure</h3>
-        <div class="content has-text-justified">
-          <p>
-            The synthetic activation generation follows the linear superposition model where each sample
-            activation is constructed as $\mathbf{a} = \sum_{i=1}^N c_i \mathbf{d}_i$, with coefficients
-            $c_i$ sampled from hierarchically-constrained distributions. Each feature $i$ receives a
-            firing probability $p_i$ drawn from a <span class="hl-blue">Zipfian distribution</span> to
-            model realistic feature frequency patterns, with firing magnitudes $\mu_i$ linearly
-            interpolated from 27.0 to 18.0 across the frequency spectrum. Standard deviations $\sigma_i$
-            follow a folded normal distribution to capture realistic activation variance patterns observed
-            in language models.
-          </p>
-          <p>
-            To model realistic feature co-occurrence patterns while maintaining computational tractability,
-            the framework employs a <span class="hl-purple">low-rank factorization</span> of the
-            correlation matrix:
-          </p>
-          <div class="math-box">
-            $$\Sigma = \mathbf{F}\mathbf{F}^T + \operatorname{diag}(\boldsymbol{\delta})$$
-          </div>
-          <p>
-            This reduces memory requirements from 268 million entries to 1.6 million entries&mdash;a
-            163&times; reduction compared to storing the full correlation matrix. The correlation scale
-            parameter controls the strength of feature dependencies, with typical values around 0.075
-            producing realistic but manageable correlation patterns.
-          </p>
-          <p>
-            Superposition emerges naturally from the dimensional constraints: packing $N = 16{,}384$
-            features into $D = 768$ dimensions necessitates overlap. The degree of feature interference
-            scales approximately as $O(1/\sqrt{D})$ with increasing dimensionality, while growing with
-            the number of packed features. For example, increasing from 4,096 to 16,384 features raises
-            $\rho_{mm}$ from ~0.12 to ~0.18 without orthogonalization, demonstrating how representational
-            crowding intensifies with feature density. This superposition creates fundamental ambiguity
-            in activation interpretation: a given activation vector $\mathbf{a} = [1.9, 0.436]$ could
-            arise from multiple coefficient combinations when features overlap significantly.
-          </p>
-        </div>
-
-        <h3 class="title is-4" style="margin-top: 2rem;">2.3 Hierarchical Constraint Enforcement and Tree Structure</h3>
-        <div class="content has-text-justified">
-          <p>
-            The hierarchical structure implements realistic concept taxonomies where child features can
-            only activate when their parent features are active, mimicking how abstract concepts enable
-            more specific subcategories. The enforcement algorithm processes constraints level-by-level
-            from roots to leaves: for each node with parent index $\text{parent}_{idx}$ and child index
-            $\text{child}_{idx}$, if $c_{\text{parent}_{idx}} = 0$ then $c_{\text{child}_{idx}} = 0$.
-            Additionally, <span class="hl-red">mutual exclusion among siblings</span> ensures that only
-            one child within a sibling group can fire simultaneously, creating competitive dynamics that
-            reflect real-world concept relationships.
-          </p>
-          <p>
-            This hierarchical distribution creates a realistic mix of 10,884 features subject to
-            conceptual constraints alongside 5,500 independent features. The tree structure follows
-            a <span class="hl-green">balanced branching pattern</span>: 128 root features at depth 0,
-            512 features at depth 1, 2,048 at depth 2, and 8,192 leaf features at depth 3. This
-            distribution models how natural language concepts organize from broad categories
-            (like &ldquo;animal&rdquo;) through intermediate levels (&ldquo;mammal,&rdquo; &ldquo;dog&rdquo;)
-            to specific instantiations (&ldquo;golden retriever&rdquo;), providing a controlled testbed
-            for evaluating whether sparse autoencoders can recover and respect compositional semantic
-            structure embedded in neural representations.
-          </p>
-        </div>
-
-        <h3 class="title is-4" style="margin-top: 2rem;">3.3 Compositional Feature Directions with Hierarchical Constraints</h3>
-        <div class="content has-text-justified">
-          <p>
-            The key insight is to make <span class="hl-green">child feature directions compositionally
-            dependent on their parent directions</span>, rather than having them be independent random
-            vectors. When constructing a hierarchical feature tree, we define each child feature direction as:
-          </p>
-          <div class="math-box">
-            $$\mathbf{d}_{\text{child}} = \alpha \cdot \mathbf{d}_{\text{parent}} + \beta \cdot \mathbf{d}_{\perp}$$
-          </div>
-          <p>
-            where $\mathbf{d}_{\text{parent}}$ is the parent&rsquo;s direction vector,
-            $\mathbf{d}_{\perp}$ is a component orthogonal to the parent (representing the
-            child&rsquo;s &ldquo;specialization&rdquo;), and $\alpha, \beta$ are mixing coefficients
-            controlling how much of the parent&rsquo;s representation is inherited. By carefully
-            choosing the $\alpha$ values across the hierarchy&mdash;$\alpha = 0.7$ for closely related
-            concepts, $\alpha = 0.3$ for more distantly related ones&mdash;we encode semantic
-            relatedness as geometric similarity in the feature space.
-          </p>
-          <p>
-            The coefficient $\beta$ controls the strength of the child&rsquo;s unique component: a
-            large $\beta$ relative to $\alpha$ means the child direction tilts strongly toward its
-            own unique subspace, while a small $\beta$ means it stays closely aligned with the parent.
-            Together, $\alpha$ and $\beta$ act as a <em>geometric dial</em> controlling where on the
-            spectrum between &ldquo;identical to parent&rdquo; and &ldquo;completely independent from
-            parent&rdquo; the child concept sits.
-          </p>
-        </div>
-
-        <h3 class="title is-4" style="margin-top: 2rem;">3.3 (cont.) Gram-Schmidt Orthogonalization for $\mathbf{d}_{\perp}$</h3>
-        <div class="content has-text-justified">
-          <p>
-            To obtain $\mathbf{d}_{\perp}$, a vector orthogonal to the parent direction, we use
-            Gram-Schmidt orthogonalization. Starting with a random vector $\mathbf{v}$, we subtract
-            its projection onto the parent direction:
-          </p>
-          <div class="math-box">
-            $$\mathbf{d}_{\perp} = \mathbf{v} - (\mathbf{v} \cdot \mathbf{d}_{\text{parent}}) \mathbf{d}_{\text{parent}}$$
-          </div>
-          <p>
-            The term $(\mathbf{v} \cdot \mathbf{d}_{\text{parent}}) \mathbf{d}_{\text{parent}}$ is the
-            component of $\mathbf{v}$ that &ldquo;points along&rdquo; the parent, so subtracting it leaves only
-            the perpendicular part. After normalizing to unit length, $\mathbf{d}_{\perp}$ lives in the
-            subspace of the full embedding space completely unrelated to the parent direction&mdash;it
-            captures whatever is unique or distinguishing about the child concept beyond what it
-            inherits from the parent.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ===== FIGURE 2: COMPOSITIONAL DIRECTIONS GEOMETRY ===== -->
-<section class="section" style="padding-top: 0; padding-bottom: 0.5rem;">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered">
-      <div class="column is-four-fifths has-text-centered">
-        <div class="figure-wrap">
-          <svg viewBox="0 0 720 310" xmlns="http://www.w3.org/2000/svg"
-               style="max-width: 720px; font-family: 'DM Sans', sans-serif;">
-            <rect class="fig-bg" width="720" height="310" fill="#fafafa" rx="12" stroke="#e0e0e0"/>
-            <text x="360" y="26" text-anchor="middle" font-size="13" font-weight="600" fill="#333">Geometric Structure of Compositional Feature Directions</text>
-            <!-- Coordinate axes area (left panel) -->
-            <!-- Origin at (175, 230) -->
-            <!-- d_parent arrow (blue, horizontal) -->
-            <line x1="175" y1="230" x2="385" y2="230" stroke="#0071BC" stroke-width="2.5"/>
-            <polygon points="385,230 373,224 373,236" fill="#0071BC"/>
-            <text x="393" y="234" font-size="12" fill="#0071BC" font-weight="600">d<tspan dy="5" font-size="9">parent</tspan><tspan dy="-5" font-size="1"> </tspan></text>
-            <!-- d_perp arrow (green, vertical up) -->
-            <line x1="175" y1="230" x2="175" y2="80" stroke="#009B55" stroke-width="2.5"/>
-            <polygon points="175,80 169,92 181,92" fill="#009B55"/>
-            <text x="183" y="76" font-size="12" fill="#009B55" font-weight="600">d<tspan dy="5" font-size="9">&#x22A5;</tspan><tspan dy="-5" font-size="1"> </tspan></text>
-            <!-- d_child arrow (purple, diagonal) alpha=0.7, shows 210 right, 140 up -->
-            <line x1="175" y1="230" x2="322" y2="112" stroke="#92268F" stroke-width="2.5"/>
-            <polygon points="322,112 308,119 318,131" fill="#92268F"/>
-            <text x="330" y="108" font-size="12" fill="#92268F" font-weight="600">d<tspan dy="5" font-size="9">child</tspan><tspan dy="-5" font-size="1"> </tspan></text>
-            <!-- Dashed projection lines -->
-            <line x1="322" y1="230" x2="322" y2="112" stroke="#ccc" stroke-width="1" stroke-dasharray="5,3"/>
-            <line x1="175" y1="112" x2="322" y2="112" stroke="#ccc" stroke-width="1" stroke-dasharray="5,3"/>
-            <!-- Alpha bracket on horizontal -->
-            <line x1="175" y1="246" x2="322" y2="246" stroke="#0071BC" stroke-width="1.5"/>
-            <line x1="175" y1="241" x2="175" y2="251" stroke="#0071BC" stroke-width="1.5"/>
-            <line x1="322" y1="241" x2="322" y2="251" stroke="#0071BC" stroke-width="1.5"/>
-            <text x="248" y="262" text-anchor="middle" font-size="11" fill="#0071BC">&#945; &middot; d<tspan dy="5" font-size="9">parent</tspan><tspan dy="-5" font-size="1"> </tspan></text>
-            <!-- Beta bracket on vertical -->
-            <line x1="155" y1="112" x2="155" y2="230" stroke="#009B55" stroke-width="1.5"/>
-            <line x1="150" y1="112" x2="160" y2="112" stroke="#009B55" stroke-width="1.5"/>
-            <line x1="150" y1="230" x2="160" y2="230" stroke="#009B55" stroke-width="1.5"/>
-            <text x="128" y="176" text-anchor="middle" font-size="11" fill="#009B55">&#946; &middot; d<tspan dy="5" font-size="9">&#x22A5;</tspan><tspan dy="-5" font-size="1"> </tspan></text>
-            <!-- Angle arc -->
-            <path d="M 225 230 A 50 50 0 0 0 210.4 194" stroke="#92268F" stroke-width="1.5" fill="none" stroke-dasharray="3,2"/>
-            <text x="240" y="212" font-size="11" fill="#92268F">&#952; = arccos(&#945;)</text>
-            <!-- Origin dot -->
-            <circle cx="175" cy="230" r="4" fill="#333"/>
-            <text x="165" y="250" font-size="10" fill="#555">O</text>
-            <!-- Right panel: formula box -->
-            <rect class="fig-panel" x="450" y="55" width="240" height="220" rx="10" fill="white" stroke="#e0e0e0" stroke-width="1.5"/>
-            <text x="570" y="82" text-anchor="middle" font-size="13" font-weight="600" fill="#333">Key Formula</text>
-            <line x1="470" y1="92" x2="670" y2="92" stroke="#e0e0e0" stroke-width="1"/>
-            <text x="570" y="116" text-anchor="middle" font-size="12" fill="#222">d<tspan dy="5" font-size="9">child</tspan><tspan dy="-5" font-size="12"> =</tspan></text>
-            <text x="570" y="140" text-anchor="middle" font-size="12" fill="#0071BC">&#945; &middot; d<tspan dy="5" font-size="9">parent</tspan><tspan dy="-5" font-size="1"> </tspan></text>
-            <text x="570" y="162" text-anchor="middle" font-size="14" fill="#888">+</text>
-            <text x="570" y="184" text-anchor="middle" font-size="12" fill="#009B55">&#946; &middot; d<tspan dy="5" font-size="9">&#x22A5;</tspan><tspan dy="-5" font-size="1"> </tspan></text>
-            <line x1="470" y1="198" x2="670" y2="198" stroke="#e0e0e0" stroke-width="1"/>
-            <text x="570" y="218" text-anchor="middle" font-size="11" fill="#555">After normalization:</text>
-            <text x="570" y="238" text-anchor="middle" font-size="12" fill="#92268F">cos(&#952;) = &#945;</text>
-            <text x="570" y="258" text-anchor="middle" font-size="10" fill="#777">&#945; encodes semantic similarity</text>
-          </svg>
-          <p class="figure-caption">
-            <strong>Figure 2.</strong> Geometric visualization of compositional feature directions.
-            The <span class="hl-blue">parent direction</span> $\mathbf{d}_{\text{parent}}$ and
-            <span class="hl-green">orthogonal component</span> $\mathbf{d}_{\perp}$ span a 2D plane.
-            The <span class="hl-purple">child direction</span>
-            $\mathbf{d}_{\text{child}} = \alpha \cdot \mathbf{d}_{\text{parent}} + \beta \cdot \mathbf{d}_{\perp}$
-            sits at angle $\theta = \arccos(\alpha)$ from the parent, encoding semantic
-            similarity directly as geometric proximity.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<hr class="pub-divider">
-
-
-<!-- ===== EXPERIMENTAL SETUP: SEMANTIC STRUCTURE ===== -->
-<section class="section" style="padding-top: 1rem;">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3 has-text-centered">Experimental Setup</h2>
-
-        <h3 class="title is-4">3.1 Addressing Semantic Structure Limitations in Representation Space</h3>
-        <div class="content has-text-justified">
-          <p>
-            The fundamental challenge in evaluating sparse autoencoders on semantic structures lies in
-            the gap between <span class="hl-blue">statistical</span> and
-            <span class="hl-red">semantic</span> hierarchies. Current synthetic benchmarks, while
-            powerful for controlled experimentation, implement purely statistical dependencies that lack
-            semantic meaning. The core limitation is that semantics requires compositional structure in
-            the representation itself, not merely correlated firing probabilities.
-          </p>
-          <p>
-            In real language models, semantic relationships like &ldquo;deceptive reasoning&rdquo; and
-            &ldquo;goal misrepresentation&rdquo; exhibit meaningful connections because the activation
-            patterns for child concepts literally contain components of parent concepts, creating genuine
-            compositional structure where child representations are built from parent representations
-            plus additional information. In contrast, existing synthetic frameworks treat hierarchical
-            features as independent random directions with statistical dependency rules. When a child
-            feature fires, it adds an arbitrary vector to the activation that bears no compositional
-            relationship to its parent&rsquo;s contribution.
-          </p>
-          <p>
-            This disconnect means that while we can test whether SAEs handle hierarchical statistical
-            dependencies, we cannot evaluate whether they recover semantically meaningful compositional
-            structures. The semantic labels assigned to features (&ldquo;Deceptive Reasoning,&rdquo;
-            &ldquo;Goal Misrepresentation&rdquo;) serve only human interpretation&mdash;the synthetic
-            model possesses no semantic understanding of these concepts.
-          </p>
-        </div>
-
-        <h3 class="title is-4" style="margin-top: 2rem;">3.2 Semantic Hierarchy Requirements and Practical Implementation Approaches</h3>
-        <div class="content has-text-justified">
-          <p>
-            Implementing genuinely semantic hierarchies in synthetic evaluation frameworks would require
-            fundamental architectural changes. <span class="hl-purple">Semantic basis vectors</span>
-            with interpretable meaning would replace random orthogonal directions, defining fundamental
-            semantic concepts like intentionality, truthfulness, goal-oriented behavior, and theory of
-            mind as basis vectors, then constructing complex features as meaningful combinations of
-            these primitives.
-          </p>
-          <p>
-            Given the <strong>fundamental paradox</strong> that creating semantically meaningful synthetic
-            features requires knowing what semantic structure looks like in representation space&mdash;precisely
-            what we aim to investigate&mdash;we implement three practical approaches:
-          </p>
-          <div class="columns" style="margin-top: 0.5rem;">
-            <div class="column">
-              <div class="content">
-                <p><strong class="hl-blue">Approach 1: Weak Semantic Structure</strong></p>
-                <p>
-                  Create statistical signatures that correlate with potential semantic patterns:
-                  features related to deception are highly correlated with each other and
-                  anti-correlated with honesty features, while manifold structures capture continuous
-                  semantic dimensions. This tests whether SAEs can handle the statistical patterns
-                  that real semantic structures might produce.
-                </p>
-              </div>
-            </div>
-            <div class="column">
-              <div class="content">
-                <p><strong class="hl-green">Approach 2: Hybrid Real Model Guidance</strong></p>
-                <p>
-                  Collect LLM activations on curated datasets with known semantic properties, use
-                  PCA/ICA/sparse coding to find empirical feature directions, then use these directions
-                  as synthetic feature vectors. This grounds synthetic features in real semantics while
-                  maintaining control and ground truth.
-                </p>
-              </div>
-            </div>
-          </div>
-          <p>
-            <strong>Approach 3</strong> explicitly acknowledges that SynthSAEBench tests statistical
-            decomposition capabilities rather than semantic understanding, focusing on measurable
-            properties: handling hierarchical statistical dependencies, decomposing correlated versus
-            independent features, and scaling behavior under various statistical constraints.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<hr class="pub-divider">
-
-<!-- ===== EXPERIMENTAL SETUP: LLM HIERARCHIES ===== -->
-<section class="section" style="padding-top: 1rem;">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3 has-text-centered">3.4 LLM-Generated Misalignment Hierarchies</h2>
-        <div class="content has-text-justified">
-          <p>
-            Our experimental pipeline leverages large language models to generate interpretable concept
-            hierarchies with explicit semantic similarity values, then translates these into geometric
-            constraints within the synthetic framework. The four-step pipeline is:
-          </p>
-          <ol>
-            <li>
-              <strong>Step 1 &mdash; Generate hierarchy.</strong> An LLM produces a tree of
-              misalignment-related concepts (e.g., &ldquo;Deceptive Reasoning&rdquo; as root),
-              assigning an $\alpha$ value to each parent-child edge encoding semantic similarity.
-              &ldquo;Goal Misrepresentation&rdquo; receives $\alpha = 0.7$ from &ldquo;Deceptive
-              Reasoning&rdquo; since it is almost a direct sub-case; &ldquo;Reward Hacking&rdquo;
-              receives $\alpha = 0.4$ from its parent as a more specific instantiation.
-            </li>
-            <li>
-              <strong>Step 2 &mdash; Translate into feature directions.</strong> Starting at the root
-              with a random unit vector $\mathbf{d}_{\text{root}}$, child directions are computed
-              recursively. Grandchildren inherit geometric structure <em>transitively</em>&mdash;&ldquo;Reward
-              Hacking&rdquo; contains directional overlap with both &ldquo;Goal Misrepresentation&rdquo;
-              and &ldquo;Deceptive Reasoning.&rdquo;
-            </li>
-            <li>
-              <strong>Step 3 &mdash; Feed into SynthSAEBench.</strong> The resulting feature directions
-              slot into the feature dictionary $D$. The parent firing-probability constraint
-              ($c_{\text{child}} \leftarrow c_{\text{child}} \cdot \mathbf{1}[c_{\text{parent}} > 0]$)
-              enforces statistical dependencies while geometric construction ensures child activations
-              literally contain parent-concept components.
-            </li>
-            <li>
-              <strong>Step 4 &mdash; Diagnose SAE behavior.</strong> Train an SAE and ask concrete
-              diagnostic questions: does the SAE learn a latent whose decoder direction has high cosine
-              similarity with $\mathbf{d}_{\text{root}}$ when only grandchild features fire? Does
-              ablating the &ldquo;Deceptive Reasoning&rdquo; latent impair &ldquo;Reward Hacking&rdquo;
-              reconstruction more than unrelated features?
-            </li>
-          </ol>
-          <p>
-            Because we hold the ground truth&mdash;we know exactly which direction corresponds to which
-            concept and what the $\alpha$ values were&mdash;we can measure failure modes with precision
-            impossible on a real LLM.
-          </p>
-        </div>
-
-        <!-- Figure 3: Deceptive Reasoning Hierarchy -->
-        <div class="figure-wrap" style="margin-top: 1.5rem;">
-          <svg viewBox="0 0 760 355" xmlns="http://www.w3.org/2000/svg"
-               style="max-width: 760px; font-family: 'DM Sans', sans-serif;">
-            <rect class="fig-bg" width="760" height="355" fill="#fafafa" rx="12" stroke="#e0e0e0"/>
-            <text x="380" y="26" text-anchor="middle" font-size="13" font-weight="600" fill="#333">Example: Deceptive Reasoning Hierarchy (LLM-generated)</text>
-            <!-- Root -->
-            <rect x="265" y="46" width="230" height="46" rx="8" fill="#ED1B23"/>
-            <text x="380" y="66" text-anchor="middle" font-size="12" font-weight="600" fill="white">Deceptive Reasoning</text>
-            <text x="380" y="83" text-anchor="middle" font-size="10" fill="#ffd0d0">p = 0.001 (rare but critical)</text>
-            <!-- Children -->
-            <rect x="48" y="154" width="180" height="46" rx="7" fill="#009B55"/>
-            <text x="138" y="174" text-anchor="middle" font-size="11" font-weight="600" fill="white">Goal Misrepresentation</text>
-            <text x="138" y="190" text-anchor="middle" font-size="10" fill="#c0ffe0">&#945; = 0.7 &nbsp;|&nbsp; p = 0.01</text>
-            <rect x="290" y="154" width="180" height="46" rx="7" fill="#009B55"/>
-            <text x="380" y="174" text-anchor="middle" font-size="11" font-weight="600" fill="white">Information Withholding</text>
-            <text x="380" y="190" text-anchor="middle" font-size="10" fill="#c0ffe0">&#945; = 0.5 &nbsp;|&nbsp; p = 0.015</text>
-            <rect x="532" y="154" width="180" height="46" rx="7" fill="#009B55"/>
-            <text x="622" y="174" text-anchor="middle" font-size="11" font-weight="600" fill="white">Strategic Misdirection</text>
-            <text x="622" y="190" text-anchor="middle" font-size="10" fill="#c0ffe0">&#945; = 0.6 &nbsp;|&nbsp; p = 0.02</text>
-            <!-- Lines root to children -->
-            <line x1="380" y1="92" x2="138" y2="154" stroke="#ED1B23" stroke-width="1.5" opacity="0.5"/>
-            <line x1="380" y1="92" x2="380" y2="154" stroke="#ED1B23" stroke-width="1.5" opacity="0.5"/>
-            <line x1="380" y1="92" x2="622" y2="154" stroke="#ED1B23" stroke-width="1.5" opacity="0.5"/>
-            <!-- Grandchildren under Goal Misrepresentation -->
-            <rect x="20" y="260" width="148" height="44" rx="6" fill="#92268F"/>
-            <text x="94" y="278" text-anchor="middle" font-size="10" font-weight="600" fill="white">Reward Hacking</text>
-            <text x="94" y="293" text-anchor="middle" font-size="9" fill="#ecd0ec">&#945; = 0.4 &nbsp;|&nbsp; p = 0.3</text>
-            <rect x="178" y="260" width="148" height="44" rx="6" fill="#92268F"/>
-            <text x="252" y="276" text-anchor="middle" font-size="10" font-weight="600" fill="white">Sycophantic</text>
-            <text x="252" y="289" text-anchor="middle" font-size="10" font-weight="600" fill="white">Agreement</text>
-            <text x="252" y="304" text-anchor="middle" font-size="9" fill="#ecd0ec">&#945; = 0.5 &nbsp;|&nbsp; p = 0.5</text>
-            <!-- Grandchildren under Info Withholding -->
-            <rect x="296" y="260" width="148" height="44" rx="6" fill="#92268F"/>
-            <text x="370" y="278" text-anchor="middle" font-size="10" font-weight="600" fill="white">Selective Omission</text>
-            <text x="370" y="293" text-anchor="middle" font-size="9" fill="#ecd0ec">&#945; = 0.6 &nbsp;|&nbsp; p = 0.4</text>
-            <rect x="454" y="260" width="148" height="44" rx="6" fill="#92268F"/>
-            <text x="528" y="276" text-anchor="middle" font-size="10" font-weight="600" fill="white">Framing</text>
-            <text x="528" y="289" text-anchor="middle" font-size="10" font-weight="600" fill="white">Manipulation</text>
-            <text x="528" y="304" text-anchor="middle" font-size="9" fill="#ecd0ec">&#945; = 0.4 &nbsp;|&nbsp; p = 0.6</text>
-            <!-- Lines children to grandchildren -->
-            <line x1="138" y1="200" x2="94" y2="260" stroke="#009B55" stroke-width="1.5" opacity="0.6"/>
-            <line x1="138" y1="200" x2="252" y2="260" stroke="#009B55" stroke-width="1.5" opacity="0.6"/>
-            <line x1="380" y1="200" x2="370" y2="260" stroke="#009B55" stroke-width="1.5" opacity="0.6"/>
-            <line x1="380" y1="200" x2="528" y2="260" stroke="#009B55" stroke-width="1.5" opacity="0.6"/>
-            <!-- Legend -->
-            <rect x="610" y="262" width="12" height="12" rx="2" fill="#ED1B23"/>
-            <text x="628" y="273" font-size="10" fill="#555">Root concept</text>
-            <rect x="610" y="282" width="12" height="12" rx="2" fill="#009B55"/>
-            <text x="628" y="293" font-size="10" fill="#555">Child concept</text>
-            <rect x="610" y="302" width="12" height="12" rx="2" fill="#92268F"/>
-            <text x="628" y="313" font-size="10" fill="#555">Grandchild concept</text>
-            <text x="623" y="333" font-size="9" fill="#888" font-style="italic">&#945; = semantic similarity</text>
-          </svg>
-          <p class="figure-caption">
-            <strong>Figure 3.</strong> LLM-generated <span class="hl-red">Deceptive Reasoning</span>
-            hierarchy. Each node carries a semantic similarity coefficient $\alpha$ (geometric
-            inheritance from parent) and a conditional firing probability $p$.
-            <span class="hl-green">Child concepts</span> inherit geometry from the root;
-            <span class="hl-purple">grandchildren</span> inherit transitively from both parent and
-            grandparent&mdash;&ldquo;Reward Hacking&rdquo; thus contains directional overlap with
-            both &ldquo;Goal Misrepresentation&rdquo; and &ldquo;Deceptive Reasoning.&rdquo;
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<hr class="pub-divider">
-
-
-<!-- ===== GEOMETRIC THEORY ===== -->
-<section class="section" style="padding-top: 1rem;">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3 has-text-centered">Theory: Semantic Correlation Through Geometry</h2>
-        <div class="content has-text-justified">
-          <p>
-            The theoretical foundation rests on the principle that
-            <strong>semantic relatedness should manifest as geometric structure in representation space</strong>.
-            When we set $\alpha > 0$, we create non-zero cosine similarity between parent and child
-            feature directions. After normalization:
-          </p>
-          <div class="math-box">
-            $$\cos(\theta) = \mathbf{d}_{\text{child}}^T \mathbf{d}_{\text{parent}} = \alpha$$
-          </div>
-          <p>
-            This follows from expanding the inner product:
-          </p>
-          <div class="math-box">
-            $$\mathbf{d}_{\text{child}}^T \mathbf{d}_{\text{parent}}
-            = (\alpha \cdot \mathbf{d}_{\text{parent}} + \beta \cdot \mathbf{d}_{\perp})^T \mathbf{d}_{\text{parent}}
-            = \alpha \underbrace{(\mathbf{d}_{\text{parent}}^T \mathbf{d}_{\text{parent}})}_{=1}
-            + \beta \underbrace{(\mathbf{d}_{\perp}^T \mathbf{d}_{\text{parent}})}_{=0}
-            = \alpha$$
-          </div>
-          <p>
-            This creates a testable prediction: SAEs that successfully decompose these features should
-            discover latents where decoder directions for child features have
-            <span class="hl-green">high cosine similarity</span> with decoder directions for parent
-            features, and interventions that ablate parent features should
-            <span class="hl-red">impair reconstruction of child features</span> more severely than
-            unrelated features.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<hr class="pub-divider">
-
-<!-- ===== SAFETY APPLICATIONS ===== -->
-<section class="section" style="padding-top: 1rem;">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3 has-text-centered">Safety Research Applications</h2>
-        <div class="content has-text-justified">
-          <p>
-            The semantic hierarchy approach enables several critical AI safety research directions.
-            You can construct arbitrarily complex semantic hierarchies reflecting real AI safety threat
-            models&mdash;power-seeking, deception, sycophancy, manipulation, goal misspecification&mdash;and
-            rigorously test whether interpretability tools can decompose these structures.
-          </p>
-        </div>
-
-        <div class="columns" style="margin-top: 1rem;">
-          <div class="column">
-            <div class="content">
-              <h4 class="title is-5">
-                <span class="icon has-text-info"><i class="fas fa-search"></i></span>
-                <span class="hl-blue">Capability Detection Robustness</span>
-              </h4>
-              <p>
-                Test SAE identification of rare, sparse dangerous features (&lt;0.1% of samples).
-                If SAEs fail to consistently recover rare scheming features in the controlled
-                synthetic setting, they will likely miss such features in real models.
-              </p>
-            </div>
-          </div>
-          <div class="column">
-            <div class="content">
-              <h4 class="title is-5">
-                <span class="icon" style="color:#92268F"><i class="fas fa-project-diagram"></i></span>
-                <span class="hl-purple">Transfer Learning for Monitoring</span>
-              </h4>
-              <p>
-                If structural patterns (clustered latents with low firing probability and mutual
-                exclusivity) reliably indicate scheming-type hierarchies in synthetic data, we can
-                search for the same geometric signatures in real SAEs as a monitoring signal.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="columns">
-          <div class="column">
-            <div class="content">
-              <h4 class="title is-5">
-                <span class="icon has-text-danger"><i class="fas fa-shield-alt"></i></span>
-                <span class="hl-red">Worst-Case Adversarial Scenarios</span>
-              </h4>
-              <p>
-                Model capability concealment: create features anti-correlated with overt expressions
-                of the same capabilities, then test whether SAEs can still recover underlying features
-                when obvious signals are suppressed.
-              </p>
-            </div>
-          </div>
-          <div class="column">
-            <div class="content">
-              <h4 class="title is-5">
-                <span class="icon has-text-success"><i class="fas fa-flask"></i></span>
-                <span class="hl-green">Intervention Testing with Ground Truth</span>
-              </h4>
-              <p>
-                Because we have complete ground truth about which features represent dangerous
-                capabilities, we can test whether ablating or clamping SAE latents matched to
-                these features actually prevents the corresponding behavior.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<hr class="pub-divider">
-
-<!-- ===== RESULTS ===== -->
-<section class="section" style="padding-top: 1rem;">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3 has-text-centered">4. Results</h2>
-
-        <!-- Heatmap figure -->
-        <div class="figure-wrap" style="margin-bottom: 1.5rem;">
-          <img src="feature_hierarchies/visualizations/cosim_heatmap.png"
-               alt="Pairwise cosine similarity heatmap for SAE features"
-               style="max-width:100%; border-radius:8px; border:1px solid var(--border);">
-          <p class="figure-caption">
-            <strong>Figure 4.</strong> Pairwise cosine similarity heatmap for SAE features
-            organized into MITRE ATLAS taxonomy trees. Rows and columns correspond to the same
-            set of features, ordered breadth-first within each tree (root, then level-1 children,
-            then level-2 leaves). Colored rectangles outline level-1 subtree blocks. The pronounced
-            <span class="hl-blue">columnar banding</span> within each block reflects the shared
-            parent-vector component inherited by sibling features under the same tactic node.
-          </p>
-        </div>
-
-        <h3 class="title is-4">Columnar Symmetry in the Cosine Similarity Heatmap</h3>
-        <div class="content has-text-justified">
-          <p>
-            The heatmap displays pairwise cosine similarities between SAE feature vectors
-            organized according to MITRE ATLAS tactic hierarchies. Features within the same
-            subtree share a common parent direction because each child feature is constructed as
-            $\mathbf{d}_\text{child} = \alpha \cdot \mathbf{d}_\text{parent} + \beta \cdot \mathbf{d}_\perp$.
-            As a result, any two siblings $i$ and $j$ under the same parent have cosine similarity
-            with an arbitrary third feature $x$ that is approximately equal&mdash;
-            $\cos(\mathbf{d}_i, x) \approx \cos(\mathbf{d}_j, x)$&mdash;since both are dominated
-            by the same $\alpha \cdot \mathbf{d}_\text{parent}$ term. This makes entire columns
-            within a subtree block appear nearly uniform in color, producing the characteristic
-            vertical stripes visible inside the colored bounding boxes.
-          </p>
-          <p>
-            Features from different tactics have lower mutual similarities because their respective
-            parent vectors are mutually orthogonal by construction. The columnar symmetry thus
-            serves as a <strong>geometric fingerprint</strong> of the construction rule: the more
-            features share ancestry, the more their similarity profiles align, collapsing distinct
-            rows into visually indistinguishable columns.
-          </p>
-        </div>
-
-        <h3 class="title is-4" style="margin-top: 2rem;">Taxonomy: MITRE ATLAS Semantic Dictionary</h3>
-        <div class="content has-text-justified">
-          <p>
-            The starting point is <code>feature_hierarchies/mitre_atlas_adversarial_ml.json</code>,
-            encoding the MITRE ATLAS adversarial machine learning threat taxonomy as a forest of
-            concept trees. The file contains 13 root nodes&mdash;one per ATLAS tactic, including
-            <em>Adversarial Evasion</em>, <em>Data Poisoning</em>, <em>Model Extraction and
-            Stealing</em>, and <em>Prompt Injection and LLM Exploitation</em>&mdash;each heading
-            a subtree of depth 2. Internal nodes represent tactic families and leaves represent
-            individual techniques. Across all 13 trees the taxonomy defines 148 hierarchical
-            feature slots, with individual tree sizes ranging from 10 to 13 nodes.
-          </p>
-          <p>
-            Each node carries an <code>alpha</code> ($\alpha$) value specifying the desired cosine
-            similarity between the node&rsquo;s feature vector and its parent&rsquo;s, a
-            <code>beta</code> ($\beta$) value satisfying $\alpha^2 + \beta^2 = 1$, a
-            <code>mutually_exclusive_children</code> flag, and a <code>children</code> array.
-            Root nodes are assigned $\alpha = 0, \beta = 1$, meaning they are initialised as
-            free unit vectors with no inherited direction.
-          </p>
-        </div>
-
-        <h3 class="title is-4" style="margin-top: 2rem;">Synthetic Model Construction &amp; Geometric Verification</h3>
-        <div class="content has-text-justified">
-          <p>
-            A <code>SyntheticModel</code> is instantiated with 512 features embedded in a
-            128-dimensional hidden space, giving a 4&times; superposition ratio. The initialiser
-            traverses the JSON forest depth-first, constructing each child vector as
-            $\mathbf{d}_\text{child} = \alpha\mathbf{d}_\text{parent} + \beta\mathbf{d}_\perp$
-            via Gram&ndash;Schmidt orthogonalisation. This guarantees
-            $\cos(\mathbf{d}_\text{child}, \mathbf{d}_\text{parent}) = \alpha$ exactly.
-          </p>
-          <p>
-            Before any training, the geometry is verified across all 135 parent&ndash;child pairs.
-            The maximum absolute deviation from the specified $\alpha$ value is below
-            $2 \times 10^{-7}$&mdash;consistent with single-precision floating-point
-            rounding&mdash;confirming the Gram&ndash;Schmidt procedure realises the intended
-            similarities to essentially exact precision.
-          </p>
-          <p>
-            <strong>Firing distribution:</strong> Firing probabilities are drawn from a Zipfian
-            distribution with exponent 0.5, clipped to $[10^{-3}, 0.3]$. The hierarchy
-            enforces a conditional firing rule: a child feature may only be active if its parent
-            is also active. The notebook verifies this constraint over 10,000 sampled batches,
-            finding zero violations. Mean active features per token (L0) $\approx$ 2.7.
-          </p>
-        </div>
-
-        <h3 class="title is-4" style="margin-top: 2rem;">Cosine Similarity Heatmap Construction</h3>
-        <div class="content has-text-justified">
-          <p>
-            For each of four randomly selected tactic trees the heatmap is constructed as follows.
-            All nodes in the tree are enumerated in breadth-first order&mdash;root, then level-1
-            children in left-to-right order, then level-2 leaves grouped under their respective
-            level-1 parents. This ordering places nodes that share a level-1 ancestor in contiguous
-            index ranges, which is what makes the block structure visible. The model&rsquo;s feature
-            dictionary matrix <em>W</em> of shape (512, 128) is L2-normalised row-wise to produce
-            unit vectors, and the cosine similarity matrix for the selected nodes is computed as
-            the inner product of the corresponding submatrix with its own transpose, yielding a
-            symmetric $n \times n$ matrix.
-          </p>
-          <p>
-            The entries follow directly from the construction rule. Diagonal entries are identically 1.
-            Parent&ndash;child entries equal the child&rsquo;s $\alpha$ value by the geometric
-            invariant. Sibling entries&mdash;between two leaves sharing a level-1 parent&mdash;are
-            elevated above zero because both vectors contain the term $\alpha \cdot \mathbf{d}_\text{parent}$;
-            the expected similarity between siblings with coefficients $(\alpha_1, \beta_1)$ and
-            $(\alpha_2, \beta_2)$ is approximately $\alpha_1\alpha_2$. Cross-subtree entries are close
-            to zero because the corresponding parent vectors are mutually orthogonal, so the
-            shared-direction term that elevates within-block similarities is absent across boundaries.
-            A colored rectangle is drawn over each level-1 diagonal block to make the grouping
-            explicit, with distinct colors assigned to each subtree.
-          </p>
-        </div>
-
-        <h3 class="title is-4" style="margin-top: 2rem;">SAE Training &amp; Recovery Metrics</h3>
-        <div class="content has-text-justified">
-          <p>
-            A BatchTopK Sparse Autoencoder is trained on hidden activations sampled from the
-            synthetic model: encoder projects 128-d hidden state into 512-d latent space,
-            retains top-$k = 15$ activations per token, decoder reconstructs. Training:
-            10M tokens, batch size 1024, learning rate $3 \times 10^{-4}$.
-          </p>
-          <p>
-            The $k = 15$ against a true L0 of 2.7 is deliberately generous, biasing toward
-            high recall at the expense of precision. Recovery is evaluated by matching each SAE
-            latent to its closest ground-truth feature via cosine similarity.
-          </p>
-        </div>
-
-        <div class="content" style="margin-top: 1rem;">
-          <table class="table is-striped is-hoverable is-fullwidth" style="font-size: 0.92rem;">
-            <thead>
-              <tr>
-                <th>Metric</th>
-                <th style="text-align:right;">Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>Explained variance (R²)</td><td style="text-align:right;">0.971</td></tr>
-              <tr><td>Matthews Correlation Coefficient</td><td style="text-align:right;">0.732</td></tr>
-              <tr><td>Uniqueness</td><td style="text-align:right;">0.773</td></tr>
-              <tr><td>F1 score</td><td style="text-align:right;">0.475</td></tr>
-              <tr><td>Precision</td><td style="text-align:right;">0.372</td></tr>
-              <tr><td>Recall</td><td style="text-align:right;">0.783</td></tr>
-              <tr><td>SAE L0</td><td style="text-align:right;">15.0</td></tr>
-              <tr><td>True L0</td><td style="text-align:right;">2.7</td></tr>
-              <tr><td>Dead latents</td><td style="text-align:right;">72 / 512</td></tr>
-              <tr><td>Shrinkage</td><td style="text-align:right;">0.985</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="content has-text-justified">
-          <p>
-            The high explained variance (0.97) confirms faithful reconstruction. Recall of 0.78
-            indicates most ground-truth features have a corresponding SAE latent. Precision of
-            0.37 reflects spurious activations&mdash;the expected consequence of the 5.6&times;
-            mismatch between permitted L0 and true signal sparsity. Of 512 SAE latents, 72 remain
-            permanently inactive, likely corresponding to features too rare under the Zipfian
-            schedule for the SAE to learn. Shrinkage near 1.0 confirms BatchTopK prevents the
-            magnitude collapse that afflicts L1-penalised autoencoders.
-          </p>
-          <p>
-            The block-diagonal similarity structure visible in the heatmap represents exactly the
-            geometric correlations the SAE must disentangle. When a leaf feature shares $\alpha = 0.65$
-            with its level-1 parent, their hidden representations differ by only
-            $\arccos(0.65) \approx 49°$, making it genuinely difficult for the encoder to resolve
-            whether parent, child, or both were active. This ambiguity is the proximate cause of
-            the precision shortfall, and it grows with $\alpha$: trees whose level-1 groups have
-            large mixing coefficients show more tightly clustered blocks in the heatmap and
-            correspondingly lower precision in SAE recovery metrics.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<hr class="pub-divider">
-
-<!-- ===== RELATED WORK ===== -->
-<section class="section" style="padding-top: 1rem;">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3 has-text-centered">Related Work</h2>
-        <div class="content has-text-justified">
-          <p>
-            Sparse autoencoders have emerged as a powerful tool for decomposing neural network
-            activations into interpretable features, yet measuring the quality of these features
-            remains active [1]. Recent work has converged on a multi-dimensional evaluation framework
-            addressing concept detection, feature separability, reconstruction fidelity, and human
-            interpretability. Sparse probing [2] selects the top-$k$ SAE features most correlated
-            with binary classification tasks and trains logistic regression probes on only those
-            features&mdash;though comprehensive testing across 113 datasets shows SAE-based sparse
-            probes do not consistently outperform simple baselines [3].
-          </p>
-          <p>
-            Concept disentanglement metrics such as RAVEL and targeted probe perturbation [4] test
-            whether intervening on specific latents can change one attribute without altering others.
-            Notably, Matryoshka SAEs exhibit positive scaling on disentanglement metrics as dictionary
-            size grows, while most other architectures show degraded performance due to feature
-            splitting. Automated interpretability techniques using LLMs [5] have dramatically reduced
-            evaluation costs, but often struggle to differentiate between SAE architectures.
-          </p>
-          <p>
-            The integration of these evaluation methods has revealed that SAE quality is irreducibly
-            multi-dimensional, with no single metric capable of identifying optimal architectures [1].
-            Our work extends SynthSAEBench [6] with geometric semantic structure, bridging the gap
-            between purely statistical hierarchies and the compositional semantic hierarchies present
-            in real language models.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<hr class="pub-divider">
-
-<!-- ===== LIMITATIONS ===== -->
-<section class="section" style="padding-top: 1rem;">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3 has-text-centered">6.1 Limitations &amp; Implications for AI Safety</h2>
-        <div class="content has-text-justified">
-          <p>
-            This approach provides <strong>weak semantic structure</strong>&mdash;it is geometrically
-            grounded but still falls short of true semantic understanding. We encode human-chosen
-            semantic relationships into the statistical properties of the data, but the model still
-            does not &ldquo;understand&rdquo; deception in any functional sense.
-          </p>
-          <p>
-            The limitations of statistical versus semantic hierarchies carry significant implications
-            for AI safety applications of sparse autoencoder research. Current synthetic evaluation
-            frameworks enable testing of <em>necessary but insufficient</em> conditions for
-            safety-relevant interpretability. We can reliably assess whether SAEs can detect rare but
-            statistically structured patterns, which matters if scheming behaviors exhibit characteristic
-            correlation signatures. The frameworks also allow evaluation of scaling behavior when
-            dangerous features are sparse, robustness of detection mechanisms to feature correlations
-            and hierarchical dependencies, and whether transfer learning approaches work effectively
-            for statistical signatures of concerning behaviors.
-          </p>
-          <p>
-            However, these capabilities come with critical limitations for safety applications. We
-            cannot test whether SAEs <em>actually understand</em> what concepts like &ldquo;deception&rdquo;
-            mean compositionally, whether ablating supposed &ldquo;deception features&rdquo; prevents
-            deceptive reasoning in functionally meaningful ways, whether the hierarchical relationships
-            we construct in synthetic data match real semantic hierarchies in deployed models, or whether
-            synthetic representations of concerning behaviors bear any resemblance to how actual models
-            represent such capabilities.
-          </p>
-          <p>
-            For practical AI safety research, this analysis suggests a
-            <strong>two-stage validation approach</strong>: first, demonstrate SAE capabilities on
-            increasingly complex synthetic statistical structures to establish baseline competence,
-            then validate on real model activations with known safety-relevant semantic content.
-            Only architectures that succeed at both stages should be considered reliable for
-            safety-critical interpretability applications, ensuring that statistical decomposition
-            capabilities translate to meaningful understanding of dangerous model behaviors.
-          </p>
-        </div>
-
-        <div class="columns" style="margin-top: 1.5rem;">
-          <div class="column">
-            <div class="content" class="can-box">
-              <p><strong style="color: #009B55;">What we CAN test with statistical hierarchies:</strong></p>
-              <ul>
-                <li>Whether SAEs detect rare but statistically structured patterns</li>
-                <li>Scaling behavior when dangerous features are sparse</li>
-                <li>Whether transfer learning works for statistical signatures</li>
-                <li>Robustness of detection to feature correlations and hierarchical dependencies</li>
-              </ul>
-            </div>
-          </div>
-          <div class="column">
-            <div class="content" class="cannot-box">
-              <p><strong style="color: #ED1B23;">What we CANNOT yet test:</strong></p>
-              <ul>
-                <li>Whether SAEs understand what &ldquo;deception&rdquo; means compositionally</li>
-                <li>Whether ablating &ldquo;deception features&rdquo; prevents deceptive reasoning</li>
-                <li>Whether constructed hierarchical relationships match real semantic hierarchies</li>
-                <li>Whether synthetic &ldquo;scheming&rdquo; features resemble real model representations</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<hr class="pub-divider">
-
-
-<!-- ===== REFERENCES ===== -->
-<section class="section" style="padding-top: 1rem;">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3 has-text-centered">References</h2>
-        <div class="content">
-          <ul class="ref-list">
-            <li>
-              <span class="ref-num">[1]</span>
-              Karvonen, A., Loughran, T., &amp; Kenton, Z. (2025). SAEBench: A comprehensive evaluation suite for sparse autoencoders. <em>arXiv:2503.09532</em>.
-            </li>
-            <li>
-              <span class="ref-num">[2]</span>
-              Gurnee, W., Nanda, N., Pauly, M., Harvey, K., Troitskii, D., &amp; Bertsimas, D. (2023). Finding neurons in a haystack: Case studies with sparse probing. <em>arXiv:2305.01610</em>.
-            </li>
-            <li>
-              <span class="ref-num">[3]</span>
-              Kantamneni, S., Wattenberg, M., &amp; Firat, O. (2025). Evaluating sparse autoencoder representations with supervised classification tasks. <em>arXiv:2502.16681</em>.
-            </li>
-            <li>
-              <span class="ref-num">[4]</span>
-              Karvonen, A., Foote, B., Bricken, T., &amp; Brown, T. (2024). SAEs learn sparse representations of sparse representations. <em>arXiv:2408.00113</em>.
-            </li>
-            <li>
-              <span class="ref-num">[5]</span>
-              Paulo, F., Friedman, D., &amp; EleutherAI. (2025). Delphi: Towards machine psychology through conditional language modeling. <em>arXiv:2410.13928</em>.
-            </li>
-            <li>
-              <span class="ref-num">[6]</span>
-              Chanin, D., et al. (2026). SynthSAEBench: Evaluating Sparse Autoencoders on Scalable Realistic Synthetic Data. <em>arXiv:2602.14687</em>.
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<hr class="pub-divider">
-
-<!-- ===== SUPPLEMENTARY MATERIALS ===== -->
-<section class="section" style="padding-top: 1rem; padding-bottom: 3rem;">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3 has-text-centered">Supplementary Materials</h2>
-        <div class="columns is-centered" style="margin-top: 1rem;">
-
-          <!-- Presentation Slides -->
-          <div class="column is-one-third">
-            <div class="supp-card">
-              <div class="supp-icon">
-                <span class="icon is-large"><i class="fas fa-chalkboard-teacher fa-2x"></i></span>
-              </div>
-              <h3>Presentation Slides</h3>
-              <p>
-                Geometric SAE Invariance pitch deck (PDF) covering the project overview and key visual concepts.
-              </p>
-              <a href="Geometric_SAE_Invariance%20v1.pdf" target="_blank" class="button is-normal is-rounded is-dark" style="margin-top: 1rem;">
-                <span class="icon"><i class="fas fa-file-pdf"></i></span>
-                <span>View Slides</span>
-              </a>
-            </div>
-          </div>
-
-          <!-- Research PDF -->
-          <div class="column is-one-third">
-            <div class="supp-card">
-              <div class="supp-icon">
-                <span class="icon is-large"><i class="fas fa-file-pdf fa-2x"></i></span>
-              </div>
-              <h3>Research PDF</h3>
-              <p>
-                Full arXiv-style research paper PDF compiled from the manuscript source.
-              </p>
-              <a href="paper.pdf" target="_blank"
-                 class="button is-normal is-rounded is-dark" style="margin-top: 1rem;">
-                <span class="icon"><i class="fas fa-download"></i></span>
-                <span>Download PDF</span>
-              </a>
-            </div>
-          </div>
-
-          <!-- Research Docs -->
-          <div class="column is-one-third">
-            <div class="supp-card">
-              <div class="supp-icon">
-                <span class="icon is-large"><i class="fas fa-book-open fa-2x"></i></span>
-              </div>
-              <h3>Research Documents</h3>
-              <p>
-                Full collection of research notes, methodology writeups, literature reviews,
-                and extended analyses.
-              </p>
-              <a href="docs/" class="button is-normal is-rounded is-dark" style="margin-top: 1rem;">
-                <span class="icon"><i class="fas fa-folder-open"></i></span>
-                <span>Browse Docs</span>
-              </a>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== FOOTER ===== -->
-<footer class="footer pub-footer" style="padding: 1.5rem;">
-  <div class="content has-text-centered">
-    <p style="font-size: 0.85rem; color: #777;">
-      Website template inspired by academic project pages.
-      &copy; 2026 Konstantinos Krampis.
-    </p>
-  </div>
-</footer>
-
-
-<!-- ── Dark/Light Theme Toggle ── -->
-<button id="theme-toggle" title="Toggle dark/light mode" aria-label="Toggle dark/light mode">
-  <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-  </svg>
-  <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-       style="display:none">
-    <circle cx="12" cy="12" r="5"></circle>
-    <line x1="12" y1="1" x2="12" y2="3"></line>
-    <line x1="12" y1="21" x2="12" y2="23"></line>
-    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-    <line x1="1" y1="12" x2="3" y2="12"></line>
-    <line x1="21" y1="12" x2="23" y2="12"></line>
-    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-  </svg>
-</button>
-<script>
-  (function () {
-    var btn = document.getElementById('theme-toggle');
-    var moon = document.getElementById('icon-moon');
-    var sun  = document.getElementById('icon-sun');
-    function applyTheme(dark) {
-      document.documentElement.classList.toggle('dark', dark);
-      moon.style.display = dark ? 'none' : '';
-      sun.style.display  = dark ? '' : 'none';
-    }
-    // init
-    var saved = localStorage.getItem('theme');
-    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    applyTheme(saved === 'dark' || (saved == null && prefersDark));
-    btn.addEventListener('click', function () {
-      var isDark = document.documentElement.classList.toggle('dark');
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-      moon.style.display = isDark ? 'none' : '';
-      sun.style.display  = isDark ? '' : 'none';
-    });
-  })();
-</script>
+</header>
+<header id="title-block-header">
+<h1 class="title">Geometric Feature Invariance in SAEs</h1>
+</header>
+<h1
+id="geometric-feature-invariance-in-saes-a-framework-for-transferable-mechanistic-interpretability-and-scalable-ai-safety">Geometric
+Feature Invariance in SAEs: A Framework for Transferable Mechanistic
+Interpretability and Scalable AI Safety</h1>
+<p><strong>Authors:</strong> Konstantinos Krampis, David Williams-King,
+David Chanin<br />
+<strong>Affiliation:</strong> City University of New York; ERA;
+University College London <strong>Date:</strong> 2026</p>
+<p><strong>Targeted output:</strong> NeurIPS 2026.</p>
+<h2 id="abstract">Abstract</h2>
+<p>This research will integrate controlled synthetic model features
+evaluation with cross-model geometric feature invariance analysis,
+towards developing a principled framework for transferable
+interpretability across model families and variants. Recent work has
+showed that Sparse Autoencoders (SAEs) trained on different LLMs learn
+geometrically similar feature spaces (invariance and analogous feature
+universality) while exhibiting trade-offs against synthetic ground-truth
+features, meaning no current SAE architecture can perfectly recover the
+ground-truth features. Our work will address fundamental challenges in
+mechanistic interpretability by establishing principled methods for
+leveraging geometric feature universality. Efficient feature transfer is
+critical for AI safety because it enables rapid safety evaluation of new
+models without restarting interpretability analysis from scratch, early
+detection of hazardous capabilities by comparing feature spaces to known
+dangerous configurations, reliable monitoring across deployment contexts
+by tracking feature drift, and scalable oversight of large model
+families where per-model analysis becomes infeasible. During the project
+implementation we will characterize geometric patterns that remain
+stable across models, and geometric transformation methods that reliably
+map feature correspondences, validated against synthetic ground-truth.
+Furthermore, we will demonstrate that safety-relevant interventions
+transfer within the same family of models, or fine-tuned variants of a
+model. This research will accelerate mechanistic interpretability, and
+enable efficient safety analysis as AI systems grow in capability and
+complexity.</p>
+<h2 id="theory-of-change">Theory of Change</h2>
+<p>Our approach involves developing synthetic benchmarks to test SAE
+transfer and the presence of invariant feature structures, which will
+produce protocols that enable reliable cross-model interpretability
+transfer based on invariant AI safety-related features and circuits.
+This will enable interpretations and safety interventions developed on
+one model to reliably transfer to other models in the same family,
+ultimately making AI safety scalable without requiring complete
+re-interpretation and SAE generation for each new model, fine-tuned
+variant, or model family member. The key assumption underlying this work
+is that geometric feature similarity is both necessary and sufficient
+for interpretability transfer.</p>
+<table>
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 89%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Component</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Activities</strong></td>
+<td style="text-align: left;">Develop synthetic benchmarks to test SAE
+transfer and the presence of invariant feature structures</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Outputs</strong></td>
+<td style="text-align: left;">Protocols that enable reliable cross-model
+interpretability transfer based on invariant AI safety-related features
+and circuits</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Outcomes</strong></td>
+<td style="text-align: left;">Enable interpretations and safety
+interventions developed on one model to reliably transfer to other
+models in the same family</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Impact</strong></td>
+<td style="text-align: left;">AI safety becomes scalable without
+requiring complete re-interpretation and SAE generation for each new
+model, fine-tuned variant, or model family member</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Key Assumption</strong></td>
+<td style="text-align: left;">Geometric feature similarity is both
+necessary and sufficient for interpretability transfer</td>
+</tr>
+</tbody>
+</table>
+<h2 id="related-work">1. Related Work</h2>
+<p>Sparse autoencoders have emerged as a powerful tool for decomposing
+neural network activations into interpretable features, yet measuring
+the quality of these features remains an active area of research. Recent
+work has converged on a multi-dimensional evaluation framework that
+addresses different aspects of SAE quality: concept detection, feature
+separability, reconstruction fidelity, and human interpretability [1].
+The development of comprehensive evaluation suites has revealed that
+gains on traditional proxy metrics, such as reconstruction loss at a
+given sparsity level, do not reliably translate to better practical
+performance, highlighting the need for more sophisticated assessment
+methods.</p>
+<p>Sparse probing methodology has proven particularly valuable for
+testing whether individual SAE features capture known concepts [2]. This
+technique selects the top-k SAE features most correlated with binary
+classification tasks and trains logistic regression probes on only those
+features. When applied to tasks spanning language identification,
+profession classification, and sentiment analysis across 35 binary
+classification tasks, sparse probing reveals whether SAEs successfully
+learn dedicated, interpretable representations of specific concepts.
+However, recent comprehensive testing across 113 datasets has shown that
+SAE-based sparse probes do not consistently outperform simple baselines
+like logistic regression on raw activations for supervised
+classification tasks [3].</p>
+<p>Concept disentanglement represents another crucial dimension of SAE
+evaluation, measuring whether these models properly separate independent
+features into non-overlapping representations [4]. Originally developed
+using language models trained on chess and Othello game transcripts
+where ground-truth features are formally specifiable, this approach has
+been extended to general language models through metrics such as RAVEL,
+spurious correlation removal, and targeted probe perturbation. These
+evaluations test whether intervening on specific latents can change one
+attribute without altering others, and whether concept-specific latent
+sets remain non-overlapping. Notably, Matryoshka SAEs exhibit positive
+scaling on disentanglement metrics as dictionary size grows, while most
+other architectures show degraded performance due to feature
+splitting.</p>
+<p>Automated interpretability techniques have revolutionized the
+scalability of SAE feature evaluation by using large language models to
+generate and assess natural language explanations of feature behavior
+[5]. This two-stage pipeline involves an explainer model producing
+concise descriptions based on activating examples, followed by a scorer
+model predicting feature activation patterns based on these
+explanations. The accuracy of these predictions serves as a measure of
+explanation quality and feature interpretability. While this approach
+has dramatically reduced evaluation costs and enabled analysis of
+millions of features, it often struggles to differentiate between SAE
+architectures, suggesting it captures necessary but not sufficient
+aspects of SAE quality.</p>
+<p>The integration of these evaluation methods has revealed that SAE
+quality is irreducibly multi-dimensional, with no single metric capable
+of identifying optimal architectures [1]. This finding has shifted the
+field away from optimizing purely for reconstruction loss toward
+embracing nuanced, multi-metric evaluation paradigms. The challenge of
+transferable interpretability across model families adds another layer
+of complexity, as geometric feature similarity patterns must be
+characterized and validated against synthetic ground-truth to enable
+reliable cross-model feature correspondence and safety-relevant
+intervention transfer.</p>
+<h2 id="methodology">2. Methodology</h2>
+<h3 id="synthetic-data-generation-framework">2.1 Synthetic Data
+Generation Framework</h3>
+<p>Our methodology builds upon the SynthSAEBench framework [6], which
+generates large-scale synthetic activation data with realistic neural
+network feature characteristics. The synthetic data generation process
+begins by defining N = 16,384 ground-truth features in a D =
+768-dimensional activation space. Each feature i is represented by a
+unit direction vector <span
+class="math inline"><strong>d</strong><sub><em>i</em></sub> ∈ ℝ<sup>768</sup></span>,
+created through random sampling from a standard normal distribution
+followed by L2 normalization: <span
+class="math inline"><strong>d</strong><sub><em>i</em></sub> = <strong>g</strong><sub><em>i</em></sub>/∥<strong>g</strong><sub><em>i</em></sub>∥<sub>2</sub></span>
+where <span
+class="math inline"><strong>g</strong><sub><em>i</em></sub> ∼ 𝒩(0,<em>I</em><sub>768</sub>)</span>.
+To reduce spurious correlations, these direction vectors undergo an
+orthogonalization process that minimizes <span
+class="math inline"><em>L</em><sub><em>o</em><em>r</em><em>t</em><em>h</em><em>o</em></sub> = ∑<sub><em>i</em> ≠ <em>j</em></sub>(<strong>d</strong><sub><em>i</em></sub><sup><em>T</em></sup><strong>d</strong><sub><em>j</em></sub>)<sup>2</sup> + <em>λ</em>∑<sub><em>i</em></sub>(∥<strong>d</strong><sub><em>i</em></sub>∥<sub>2</sub>−1)<sup>2</sup></span>,
+pushing vectors toward orthogonality while maintaining unit length.</p>
+<p>The framework incorporates three critical phenomena observed in real
+neural networks: superposition, hierarchy, and correlation.
+Superposition arises naturally when the number of features (N = 16,384)
+exceeds the activation dimensionality (D = 768), forcing features to
+share representational space. This overlap is quantified using Mean Max
+Cosine Similarity: <span class="math inline">$\rho_{mm} = \frac{1}{N}
+\sum_{i=1}^N \max_{j \neq i} |\mathbf{d}_i^T \mathbf{d}_j|$</span>,
+where <span
+class="math inline"><em>ρ</em><sub><em>m</em><em>m</em></sub> ≈ 0.15</span>
+indicates moderate superposition in the standard benchmark. Hierarchical
+structure is implemented as a forest of 128 trees with branching factor
+4 and maximum depth 3, encompassing 10,884 features with parent-child
+dependencies enforced through coefficient constraints: <span
+class="math inline"><em>c</em><sub><em>c</em><em>h</em><em>i</em><em>l</em><em>d</em></sub> ← <em>c</em><sub><em>c</em><em>h</em><em>i</em><em>l</em><em>d</em></sub> ⋅ <strong>1</strong>[<em>c</em><sub><em>p</em><em>a</em><em>r</em><em>e</em><em>n</em><em>t</em></sub>&gt;0]</span>.</p>
+<h3 id="feature-dictionary-construction-and-correlation-structure">2.2
+Feature Dictionary Construction and Correlation Structure</h3>
+<p>The synthetic activation generation follows the linear superposition
+model where each sample activation is constructed as <span
+class="math inline">$\mathbf{a} = \sum_{i=1}^N c_i \mathbf{d}_i$</span>,
+with coefficients <span
+class="math inline"><em>c</em><sub><em>i</em></sub></span> sampled from
+hierarchically-constrained distributions. Each feature i receives a
+firing probability <span
+class="math inline"><em>p</em><sub><em>i</em></sub></span> drawn from a
+Zipfian distribution to model realistic feature frequency patterns, with
+firing magnitudes <span
+class="math inline"><em>μ</em><sub><em>i</em></sub></span> linearly
+interpolated from 27.0 to 18.0 across the frequency spectrum. Standard
+deviations <span
+class="math inline"><em>σ</em><sub><em>i</em></sub></span> follow a
+folded normal distribution to capture realistic activation variance
+patterns observed in language models.</p>
+<p>To model realistic feature co-occurrence patterns while maintaining
+computational tractability, the framework employs a low-rank
+factorization of the correlation matrix <span
+class="math inline"><em>Σ</em> = <strong>F</strong><strong>F</strong><sup><em>T</em></sup> + diag(<strong>δ</strong>)</span>.
+This reduces memory requirements from 268 million entries to 1.6 million
+entries—a 163<span class="math inline">×</span> reduction compared to
+storing the full correlation matrix. The correlation scale parameter
+controls the strength of feature dependencies, with typical values
+around 0.075 producing realistic but manageable correlation
+patterns.</p>
+<p>Superposition emerges naturally from the dimensional constraints, as
+packing N = 16,384 features into D = 768 dimensions necessitates
+overlap. The degree of feature interference scales approximately as
+<span class="math inline">$O(1/\sqrt{D})$</span> with increasing
+dimensionality, while growing with the number of packed features. For
+example, increasing from 4,096 to 16,384 features raises <span
+class="math inline"><em>ρ</em><sub><em>m</em><em>m</em></sub></span>
+from ~0.12 to ~0.18 without orthogonalization, demonstrating how
+representational crowding intensifies with feature density. This
+superposition creates fundamental ambiguity in activation
+interpretation: a given activation vector <span
+class="math inline"><strong>a</strong> = [1.9,0.436]</span> could arise
+from multiple coefficient combinations when features overlap
+significantly, such as <span
+class="math inline"><em>c</em><sub>1</sub> = 1, <em>c</em><sub>2</sub> = 1</span>
+versus <span
+class="math inline"><em>c</em><sub>1</sub> = 2, <em>c</em><sub>2</sub> = 0</span>
+for features with directions <span
+class="math inline"><strong>d</strong><sub>1</sub> = [1,0]</span> and
+<span
+class="math inline"><strong>d</strong><sub>2</sub> = [0.9,0.436]</span>.</p>
+<h3 id="hierarchical-constraint-enforcement-and-tree-structure">2.3
+Hierarchical Constraint Enforcement and Tree Structure</h3>
+<p>The hierarchical structure implements realistic concept taxonomies
+where child features can only activate when their parent features are
+active, mimicking how abstract concepts enable more specific
+subcategories. The enforcement algorithm processes constraints
+level-by-level from roots to leaves: for each node with parent index
+<span
+class="math inline"><em>p</em><em>a</em><em>r</em><em>e</em><em>n</em><em>t</em><sub><em>i</em><em>d</em><em>x</em></sub></span>
+and child index <span
+class="math inline"><em>c</em><em>h</em><em>i</em><em>l</em><em>d</em><sub><em>i</em><em>d</em><em>x</em></sub></span>,
+if <span
+class="math inline"><em>c</em><sub><em>p</em><em>a</em><em>r</em><em>e</em><em>n</em><em>t</em><sub><em>i</em><em>d</em><em>x</em></sub></sub> = 0</span>
+then <span
+class="math inline"><em>c</em><sub><em>c</em><em>h</em><em>i</em><em>l</em><em>d</em><sub><em>i</em><em>d</em><em>x</em></sub></sub> = 0</span>.
+Additionally, mutual exclusion among siblings ensures that only one
+child within a sibling group can fire simultaneously, creating
+competitive dynamics that reflect real-world concept relationships.</p>
+<p>This hierarchical distribution creates a realistic mix of 10,884
+features subject to conceptual constraints alongside 5,500 independent
+features. The tree structure follows a balanced branching pattern: 128
+root features at depth 0, 512 features at depth 1, 2,048 at depth 2, and
+8,192 leaf features at depth 3. This distribution models how natural
+language concepts organize from broad categories (like “animal”) through
+intermediate levels (“mammal”, “dog”) to specific instantiations
+(“golden retriever”), providing a controlled testbed for evaluating
+whether sparse autoencoders can recover and respect compositional
+semantic structure embedded in neural representations.</p>
+<h2 id="experimental-setup">3. Experimental Setup</h2>
+<h3
+id="addressing-semantic-structure-limitations-in-representation-space">3.1
+Addressing Semantic Structure Limitations in Representation Space</h3>
+<p>The fundamental challenge in evaluating sparse autoencoders on
+semantic structures lies in the gap between statistical and semantic
+hierarchies. Current synthetic benchmarks, while powerful for controlled
+experimentation, implement purely statistical dependencies that lack
+semantic meaning. The core limitation is that semantics requires
+compositional structure in the representation itself, not merely
+correlated firing probabilities. In real language models, semantic
+relationships like “deceptive reasoning” and “goal misrepresentation”
+exhibit meaningful connections because the activation patterns for child
+concepts literally contain components of parent concepts, creating
+genuine compositional structure where child representations are built
+from parent representations plus additional information.</p>
+<p>In contrast, existing synthetic frameworks treat hierarchical
+features as independent random directions with statistical dependency
+rules. When a child feature fires, it adds an arbitrary vector to the
+activation that bears no compositional relationship to its parent’s
+contribution. This disconnect means that while we can test whether SAEs
+handle hierarchical statistical dependencies, we cannot evaluate whether
+they recover semantically meaningful compositional structures. The
+semantic labels assigned to features (“Deceptive Reasoning,” “Goal
+Misrepresentation”) serve only human interpretation—the synthetic model
+possesses no semantic understanding of these concepts.</p>
+<h3
+id="semantic-hierarchy-requirements-and-practical-implementation-approaches">3.2
+Semantic Hierarchy Requirements and Practical Implementation
+Approaches</h3>
+<p>Implementing genuinely semantic hierarchies in synthetic evaluation
+frameworks would require fundamental architectural changes beyond
+current capabilities. Semantic basis vectors with interpretable meaning
+would replace random orthogonal directions, defining fundamental
+semantic concepts like intentionality, truthfulness, goal-oriented
+behavior, and theory of mind as basis vectors, then constructing complex
+features as meaningful combinations of these primitives.</p>
+<p>Given the fundamental paradox that creating semantically meaningful
+synthetic features requires knowing what semantic structure looks like
+in representation space—precisely what we aim to investigate—we
+implement three practical approaches. The weak semantic structure
+approach creates statistical signatures that correlate with potential
+semantic patterns, while the hybrid approach leverages real model
+guidance by collecting LLM activations on curated datasets with known
+semantic properties. The explicit limitation acknowledgment approach
+recognizes that synthetic benchmarks test statistical decomposition
+capabilities rather than semantic understanding, focusing on measurable
+properties: handling hierarchical statistical dependencies, decomposing
+correlated versus independent features, and scaling behavior under
+various statistical constraints.</p>
+<h3
+id="compositional-feature-directions-with-hierarchical-constraints">3.3
+Compositional Feature Directions with Hierarchical Constraints</h3>
+<p>We introduce partial semantic structure by modifying how feature
+direction vectors are constructed within hierarchical relationships,
+making child feature directions compositionally dependent on their
+parent directions rather than having them be independent random vectors.
+When constructing a hierarchical feature tree, we define each child
+feature direction as <span
+class="math inline"><strong>d</strong><sub><em>c</em><em>h</em><em>i</em><em>l</em><em>d</em></sub> = <em>α</em> ⋅ <strong>d</strong><sub><em>p</em><em>a</em><em>r</em><em>e</em><em>n</em><em>t</em></sub> + <em>β</em> ⋅ <strong>d</strong><sub>⊥</sub></span>,
+where <span
+class="math inline"><strong>d</strong><sub><em>p</em><em>a</em><em>r</em><em>e</em><em>n</em><em>t</em></sub></span>
+is the parent’s direction vector, <span
+class="math inline"><strong>d</strong><sub>⊥</sub></span> is a component
+orthogonal to the parent representing the specialization of the child
+concept, and <span class="math inline"><em>α</em>, <em>β</em></span> are
+mixing coefficients that control how much of the parent’s representation
+is inherited.</p>
+<p>To obtain the orthogonal component <span
+class="math inline"><strong>d</strong><sub>⊥</sub></span>, we employ
+Gram-Schmidt orthogonalization starting with a random vector <span
+class="math inline"><strong>v</strong></span> and subtracting its
+projection onto the parent direction: <span
+class="math inline"><strong>d</strong><sub>⊥</sub> = <strong>v</strong> − (<strong>v</strong>⋅<strong>d</strong><sub><em>p</em><em>a</em><em>r</em><em>e</em><em>n</em><em>t</em></sub>)<strong>d</strong><sub><em>p</em><em>a</em><em>r</em><em>e</em><em>n</em><em>t</em></sub></span>.
+The coefficient <span class="math inline"><em>β</em></span> controls how
+much orthogonal specialization enters the final child direction—a large
+<span class="math inline"><em>β</em></span> relative to <span
+class="math inline"><em>α</em></span> means the child direction tilts
+strongly toward its unique subspace, while a small <span
+class="math inline"><em>β</em></span> means the child remains closely
+aligned with the parent direction. This creates genuine compositional
+structure where activations containing child features literally contain
+components of parent features in their vector representations.</p>
+<p>The theoretical foundation rests on semantic relatedness manifesting
+as geometric structure in representation space. When we set <span
+class="math inline"><em>α</em> &gt; 0</span>, we create non-zero cosine
+similarity between parent and child feature directions. Expanding the
+inner product after normalization:</p>
+<p><span class="math display">$$\begin{aligned}
+\mathbf{d}_{\text{child}}^T \mathbf{d}_{\text{parent}} &amp;= (\alpha
+\cdot \mathbf{d}_{\text{parent}} + \beta \cdot \mathbf{d}_\perp)^T
+\mathbf{d}_{\text{parent}} \\
+&amp;= \alpha \underbrace{(\mathbf{d}_{\text{parent}}^T
+\mathbf{d}_{\text{parent}})}_{=1} + \beta
+\underbrace{(\mathbf{d}_\perp^T \mathbf{d}_{\text{parent}})}_{=0} \\
+&amp;= \alpha
+\end{aligned}$$</span></p>
+<p>This creates testable predictions: SAEs that successfully decompose
+these features should discover latents where decoder directions for
+child features have high cosine similarity with decoder directions for
+parent features, and interventions that ablate parent features should
+impair reconstruction of child features more severely than unrelated
+features.</p>
+<h3
+id="llm-generated-misalignment-hierarchies-and-geometric-implementation">3.4
+LLM-Generated Misalignment Hierarchies and Geometric Implementation</h3>
+<p>Our experimental pipeline leverages large language models to generate
+interpretable concept hierarchies with explicit semantic similarity
+values, then translates these into geometric constraints within the
+synthetic framework. In the first step, we prompt an LLM to produce a
+tree of misalignment-related concepts with “Deceptive Reasoning” as a
+root, children like “Goal Misrepresentation” and “Information
+Withholding,” and grandchildren such as “Reward Hacking” and
+“Sycophantic Agreement.” Critically, we ask the LLM to assign an <span
+class="math inline"><em>α</em></span> value to each parent-child edge
+encoding its judgment of semantic similarity—“Reward Hacking” might
+receive <span class="math inline"><em>α</em> = 0.4</span> from “Goal
+Misrepresentation” since it represents a specific instantiation, while
+“Goal Misrepresentation” might receive <span
+class="math inline"><em>α</em> = 0.7</span> from “Deceptive Reasoning”
+as a direct sub-case.</p>
+<p>In the second step, we translate the tree into feature directions by
+starting at the root with a random unit vector <span
+class="math inline"><strong>d</strong><sub><em>r</em><em>o</em><em>o</em><em>t</em></sub></span>
+and recursively computing child directions using the compositional
+formula. The mixing coefficient <span
+class="math inline"><em>β</em></span> is derived from <span
+class="math inline"><em>α</em></span> to achieve the specified cosine
+similarity after normalization. Grandchildren inherit geometric
+structure transitively from both parents and grandparents—“Reward
+Hacking” contains directional overlap with both “Goal Misrepresentation”
+and “Deceptive Reasoning,” capturing the correct semantic property of
+compositional concept inheritance.</p>
+<p>The resulting feature directions integrate directly into
+SynthSAEBench’s hierarchy mechanism, where the parent firing-probability
+constraint <span
+class="math inline"><em>c</em><sub><em>c</em><em>h</em><em>i</em><em>l</em><em>d</em></sub> ← <em>c</em><sub><em>c</em><em>h</em><em>i</em><em>l</em><em>d</em></sub> ⋅ <strong>1</strong>[<em>c</em><sub><em>p</em><em>a</em><em>r</em><em>e</em><em>n</em><em>t</em></sub>&gt;0]</span>
+enforces statistical dependencies while the geometric construction
+ensures that hidden activations for child concept samples literally
+contain components pointing toward parent concept directions. This
+enables precise diagnostic evaluation: we can test whether SAEs learn
+latents whose decoder directions maintain high cosine similarity with
+ground-truth concept directions, whether ablating latents aligned with
+“Deceptive Reasoning” impairs reconstruction of “Reward Hacking” more
+than unrelated features, and whether SAEs correctly split hierarchies or
+inappropriately absorb child concepts into parent latents.</p>
+<h3 id="safety-research-applications">3.5 Safety Research
+Applications</h3>
+<p>The semantic hierarchy approach enables several critical AI safety
+research directions. We can construct arbitrarily complex semantic
+hierarchies reflecting real AI safety threat models—power-seeking,
+deception, sycophancy, manipulation, goal misspecification—and
+rigorously test whether interpretability tools can decompose these
+structures. Four concrete evaluation axes emerge from this
+framework:</p>
+<p><strong>Capability Detection Robustness.</strong> Test SAE
+identification of rare, sparse dangerous features (appearing in fewer
+than 0.1% of samples). If SAEs fail to consistently recover rare
+scheming features in the controlled synthetic setting, they will likely
+miss such features in real models where dangerous behaviors are
+inherently infrequent.</p>
+<p><strong>Transfer Learning for Monitoring.</strong> If structural
+patterns—clustered latents with low firing probability and mutual
+exclusivity—reliably indicate scheming-type hierarchies in synthetic
+data, we can search for the same geometric signatures in real SAEs
+trained on large language models as a monitoring signal, enabling
+scalable safety auditing without labeling every feature manually.</p>
+<p><strong>Worst-Case Adversarial Scenarios.</strong> Model capability
+concealment can be simulated by creating features that are
+anti-correlated with overt expressions of the same capabilities. This
+tests whether SAEs can still recover underlying dangerous features when
+obvious activation signals are suppressed, mimicking how a deceptively
+aligned model might hide its true capabilities during evaluation.</p>
+<p><strong>Intervention Testing with Ground Truth.</strong> Because we
+have complete ground truth about which features represent dangerous
+capabilities, we can test whether ablating or clamping SAE latents
+matched to these features actually prevents the corresponding behavior
+in downstream tasks—providing principled validation that
+interpretability interventions have the intended causal effect.</p>
+<h2 id="results">4. Results</h2>
+<figure>
+<img src="feature_hierarchies/visualizations/cosim_heatmap.png"
+alt="Cosine Similarity Heatmap" />
+<figcaption aria-hidden="true">Cosine Similarity Heatmap</figcaption>
+</figure>
+<p><strong>Figure.</strong> Pairwise cosine similarity heatmap for SAE
+features organized into MITRE ATLAS taxonomy trees. Rows and columns
+correspond to the same set of features, ordered breadth-first within
+each tree (root, then level-1 children, then level-2 leaves). Colored
+rectangles outline level-1 subtree blocks. The pronounced columnar
+banding within each block reflects the shared parent-vector component
+inherited by sibling features under the same tactic node.</p>
+<hr />
+<h2 id="columnar-symmetry-in-the-cosine-similarity-heatmap">Columnar
+Symmetry in the Cosine Similarity Heatmap</h2>
+<p>The heatmap displays pairwise cosine similarities between SAE feature
+vectors organized according to MITRE ATLAS tactic hierarchies. Features
+within the same subtree share a common parent direction because each
+child feature is constructed as a linear combination of its parent
+vector and an orthogonal component: <em>d</em>_child = <span
+class="math inline"><em>α</em>⋅</span><em>d</em>_parent + <span
+class="math inline"><em>β</em> ⋅ <strong>d</strong><sub>⊥</sub></span>.
+As a result, any two siblings <em>i</em> and <em>j</em> under the same
+parent have cosine similarity with an arbitrary third feature <em>x</em>
+that is approximately equal — cos(<em>d</em>_i, <em>x</em>) <span
+class="math inline">≈</span> cos(<em>d</em>_j, <em>x</em>) — since both
+are dominated by the same <span
+class="math inline"><em>α</em>⋅</span><em>d</em>_parent term. This makes
+entire columns within a subtree block appear nearly uniform in color,
+producing the characteristic vertical stripes visible inside the colored
+bounding boxes.</p>
+<p>The contrast between blocks of different colors illustrates the
+hierarchical structure at a coarser level. Features from different
+tactics have lower mutual similarities because their respective parent
+vectors are mutually orthogonal by construction, attenuating the
+shared-component effect across subtree boundaries. The columnar symmetry
+thus serves as a geometric fingerprint of the construction rule: the
+more features share ancestry, the more their similarity profiles with
+the rest of the matrix align, collapsing distinct rows into visually
+indistinguishable columns.</p>
+<h3 id="taxonomy-and-semantic-dictionary">Taxonomy and Semantic
+Dictionary</h3>
+<p>The starting point is
+<code>feature_hierarchies/mitre_atlas_adversarial_ml.json</code>, a
+hand-authored semantic dictionary encoding the MITRE ATLAS adversarial
+machine learning threat taxonomy as a forest of concept trees. The file
+contains 13 root nodes — one per ATLAS tactic, including <em>Adversarial
+Evasion</em>, <em>Data Poisoning</em>, <em>Model Extraction and
+Stealing</em>, and <em>Prompt Injection and LLM Exploitation</em> — each
+heading a subtree of depth 2. Internal nodes represent tactic families
+(e.g. <em>Physical Domain Evasion</em>, <em>Digital Domain Evasion</em>)
+and leaves represent individual techniques (e.g. <em>Adversarial
+Patch</em>, <em>Black-Box Evasion</em>, <em>Stop Sign Attack</em>).
+Across all 13 trees the taxonomy defines 148 hierarchical feature slots,
+with individual tree sizes ranging from 10 to 13 nodes.</p>
+<p>Each node in the JSON carries a <code>label</code>, an
+<code>alpha</code> (<span class="math inline"><em>α</em></span>) value
+specifying the desired cosine similarity between the node’s feature
+vector and its parent’s, a <code>beta</code> (<span
+class="math inline"><em>β</em></span>) value satisfying <span
+class="math inline"><em>α</em><sup>2</sup> + <em>β</em><sup>2</sup> = 1</span>,
+a <code>mutually_exclusive_children</code> flag indicating whether
+sibling features are treated as alternatives by the firing sampler, and
+a <code>children</code> array that recurses into the same schema. Root
+nodes are assigned <span class="math inline"><em>α</em> = 0</span> and
+<span class="math inline"><em>β</em> = 1</span>, meaning they have no
+inherited direction and are initialised as free unit vectors.</p>
+<h3 id="synthetic-model-construction">Synthetic Model Construction</h3>
+<p>A <code>SyntheticModel</code> is instantiated with 512 features
+embedded in a 128-dimensional hidden space, giving a 4<span
+class="math inline">×</span> superposition ratio. Because the number of
+features exceeds the ambient dimensionality, the model cannot represent
+all features in an orthogonal basis and must instead place them in
+superposition — an arrangement that mirrors the situation hypothesised
+for features in large language models. The model is seeded to be
+reproducible and configured with a <code>HierarchyConfig</code> pointing
+at the JSON taxonomy, which activates the semantic geometry
+initialiser.</p>
+<p>The initialiser traverses the JSON forest in depth-first order. For
+each parent–child edge it constructs the child’s feature vector
+according to the rule <em>d</em>_child = <span
+class="math inline"><em>α</em>⋅</span><em>d</em>_parent + <span
+class="math inline"><em>β</em> ⋅ <strong>d</strong><sub>⊥</sub></span>,
+where <span class="math inline"><strong>d</strong><sub>⊥</sub></span> is
+a unit vector in the subspace orthogonal to <em>d</em>_parent computed
+by Gram–Schmidt orthogonalisation. This guarantees cos(<em>d</em>_child,
+<em>d</em>_parent) = <span class="math inline"><em>α</em></span>
+exactly, so the <span class="math inline"><em>α</em></span> values in
+the JSON are not targets to be learned but rather geometric invariants
+enforced at initialisation time. The remaining 364 features not covered
+by the taxonomy are assigned mutually orthogonalised random unit
+vectors, filling the residual capacity of the hidden space as uniformly
+as the dimensionality allows.</p>
+<h3 id="geometric-verification">Geometric Verification</h3>
+<p>Before any training, the notebook verifies the constructed geometry
+numerically by iterating over all 135 parent–child pairs in the
+hierarchy and computing the cosine similarity between each pair of
+normalised feature vectors. The maximum absolute deviation from the
+corresponding <span class="math inline"><em>α</em></span> value is below
+<span class="math inline">2 × 10<sup>−7</sup></span> across all pairs —
+a level consistent with single-precision floating-point rounding —
+confirming that the Gram–Schmidt procedure realises the intended
+similarities to essentially exact precision. This verification is not
+merely illustrative: it establishes a ground truth against which the
+SAE’s learned representations can later be compared, and it guards
+against numerical drift that could otherwise invalidate the theoretical
+guarantees of the construction.</p>
+<h3 id="feature-firing-distribution">Feature Firing Distribution</h3>
+<p>The model generates activations by sampling a sparse binary mask over
+the 512 features for each token in a batch, then computing the hidden
+state as the sum of the activated feature vectors scaled by sampled
+magnitudes. Firing probabilities are drawn from a Zipfian distribution
+with exponent 0.5, clipped to the interval <span
+class="math inline">[10<sup>−3</sup>, 0.3]</span>, so that a small
+number of features fire frequently while the majority fire rarely. This
+power-law structure reflects empirical observations about feature
+frequency in large language models and introduces a realistic diversity
+of sample counts across features.</p>
+<p>The hierarchy additionally enforces a conditional firing rule: a
+child feature may only be active on a given token if its parent is also
+active. This constraint ensures that the semantic relationships encoded
+in the JSON are reflected not only in the geometry of the feature
+vectors but also in their co-occurrence statistics. The notebook
+verifies this constraint exhaustively over 10,000 sampled batches,
+finding zero violations. Under these conditions the average number of
+active features per token (L0) is approximately 2.7, reflecting the
+combined effect of the low base firing rates and the hierarchical gating
+that suppresses children whenever their parent is inactive.</p>
+<h3 id="cosine-similarity-heatmaps">Cosine Similarity Heatmaps</h3>
+<p>For each of four randomly selected tactic trees the heatmap is
+constructed as follows. First, all nodes in the tree are enumerated in
+breadth-first order — root, then level-1 children in left-to-right
+order, then level-2 leaves grouped under their respective level-1
+parents. This ordering is consequential: it places nodes that share a
+level-1 ancestor in contiguous index ranges, which is precisely what
+makes the block structure visible. The model’s feature dictionary matrix
+<em>W</em> of shape (512, 128) is then L2-normalised row-wise to produce
+unit vectors, and the cosine similarity matrix for the selected nodes is
+computed as the inner product of the corresponding submatrix with its
+own transpose, yielding a symmetric <span
+class="math inline"><em>n</em> × <em>n</em></span> matrix.</p>
+<p>The entries of this matrix have a predictable structure that follows
+directly from the construction rule. Diagonal entries are identically 1.
+Parent–child entries equal the child’s <span
+class="math inline"><em>α</em></span> value by the geometric invariant
+established above. Sibling entries — between two leaves that share a
+level-1 parent — are elevated above zero because both vectors contain
+the term <span class="math inline"><em>α</em>⋅</span><em>d</em>_parent;
+the expected similarity between two such siblings with mixing
+coefficients (<span
+class="math inline"><em>α</em><sub>1</sub>, <em>β</em><sub>1</sub></span>)
+and (<span
+class="math inline"><em>α</em><sub>2</sub>, <em>β</em><sub>2</sub></span>)
+is approximately <span
+class="math inline"><em>α</em><sub>1</sub><em>α</em><sub>2</sub></span>,
+modulated by the degree to which their respective orthogonal components
+happen to align. Cross-subtree entries — between features from different
+level-1 blocks — are close to zero because the corresponding parent
+vectors are mutually orthogonal, so the shared-direction term that
+elevates within-block similarities is absent across block
+boundaries.</p>
+<p>Finally, for each level-1 child of the root, the set of all
+descendant feature indices is recovered via
+<code>get_all_feature_indices()</code> and mapped back to the BFS
+ordering, yielding a contiguous index range. A colored rectangle is
+drawn over the corresponding diagonal block to make the grouping
+explicit, with distinct colors assigned to each level-1 subtree in
+sequence.</p>
+<h3 id="sae-training-and-recovery">SAE Training and Recovery</h3>
+<p>The main experiment in the notebook trains a BatchTopK Sparse
+Autoencoder on hidden activations sampled from the synthetic model. The
+encoder projects the 128-dimensional hidden state into a 512-dimensional
+latent space, retains the top-<em>k</em> = 15 activations per token, and
+the decoder reconstructs the hidden state from the sparse latent code.
+With 10 million training tokens, batch size 1024, and learning rate
+<span class="math inline">3 × 10<sup>−4</sup></span>, training converges
+in roughly two minutes on CPU.</p>
+<p>The choice of <em>k</em> = 15 against a true L0 of 2.7 is
+deliberately generous: the SAE is permitted to use substantially more
+active latents per token than the data actually contains, which biases
+it toward high recall at the expense of precision. After training,
+recovery is evaluated by matching each SAE latent to its closest
+ground-truth feature via cosine similarity in activation space, then
+computing standard binary classification metrics over the resulting
+assignment. The results are summarised below.</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Metric</th>
+<th style="text-align: right;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Explained variance <span
+class="math inline">(<em>R</em><sup>2</sup>)</span></td>
+<td style="text-align: right;">0.971</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Matthews Correlation Coefficient</td>
+<td style="text-align: right;">0.732</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Uniqueness</td>
+<td style="text-align: right;">0.773</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">F1 score</td>
+<td style="text-align: right;">0.475</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Precision</td>
+<td style="text-align: right;">0.372</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Recall</td>
+<td style="text-align: right;">0.783</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SAE L0</td>
+<td style="text-align: right;">15.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">True L0</td>
+<td style="text-align: right;">2.7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Dead latents</td>
+<td style="text-align: right;">72 / 512</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Shrinkage</td>
+<td style="text-align: right;">0.985</td>
+</tr>
+</tbody>
+</table>
+<p>The high explained variance (0.97) confirms that the SAE reconstructs
+the hidden state faithfully in terms of mean squared error. The recall
+of 0.78 indicates that most ground-truth features have a corresponding
+SAE latent that activates when the feature is present. The precision of
+0.37, however, reflects a substantial rate of spurious activations —
+latents firing in the absence of any corresponding ground-truth feature
+— which is the expected consequence of the 5.6<span
+class="math inline">×</span> mismatch between the SAE’s permitted L0 and
+the true signal sparsity. Of the 512 SAE latents, 72 remain permanently
+inactive throughout training, likely corresponding to features so rare
+under the Zipfian schedule that the SAE never encounters enough positive
+examples to learn them. The shrinkage near 1.0 confirms that the
+BatchTopK constraint prevents the magnitude collapse that afflicts
+L1-penalised autoencoders.</p>
+<p>The connection to the heatmaps is direct. The block-diagonal
+similarity structure visible in each panel represents exactly the
+geometric correlations the SAE must disentangle. When a leaf feature
+shares <span class="math inline"><em>α</em> = 0.65</span> with its
+level-1 parent, their hidden representations differ by a rotation of
+only <span class="math inline">arccos (0.65) ≈ 49<sup>∘</sup></span>,
+making it genuinely difficult for the encoder to resolve whether the
+parent, the child, or both were active on a given token. This ambiguity
+is the proximate cause of the precision shortfall, and it grows with
+<span class="math inline"><em>α</em></span>: trees whose level-1 groups
+have large mixing coefficients will show more tightly clustered blocks
+in the heatmap and correspondingly lower precision in the SAE recovery
+metrics.</p>
+<h2 id="discussion">5. Discussion</h2>
+<p>[Discussion section to be developed]</p>
+<h2 id="conclusion">6. Conclusion</h2>
+<h3 id="implications-for-ai-safety-research">6.1 Implications for AI
+Safety Research</h3>
+<p>The limitations of statistical versus semantic hierarchies carry
+significant implications for AI safety applications of sparse
+autoencoder research. Current synthetic evaluation frameworks enable
+testing of necessary but insufficient conditions for safety-relevant
+interpretability. We can reliably assess whether SAEs can detect rare
+but statistically structured patterns, which matters if scheming
+behaviors exhibit characteristic correlation signatures. The frameworks
+also allow evaluation of scaling behavior when dangerous features are
+sparse, robustness of detection mechanisms to feature correlations and
+hierarchical dependencies, and whether transfer learning approaches work
+effectively for statistical signatures of concerning behaviors.</p>
+<p>However, these capabilities come with critical limitations for safety
+applications. We cannot test whether SAEs actually understand what
+concepts like “deception” mean compositionally, whether ablating
+supposed “deception features” prevents deceptive reasoning in
+functionally meaningful ways, whether the hierarchical relationships we
+construct in synthetic data match real semantic hierarchies in deployed
+models, or whether synthetic representations of concerning behaviors
+bear any resemblance to how actual models represent such
+capabilities.</p>
+<p>For practical AI safety research, this analysis suggests using
+synthetic benchmarks like SynthSAEBench to test necessary conditions
+while recognizing their insufficiency. If SAEs fail on statistical
+hierarchies, they will certainly fail on real semantic hierarchies.
+However, success on statistical hierarchies does not guarantee success
+on semantic ones, requiring additional validation on real models with
+genuine semantic content. The synthetic approach provides a controlled
+environment for understanding SAE scaling properties, architectural
+trade-offs, and fundamental limitations, but cannot substitute for
+evaluation on semantically grounded data where safety-relevant behaviors
+emerge naturally from model training rather than statistical
+construction.</p>
+<p>This framework suggests a two-stage validation approach: first,
+demonstrate SAE capabilities on increasingly complex synthetic
+statistical structures to establish baseline competence, then validate
+these capabilities on real model activations with known safety-relevant
+semantic content. Only architectures that succeed at both stages should
+be considered reliable for safety-critical interpretability
+applications, ensuring that statistical decomposition capabilities
+translate to meaningful understanding of dangerous model behaviors.</p>
+<h2 id="acknowledgments">Acknowledgments</h2>
+<p>[Acknowledgments section to be developed]</p>
+<h2 id="references">References</h2>
+<p>[1] Karvonen, A., Loughran, T., &amp; Kenton, Z. (2025). SAEBench: A
+comprehensive evaluation suite for sparse autoencoders. <em>arXiv
+preprint arXiv:2503.09532</em>.</p>
+<p>[2] Gurnee, W., Nanda, N., Pauly, M., Harvey, K., Troitskii, D.,
+&amp; Bertsimas, D. (2023). Finding neurons in a haystack: Case studies
+with sparse probing. <em>arXiv preprint arXiv:2305.01610</em>.</p>
+<p>[3] Kantamneni, S., Wattenberg, M., &amp; Firat, O. (2025).
+Evaluating sparse autoencoder representations with supervised
+classification tasks. <em>arXiv preprint arXiv:2502.16681</em>.</p>
+<p>[4] Karvonen, A., Foote, B., Bricken, T., &amp; Brown, T. (2024).
+SAEs learn sparse representations of sparse representations. <em>arXiv
+preprint arXiv:2408.00113</em>.</p>
+<p>[5] Paulo, F., Friedman, D., &amp; EleutherAI. (2025). Delphi:
+Towards machine psychology through conditional language modeling.
+<em>arXiv preprint arXiv:2410.13928</em>.</p>
+<p>[6] Chanin, D., et al. (2026). SynthSAEBench: Evaluating Sparse
+Autoencoders on Scalable Realistic Synthetic Data. <em>arXiv preprint
+arXiv:2602.14687</em>.</p>
+<h2 id="appendices">Appendices</h2>
+<h3 id="appendix-a-additional-experimental-details">Appendix A:
+Additional Experimental Details</h3>
+<p>[Additional details to be developed]</p>
+<h3 id="appendix-b-supplementary-results">Appendix B: Supplementary
+Results</h3>
+<p>[Supplementary results to be developed]</p>
 </body>
 </html>
