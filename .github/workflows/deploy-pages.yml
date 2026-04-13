@@ -70,7 +70,6 @@ jobs:
             --pdf-engine=pdflatex \
             -H arxiv-preamble.tex \
             --from=markdown+tex_math_dollars \
-            --number-sections \
             -o _site/paper.pdf
           echo "PDF compiled successfully"
 

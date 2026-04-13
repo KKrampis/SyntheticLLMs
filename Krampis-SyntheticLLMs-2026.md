@@ -1,11 +1,3 @@
-# Geometric Feature Invariance in SAEs: A Framework for Transferable Mechanistic Interpretability and Scalable AI Safety
-
-**Authors:** Konstantinos Krampis, David Williams-King, David Chanin  
-**Affiliation:** City University of New York; ERA; University College London
-**Date:** 2026
-
-**Targeted output:** NeurIPS 2026.
-
 ## Abstract
 
 This research will integrate controlled synthetic model features evaluation with cross-model geometric feature invariance analysis, towards developing a principled framework for transferable interpretability across model families and variants. Recent work has showed that Sparse Autoencoders (SAEs) trained on different LLMs learn geometrically similar feature spaces (invariance and analogous feature universality) while exhibiting trade-offs against synthetic ground-truth features, meaning no current SAE architecture can perfectly recover the ground-truth features. Our work will address fundamental challenges in mechanistic interpretability by establishing principled methods for leveraging geometric feature universality. Efficient feature transfer is critical for AI safety because it enables rapid safety evaluation of new models without restarting interpretability analysis from scratch, early detection of hazardous capabilities by comparing feature spaces to known dangerous configurations, reliable monitoring across deployment contexts by tracking feature drift, and scalable oversight of large model families where per-model analysis becomes infeasible. During the project implementation we will characterize geometric patterns that remain stable across models, and geometric transformation methods that reliably map feature correspondences, validated against synthetic ground-truth. Furthermore, we will demonstrate that safety-relevant interventions transfer within the same family of models, or fine-tuned variants of a model. This research will accelerate mechanistic interpretability, and enable efficient safety analysis as AI systems grow in capability and complexity.
