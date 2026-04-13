@@ -31,6 +31,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -45,45 +48,84 @@ jobs:
         run: npm ci
 
       - name: Install pandoc and LaTeX
+        timeout-minutes: 15
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y pandoc \
             texlive-latex-extra \
             texlive-fonts-recommended \
             texlive-science \
-            texlive-fonts-extra \
             lmodern \
             poppler-utils
 
       - name: Generate TikZ figures as PNG
         run: |
           for n in 1 2 3; do
-            (cd figures && pdflatex -interaction=nonstopmode fig${n}.tex)
+            echo "Compiling fig${n}.tex..."
+            pdflatex -interaction=nonstopmode -output-directory=figures figures/fig${n}.tex
+            echo "Converting fig${n}.pdf to PNG..."
             pdftocairo -png -r 150 -singlefile figures/fig${n}.pdf figures/fig${n}
-            echo "Generated figures/fig${n}.png"
+            ls -lh figures/fig${n}.png
           done
+
+      - name: Compile paper PDF
+        run: |
+          pandoc Krampis-SyntheticLLMs-2026.md \
+            --metadata-file=paper-meta.yaml \
+            --pdf-engine=pdflatex \
+            -H arxiv-preamble.tex \
+            --from=markdown+tex_math_dollars \
+            -o Krampis-SyntheticLLMs-2026.pdf
+          ls -lh Krampis-SyntheticLLMs-2026.pdf
+
+      - name: Generate landing page HTML
+        run: |
+          pandoc Krampis-SyntheticLLMs-2026.md \
+            --template _templates/website-template.html \
+            --from=markdown+tex_math_dollars \
+            --highlight-style=espresso \
+            -o index.html
+          ls -lh index.html
+
+      - name: Convert docs markdown to HTML
+        run: |
+          mapfile -t md_files < <(find texts-md -maxdepth 1 -name "*.md" -type f | sort)
+          echo "Found ${#md_files[@]} markdown files"
+          mkdir -p _site/docs
+          for md in "${md_files[@]}"; do
+            base=$(basename "$md" .md)
+            [ "$base" = "universality-references" ] && continue
+            pandoc "$md" \
+              --standalone \
+              --from=markdown+tex_math_dollars \
+              --metadata title="${base//-/ }" \
+              --highlight-style=espresso \
+              -H _templates/doc-style.html \
+              -B _templates/doc-nav.html \
+              -o "_site/docs/${base}.html"
+            echo "Converted: $base"
+          done
+          cp _templates/docs-index-header.html _site/docs/index.html
+          for md in "${md_files[@]}"; do
+            base=$(basename "$md" .md)
+            [ "$base" = "universality-references" ] && continue
+            label="${base//-/ }"
+            echo "    <li><a href=\"${base}.html\">${label}</a></li>" \
+              >> _site/docs/index.html
+          done
+          cat _templates/docs-index-footer.html >> _site/docs/index.html
+          echo "Docs index built"
 
       - name: Assemble site
         run: |
           mkdir -p _site/presentation/node_modules/reveal.js/dist/theme
           mkdir -p _site/presentation/node_modules/reveal.js/plugin/zoom
           mkdir -p _site/presentation/node_modules/reveal.js/plugin/notes
-          mkdir -p _site/docs
 
-          # Copy pitch-deck PDF (used by "Presentation Slides" card)
           cp "Geometric_SAE_Invariance v1.pdf" "_site/Geometric_SAE_Invariance v1.pdf"
+          cp Krampis-SyntheticLLMs-2026.pdf _site/Krampis-SyntheticLLMs-2026.pdf
+          cp index.html _site/index.html
 
-          # Compile arXiv-style paper PDF
-          echo "Compiling arXiv-style paper PDF..."
-          pandoc Krampis-SyntheticLLMs-2026.md \
-            --metadata-file=paper-meta.yaml \
-            --pdf-engine=pdflatex \
-            -H arxiv-preamble.tex \
-            --from=markdown+tex_math_dollars \
-            -o _site/paper.pdf
-          echo "PDF compiled successfully"
-
-          # Reveal.js presentation
           cp slides-reveal.js/semantic-constraints-presentation.html \
              _site/presentation/index.html
           cp slides-reveal.js/node_modules/reveal.js/dist/reset.css \
@@ -99,61 +141,17 @@ jobs:
           cp slides-reveal.js/node_modules/reveal.js/plugin/notes/notes.js \
              _site/presentation/node_modules/reveal.js/plugin/notes/
 
-          # Convert markdown docs to HTML using template files
-          echo "Converting docs..."
-          mapfile -t md_files < <(find texts-md -maxdepth 1 -name "*.md" -type f | sort)
-          echo "Found ${#md_files[@]} markdown files"
-          for md in "${md_files[@]}"; do
-            base=$(basename "$md" .md)
-            [ "$base" = "universality-references" ] && continue
-            pandoc "$md" \
-              --standalone \
-              --from=markdown+tex_math_dollars \
-              --metadata title="${base//-/ }" \
-              --highlight-style=espresso \
-              -H _templates/doc-style.html \
-              -B _templates/doc-nav.html \
-              -o "_site/docs/${base}.html"
-            echo "Converted: $base"
-          done
-
-          # Docs index page: assemble from header template + dynamic list + footer
-          cp _templates/docs-index-header.html _site/docs/index.html
-          for md in "${md_files[@]}"; do
-            base=$(basename "$md" .md)
-            [ "$base" = "universality-references" ] && continue
-            label="${base//-/ }"
-            echo "    <li><a href=\"${base}.html\">${label}</a></li>" \
-              >> _site/docs/index.html
-          done
-          cat _templates/docs-index-footer.html >> _site/docs/index.html
-          echo "Docs index built"
-
-          # Generate landing page (index.html) from manuscript
-          pandoc Krampis-SyntheticLLMs-2026.md \
-            --standalone \
-            --from=markdown+tex_math_dollars \
-            --metadata title="Geometric Feature Invariance in SAEs" \
-            --highlight-style=espresso \
-            -H _templates/doc-style.html \
-            -B _templates/home-nav.html \
-            -o _site/index.html
-          echo "Landing page generated from manuscript"
-
-          # Feature hierarchy assets (heatmap image referenced by index.html and paper)
           cp -r feature_hierarchies _site/feature_hierarchies
-
-          # TikZ figures rendered as PNG (referenced by manuscript and website)
           cp -r figures _site/figures
 
           touch _site/.nojekyll
+          echo "Site assembled. Contents:"
+          ls _site/
 
       - name: Commit generated files back to repository
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          cp _site/paper.pdf Krampis-SyntheticLLMs-2026.pdf
-          cp _site/index.html index.html
           git add Krampis-SyntheticLLMs-2026.pdf index.html figures/fig1.png figures/fig2.png figures/fig3.png
           git diff --staged --quiet || git commit -m "chore: regenerate index.html and Krampis-SyntheticLLMs-2026.pdf from manuscript"
           git pull --rebase origin main

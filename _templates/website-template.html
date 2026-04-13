@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>$title$</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$$', '$$'], ['\\(', '\\)']],
+        displayMath: [['$$$$', '$$$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    :root {
+      --bg:       #1e2127;
+      --bg2:      #282c34;
+      --bg3:      #2c313c;
+      --border:   #3e4451;
+      --text:     #abb2bf;
+      --heading:  #ffffff;
+      --blue:     #61afef;
+      --green:    #98c379;
+      --red:      #e06c75;
+    }
+
+    html { font-size: 11pt; }
+
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    /* ── Hero ── */
+    .pub-hero {
+      background: var(--bg2);
+      border-bottom: 2px solid var(--blue);
+      padding: 3rem 1.5rem 2.5rem;
+      text-align: center;
+    }
+    .pub-hero .pub-title {
+      font-size: clamp(1.3rem, 3vw, 1.9rem);
+      font-weight: 700;
+      color: var(--heading);
+      line-height: 1.3;
+      max-width: 860px;
+      margin: 0 auto 1rem;
+    }
+    .pub-hero .pub-authors {
+      font-size: 1rem;
+      color: var(--text);
+      margin-bottom: 0.35rem;
+    }
+    .pub-hero .pub-affil {
+      font-size: 0.85rem;
+      color: #636d83;
+      margin-bottom: 1.5rem;
+    }
+    .pub-hero .buttons { justify-content: center; gap: 0.6rem; }
+    .pub-hero .button {
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+    .btn-pdf   { background: var(--blue);   color: #fff !important; border: none; }
+    .btn-pdf:hover { background: #4d9ede; }
+    .btn-ghost { background: transparent; color: var(--blue) !important;
+                 border: 1.5px solid var(--blue); }
+    .btn-ghost:hover { background: var(--bg3); }
+
+    /* ── Content wrapper ── */
+    .pub-content {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    /* ── Headings ── */
+    .pub-content h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--heading);
+      margin-top: 2.5rem;
+      margin-bottom: 0.6rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .pub-content h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--blue);
+      margin-top: 1.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .pub-content h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--heading);
+      margin-top: 1.25rem;
+      margin-bottom: 0.4rem;
+    }
+
+    /* ── Body text ── */
+    .pub-content p  { margin: 0.7rem 0; line-height: 1.75; }
+    .pub-content strong { color: var(--heading); }
+    .pub-content em     { color: var(--text); font-style: italic; }
+
+    /* ── Links ── */
+    .pub-content a { color: var(--blue); text-decoration: none; }
+    .pub-content a:hover { text-decoration: underline; color: var(--green); }
+
+    /* ── Code ── */
+    .pub-content code {
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      font-size: 0.85em;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.15em 0.4em;
+      color: var(--text);
+    }
+    .pub-content pre {
+      background: #21252b;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1em 1.25em;
+      overflow-x: auto;
+      margin: 1.25rem 0;
+    }
+    .pub-content pre code { background: none; border: none; padding: 0; font-size: 0.85em; }
+
+    /* ── Tables ── */
+    .pub-content table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 1.25rem 0;
+      font-size: 0.9rem;
+    }
+    .pub-content th, .pub-content td {
+      border: 1px solid var(--border);
+      padding: 0.5em 0.85em;
+      text-align: left;
+      color: var(--text);
+    }
+    .pub-content th { background: var(--bg3); font-weight: 600; color: var(--green); }
+    .pub-content tr:nth-child(even) td { background: var(--bg3); }
+
+    /* ── Figures ── */
+    .pub-content img {
+      max-width: 100%;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      display: block;
+      margin: 1.5rem auto;
+    }
+    .pub-content figure { margin: 1.5rem 0; text-align: center; }
+    .pub-content figcaption {
+      font-size: 0.875rem;
+      color: #636d83;
+      margin-top: 0.5rem;
+    }
+
+    /* ── Blockquote ── */
+    .pub-content blockquote {
+      border-left: 3px solid var(--blue);
+      background: var(--bg3);
+      border-radius: 0 4px 4px 0;
+      margin: 1.25rem 0;
+      padding: 0.6rem 1rem;
+      color: #9da5b4;
+    }
+
+    /* ── HR ── */
+    .pub-content hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+    /* ── Footer ── */
+    .pub-footer {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      padding: 1.25rem 1.5rem;
+      text-align: center;
+      font-size: 0.82rem;
+      color: #636d83;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Hero ── -->
+<header class="pub-hero">
+  <p class="pub-title">Geometric Feature Invariance in SAEs: A Framework for Transferable Mechanistic Interpretability and Scalable AI Safety</p>
+  <p class="pub-authors">Konstantinos Krampis &nbsp;&middot;&nbsp; David Williams-King &nbsp;&middot;&nbsp; David Chanin</p>
+  <p class="pub-affil">City University of New York &nbsp;&middot;&nbsp; ERA &nbsp;&middot;&nbsp; University College London &nbsp;&middot;&nbsp; 2026</p>
+  <div class="buttons">
+    <a href="Krampis-SyntheticLLMs-2026.pdf" class="button btn-pdf">&#8595;&nbsp; Download PDF</a>
+    <a href="docs/" class="button btn-ghost">Docs</a>
+    <a href="https://github.com/KKrampis/SyntheticLLMs" class="button btn-ghost">GitHub</a>
+  </div>
+</header>
+
+<!-- ── Paper content rendered from markdown ── -->
+<main class="pub-content">
+$body$
+</main>
+
+<!-- ── Footer ── -->
+<footer class="pub-footer">
+  Targeted output: NeurIPS 2026 &nbsp;&middot;&nbsp;
+  <a href="Krampis-SyntheticLLMs-2026.pdf" style="color:#61afef;">Download PDF</a>
+</footer>
+
+</body>
+</html>
