@@ -59,7 +59,6 @@ jobs:
           mkdir -p _site/presentation/node_modules/reveal.js/plugin/zoom
           mkdir -p _site/presentation/node_modules/reveal.js/plugin/notes
           mkdir -p _site/docs
-          mkdir -p _site/paper
 
           # Copy pitch-deck PDF (used by "Presentation Slides" card)
           cp "Geometric_SAE_Invariance v1.pdf" "_site/Geometric_SAE_Invariance v1.pdf"
@@ -121,17 +120,6 @@ jobs:
           cat _templates/docs-index-footer.html >> _site/docs/index.html
           echo "Docs index built"
 
-          # Convert primary manuscript to HTML for /paper/
-          pandoc Krampis-SyntheticLLMs-2026.md \
-            --standalone \
-            --from=markdown+tex_math_dollars \
-            --metadata title="Geometric Feature Invariance in SAEs" \
-            --highlight-style=espresso \
-            -H _templates/doc-style.html \
-            -B _templates/paper-nav.html \
-            -o "_site/paper/index.html"
-          echo "Primary manuscript converted to HTML"
-
           # Generate landing page (index.html) from manuscript
           pandoc Krampis-SyntheticLLMs-2026.md \
             --standalone \
@@ -156,7 +144,8 @@ jobs:
           cp _site/index.html index.html
           git add Krampis-SyntheticLLMs-2026.pdf index.html
           git diff --staged --quiet || git commit -m "chore: regenerate index.html and Krampis-SyntheticLLMs-2026.pdf from manuscript"
-          git push
+          git pull --rebase origin main
+          git push origin main
 
       - name: Configure Pages
         uses: actions/configure-pages@v4
