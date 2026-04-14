@@ -223,41 +223,41 @@ David Chanin<sup>3</sup></p>
 <h2 id="abstract">Abstract</h2>
 <p>This research integrates controlled synthetic model feature
 evaluation with cross-model geometric feature invariance analysis,
-towards developing a principled framework for transferable
-interpretability across model families and variants. Recent work has
-shown that Sparse Autoencoders (SAEs) trained on different LLMs learn
-geometrically similar feature spaces—exhibiting invariance and analogous
-feature universality—while exhibiting trade-offs against synthetic
-ground-truth features, meaning no current SAE architecture can perfectly
-recover the ground-truth features. Our work addresses fundamental
-challenges in mechanistic interpretability by establishing principled
-methods for leveraging geometric feature universality. Efficient feature
-transfer is critical for AI safety because it enables rapid safety
-evaluation of new models without restarting interpretability analysis
-from scratch, early detection of hazardous capabilities by comparing
-feature spaces to known dangerous configurations, reliable monitoring
-across deployment contexts by tracking feature drift, and scalable
-oversight of large model families where per-model analysis becomes
-infeasible. During the project implementation we will characterize
-geometric patterns that remain stable across models, and geometric
-transformation methods that reliably map feature correspondences,
-validated against synthetic ground-truth. Furthermore, we will
-demonstrate that safety-relevant interventions transfer within the same
-family of models, or fine-tuned variants of a model. This research will
-accelerate mechanistic interpretability and enable efficient safety
-analysis as AI systems grow in capability and complexity.</p>
+towards developing a framework for transferable interpretability across
+model families and variants. Recent work has shown that Sparse
+Autoencoders (SAEs) trained on different LLMs learn geometrically
+similar feature spaces—exhibiting invariance and analogous feature
+universality—while exhibiting trade-offs against synthetic ground-truth
+features, meaning no current SAE architecture can perfectly recover the
+ground-truth features. Efficient feature transfer is critical for AI
+safety because it enables rapid safety evaluation of new models without
+restarting interpretability analysis from scratch, early detection of
+hazardous capabilities by comparing feature spaces to known dangerous
+configurations, reliable monitoring across deployment contexts by
+tracking feature drift, and scalable oversight of large model families
+where per-model analysis becomes infeasible. The present work addresses
+fundamental challenges in mechanistic interpretability, through an
+approach for identifying geometric feature universality in synthetic
+models. In our approach, we characterized geometric patterns that remain
+stable across models, and geometric transformation methods that reliably
+map feature correspondences, validated against synthetic ground-truth.
+Furthermore, our method can be used to assess whether safety-relevant
+interventions transfer within the same family of models, or fine-tuned
+variants of a model. The overall goal of our research, is to accelerate
+model interpretability, and enable scalable safety analysis as AI
+systems grow in capability and complexity.</p>
 <h2 id="theory-of-change">Theory of Change</h2>
-<p>Our approach involves developing synthetic benchmarks to test SAE
-transfer and the presence of invariant feature structures, which will
-produce protocols that enable reliable cross-model interpretability
-transfer based on invariant AI safety-related features and circuits.
-This will enable interpretations and safety interventions developed on
-one model to reliably transfer to other models in the same family,
-ultimately making AI safety scalable without requiring complete
-re-interpretation and SAE generation for each new model, fine-tuned
-variant, or model family member. The key assumption underlying this work
-is that geometric feature similarity is both necessary and sufficient
-for interpretability transfer.</p>
+<p>Our approach involves developing synthetic models to test SAE
+recovery of invariant geometric feature structures, in order to
+establish reliable cross-model interpretability transfer based on
+invariant AI safety-related features, including internal circuits. Our
+results can be used as basis to enable interpretations and safety
+interventions developed on one model to reliably transfer to other
+models in the same family, ultimately making AI safety scalable without
+requiring complete re-interpretation and SAE generation for each new
+model, fine-tuned variant, or model family member. The key assumption
+underlying this work is that geometric feature similarity is both
+necessary and sufficient for interpretability transfer.</p>
 <table>
 <colgroup>
 <col style="width: 10%" />
@@ -265,42 +265,38 @@ for interpretability transfer.</p>
 </colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;">Component</th>
-<th style="text-align: left;">Description</th>
+<th style="text-align: left;"><strong>Activities</strong></th>
+<th style="text-align: left;">Develop synthetic benchmarks to test SAE
+transfer and the presence of invariant feature structures.</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;"><strong>Activities</strong></td>
-<td style="text-align: left;">Develop synthetic benchmarks to test SAE
-transfer and the presence of invariant feature structures</td>
-</tr>
-<tr class="even">
 <td style="text-align: left;"><strong>Outputs</strong></td>
 <td style="text-align: left;">Protocols that enable reliable cross-model
 interpretability transfer based on invariant AI safety-related features
-and circuits</td>
+and circuits.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;"><strong>Outcomes</strong></td>
 <td style="text-align: left;">Enable interpretations and safety
 interventions developed on one model to reliably transfer to other
-models in the same family</td>
+models in the same family.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;"><strong>Impact</strong></td>
 <td style="text-align: left;">AI safety becomes scalable without
 requiring complete re-interpretation and SAE generation for each new
-model, fine-tuned variant, or model family member</td>
+model, fine-tuned variant, or model family member.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;"><strong>Key Assumption</strong></td>
 <td style="text-align: left;">Geometric feature similarity is both
-necessary and sufficient for interpretability transfer</td>
+necessary and sufficient for interpretability transfer.</td>
 </tr>
 </tbody>
 </table>
-<h2 id="related-work">1. Related Work</h2>
+<h2 id="background">1. Background</h2>
 <p>Sparse autoencoders have emerged as a powerful tool for decomposing
 neural network activations into interpretable features, yet measuring
 the quality of these features remains an active area of research. Recent
@@ -366,25 +362,23 @@ characterized and validated against synthetic ground-truth to enable
 reliable cross-model feature correspondence and safety-relevant
 intervention transfer.</p>
 <h2 id="methodology">2. Methodology</h2>
-<h3 id="synthetic-data-generation-framework">2.1 Synthetic Data
-Generation Framework</h3>
+<h3 id="hierarchical-feature-structure-in-synthetic-models">2.1
+Hierarchical Feature Structure in Synthetic Models</h3>
 <p>Our methodology builds upon the SynthSAEBench framework <span
 class="citation" data-cites="chanin_synthsaebench_2026">[6]</span>,
-which generates large-scale synthetic activation data with realistic
-neural network feature characteristics. The synthetic data generation
-process begins by defining N = 16,384 ground-truth features in a D =
-768-dimensional activation space. Each feature i is represented by a
-unit direction vector <span
-class="math inline"><strong>d</strong><sub><em>i</em></sub> ∈ ℝ<sup>768</sup></span>,
-created through random sampling from a standard normal distribution
-followed by L2 normalization: <span
-class="math inline"><strong>d</strong><sub><em>i</em></sub> = <strong>g</strong><sub><em>i</em></sub>/∥<strong>g</strong><sub><em>i</em></sub>∥<sub>2</sub></span>
-where <span
-class="math inline"><strong>g</strong><sub><em>i</em></sub> ∼ 𝒩(0,<em>I</em><sub>768</sub>)</span>.
-To reduce spurious correlations, these direction vectors undergo an
-orthogonalization process that minimizes <span
-class="math inline"><em>L</em><sub><em>o</em><em>r</em><em>t</em><em>h</em><em>o</em></sub> = ∑<sub><em>i</em> ≠ <em>j</em></sub>(<strong>d</strong><sub><em>i</em></sub><sup><em>T</em></sup><strong>d</strong><sub><em>j</em></sub>)<sup>2</sup> + <em>λ</em>∑<sub><em>i</em></sub>(∥<strong>d</strong><sub><em>i</em></sub>∥<sub>2</sub>−1)<sup>2</sup></span>,
-pushing vectors toward orthogonality while maintaining unit length.</p>
+where the synthetic models are implemented using a hierarchical,
+parent-child tree feature structure, containing a forest of 128 trees
+with branching factor 4 and maximum depth 3, encompassing a realistic
+mix of 10,884 features subject to conceptual constraints alongside 5,500
+independent features. The tree structure follows a balanced branching
+pattern: 128 root features at depth 0, 512 features at depth 1, 2,048 at
+depth 2, and 8,192 leaf features at depth 3 ( <strong>Figure
+1.</strong>). This distribution models how natural language concepts
+organize from broad categories (for example “animal”) through
+intermediate levels (“mammal”, “dog”) to specific instantiations
+(“golden retriever”), providing a controlled testbed for evaluating
+whether SAEs can recover structure embedded in neural
+representations.</p>
 <figure>
 <img src="figures/fig1.png"
 alt="Natural Language Concept Hierarchy Encoded as Geometric Feature Directions" />
@@ -403,57 +397,75 @@ natural language concepts organize from broad categories through
 intermediate levels to specific instantiations, providing a controlled
 testbed for evaluating whether SAEs can recover compositional structure
 embedded in neural representations.</p>
-<p>The framework incorporates three critical phenomena observed in real
-neural networks: superposition, hierarchy, and correlation.
-Superposition arises naturally when the number of features (N = 16,384)
-exceeds the activation dimensionality (D = 768), forcing features to
-share representational space. This overlap is quantified using Mean Max
-Cosine Similarity: <span class="math inline">$\rho_{mm} = \frac{1}{N}
-\sum_{i=1}^N \max_{j \neq i} |\mathbf{d}_i^T \mathbf{d}_j|$</span>,
+<p>This totals in <span class="math inline"><em>N</em> = 16, 384</span>
+ground-truth features, which are represented in a <span
+class="math inline"><em>D</em> = 768</span>-dimensional activation
+space. Each feature <span class="math inline"><em>i</em></span> is
+represented by a unit direction vector <span
+class="math inline"><strong>d</strong><sub><em>i</em></sub> ∈ ℝ<sup>768</sup></span>,
+created through random sampling from a standard normal distribution
+followed by L2 normalization: <span
+class="math inline"><strong>d</strong><sub><em>i</em></sub> = <strong>g</strong><sub><em>i</em></sub>/∥<strong>g</strong><sub><em>i</em></sub>∥<sub>2</sub></span>
 where <span
-class="math inline"><em>ρ</em><sub><em>m</em><em>m</em></sub> ≈ 0.15</span>
-indicates moderate superposition in the standard benchmark. Hierarchical
-structure is implemented as a forest of 128 trees with branching factor
-4 and maximum depth 3, encompassing 10,884 features with parent-child
-dependencies enforced through coefficient constraints: <span
-class="math inline"><em>c</em><sub><em>c</em><em>h</em><em>i</em><em>l</em><em>d</em></sub> ← <em>c</em><sub><em>c</em><em>h</em><em>i</em><em>l</em><em>d</em></sub> ⋅ <strong>1</strong>[<em>c</em><sub><em>p</em><em>a</em><em>r</em><em>e</em><em>n</em><em>t</em></sub>&gt;0]</span>.</p>
-<h3 id="feature-dictionary-construction-and-correlation-structure">2.2
-Feature Dictionary Construction and Correlation Structure</h3>
-<p>The synthetic activation generation follows the linear superposition
-model where each sample activation is constructed as <span
+class="math inline"><strong>g</strong><sub><em>i</em></sub> ∼ 𝒩(0,<em>I</em><sub>768</sub>)</span>.
+To reduce spurious correlations, these direction vectors also undergo an
+orthogonalization process that minimizes <span
+class="math inline"><em>L</em><sub><em>o</em><em>r</em><em>t</em><em>h</em><em>o</em></sub> = ∑<sub><em>i</em> ≠ <em>j</em></sub>(<strong>d</strong><sub><em>i</em></sub><sup><em>T</em></sup><strong>d</strong><sub><em>j</em></sub>)<sup>2</sup> + <em>λ</em>∑<sub><em>i</em></sub>(∥<strong>d</strong><sub><em>i</em></sub>∥<sub>2</sub>−1)<sup>2</sup></span>,
+pushing vectors toward orthogonality while maintaining unit length.</p>
+<p>Furthermore, to model realistic feature co-occurrence patterns while
+maintaining computational tractability, the framework employs a low-rank
+factorization of the correlation matrix <span
+class="math inline"><em>Σ</em> = <strong>F</strong><strong>F</strong><sup><em>T</em></sup> + diag(<strong>δ</strong>)</span>.
+This also reduces memory requirements for training SAEs in the
+SynthSAEBench framework, from 268 million entries to 1.6 million
+entries—a <span class="math inline">163×</span> reduction compared to
+storing the full correlation matrix.</p>
+<h3 id="feature-dictionary-correlation-and-activation-structure">2.2
+Feature Dictionary, Correlation and Activation Structure</h3>
+<p>Our methodology generates large-scale synthetic activation data with
+realistic neural network feature characteristics, by incorporating three
+critical phenomena observed in real neural networks: superposition,
+correlation and real-world concepts that follow hierarchical structures
+as mentioned in section 2.1.</p>
+<p>To achieve the tree structure dependencies enforce also feature
+activation constraints <span class="math inline"><em>c</em></span> based
+on <span
+class="math inline"><em>c</em><sub><em>c</em><em>h</em><em>i</em><em>l</em><em>d</em></sub> ← <em>c</em><sub><em>c</em><em>h</em><em>i</em><em>l</em><em>d</em></sub> ⋅ <strong>1</strong>[<em>c</em><sub><em>p</em><em>a</em><em>r</em><em>e</em><em>n</em><em>t</em></sub>&gt;0]</span>.
+The hierarchical structure implements realistic concept taxonomies where
+child features can only activate when their parent features are active,
+mimicking how abstract concepts enable more specific subcategories <span
+class="citation" data-cites="chanin_synthsaebench_2026">[6]</span>. The
+enforcement algorithm processes constraints level-by-level from roots to
+leaves: for each node with parent index <span
+class="math inline"><em>p</em><em>a</em><em>r</em><em>e</em><em>n</em><em>t</em><sub><em>i</em><em>d</em><em>x</em></sub></span>
+and child index <span
+class="math inline"><em>c</em><em>h</em><em>i</em><em>l</em><em>d</em><sub><em>i</em><em>d</em><em>x</em></sub></span>,
+if <span
+class="math inline"><em>c</em><sub><em>p</em><em>a</em><em>r</em><em>e</em><em>n</em><em>t</em><sub><em>i</em><em>d</em><em>x</em></sub></sub> = 0</span>
+then <span
+class="math inline"><em>c</em><sub><em>c</em><em>h</em><em>i</em><em>l</em><em>d</em><sub><em>i</em><em>d</em><em>x</em></sub></sub> = 0</span>.
+Additionally, a mutual exclusion rule among siblings ensures that only
+one child within a sibling group can fire simultaneously, creating
+competitive dynamics that reflect real-world concept relationships.</p>
+<p>Furthermore, the synthetic activation generation follows the linear
+superposition model where each sample activation is constructed as <span
 class="math inline">$\mathbf{a} = \sum_{i=1}^N c_i \mathbf{d}_i$</span>,
 with coefficients <span
 class="math inline"><em>c</em><sub><em>i</em></sub></span> sampled from
-hierarchically-constrained distributions. Each feature i receives a
-firing probability <span
-class="math inline"><em>p</em><sub><em>i</em></sub></span> drawn from a
-Zipfian distribution to model realistic feature frequency patterns, with
-firing magnitudes <span
+the tree-constrained distributions. Each feature <span
+class="math inline"><em>i</em></span> receives a firing probability
+<span class="math inline"><em>p</em><sub><em>i</em></sub></span> drawn
+from a Zipfian distribution to model realistic feature frequency
+patterns, with firing magnitudes <span
 class="math inline"><em>μ</em><sub><em>i</em></sub></span> linearly
-interpolated from 27.0 to 18.0 across the frequency spectrum. Standard
-deviations <span
-class="math inline"><em>σ</em><sub><em>i</em></sub></span> follow a
-folded normal distribution to capture realistic activation variance
-patterns observed in language models.</p>
-<p>To model realistic feature co-occurrence patterns while maintaining
-computational tractability, the framework employs a low-rank
-factorization of the correlation matrix <span
-class="math inline"><em>Σ</em> = <strong>F</strong><strong>F</strong><sup><em>T</em></sup> + diag(<strong>δ</strong>)</span>.
-This reduces memory requirements from 268 million entries to 1.6 million
-entries—a 163<span class="math inline">×</span> reduction compared to
-storing the full correlation matrix. The correlation scale parameter
-controls the strength of feature dependencies, with typical values
-around 0.075 producing realistic but manageable correlation
-patterns.</p>
-<p>Superposition emerges naturally from the dimensional constraints, as
-packing N = 16,384 features into D = 768 dimensions necessitates
-overlap. The degree of feature interference scales approximately as
-<span class="math inline">$O(1/\sqrt{D})$</span> with increasing
-dimensionality, while growing with the number of packed features. For
-example, increasing from 4,096 to 16,384 features raises <span
-class="math inline"><em>ρ</em><sub><em>m</em><em>m</em></sub></span>
-from ~0.12 to ~0.18 without orthogonalization, demonstrating how
-representational crowding intensifies with feature density. This
+interpolated across the frequency spectrum.</p>
+<p>Superposition arises naturally when the number of features (<span
+class="math inline"><em>N</em> = 16, 384</span>) exceeds the activation
+dimensionality (<span class="math inline"><em>D</em> = 768</span>),
+forcing features to share representational space. The degree of feature
+interference scales approximately as <span
+class="math inline">$O(1/\sqrt{D})$</span> with increasing
+dimensionality, while growing with the number of packed features. This
 superposition creates fundamental ambiguity in activation
 interpretation: a given activation vector <span
 class="math inline"><strong>a</strong> = [1.9,0.436]</span> could arise
@@ -465,39 +477,16 @@ class="math inline"><em>c</em><sub>1</sub> = 2, <em>c</em><sub>2</sub> =
 for features with directions <span
 class="math inline"><strong>d</strong><sub>1</sub> = [1,0]</span> and
 <span
-class="math inline"><strong>d</strong><sub>2</sub> = [0.9,0.436]</span>.</p>
-<h3 id="hierarchical-constraint-enforcement-and-tree-structure">2.3
-Hierarchical Constraint Enforcement and Tree Structure</h3>
-<p>The hierarchical structure implements realistic concept taxonomies
-where child features can only activate when their parent features are
-active, mimicking how abstract concepts enable more specific
-subcategories. The enforcement algorithm processes constraints
-level-by-level from roots to leaves: for each node with parent index
-<span
-class="math inline"><em>p</em><em>a</em><em>r</em><em>e</em><em>n</em><em>t</em><sub><em>i</em><em>d</em><em>x</em></sub></span>
-and child index <span
-class="math inline"><em>c</em><em>h</em><em>i</em><em>l</em><em>d</em><sub><em>i</em><em>d</em><em>x</em></sub></span>,
-if <span
-class="math inline"><em>c</em><sub><em>p</em><em>a</em><em>r</em><em>e</em><em>n</em><em>t</em><sub><em>i</em><em>d</em><em>x</em></sub></sub> = 0</span>
-then <span
-class="math inline"><em>c</em><sub><em>c</em><em>h</em><em>i</em><em>l</em><em>d</em><sub><em>i</em><em>d</em><em>x</em></sub></sub> = 0</span>.
-Additionally, mutual exclusion among siblings ensures that only one
-child within a sibling group can fire simultaneously, creating
-competitive dynamics that reflect real-world concept relationships.</p>
-<p>This hierarchical distribution creates a realistic mix of 10,884
-features subject to conceptual constraints alongside 5,500 independent
-features. The tree structure follows a balanced branching pattern: 128
-root features at depth 0, 512 features at depth 1, 2,048 at depth 2, and
-8,192 leaf features at depth 3. This distribution models how natural
-language concepts organize from broad categories (like “animal”) through
-intermediate levels (“mammal”, “dog”) to specific instantiations
-(“golden retriever”), providing a controlled testbed for evaluating
-whether sparse autoencoders can recover and respect compositional
-semantic structure embedded in neural representations.</p>
+class="math inline"><strong>d</strong><sub>2</sub> = [0.9,0.436]</span>.
+The superposition overlap is quantified using Mean Max Cosine
+Similarity: <span class="math inline">$\rho_{mm} = \frac{1}{N}
+\sum_{i=1}^N \max_{j \neq i} |\mathbf{d}_i^T \mathbf{d}_j|$</span>,
+where <span
+class="math inline"><em>ρ</em><sub><em>m</em><em>m</em></sub> ≈ 0.15</span>
+indicates moderate superposition in the standard benchmark.</p>
 <h2 id="experimental-setup">3. Experimental Setup</h2>
-<h3
-id="addressing-semantic-structure-limitations-in-representation-space">3.1
-Addressing Semantic Structure Limitations in Representation Space</h3>
+<h3 id="semantic-structure-limitations-in-representation-space">3.1
+Semantic Structure Limitations in Representation Space</h3>
 <p>The fundamental challenge in evaluating sparse autoencoders on
 semantic structures lies in the gap between statistical and semantic
 hierarchies. Current synthetic benchmarks, while powerful for controlled
@@ -521,9 +510,8 @@ semantic labels assigned to features (“Deceptive Reasoning,” “Goal
 Misrepresentation”) serve only human interpretation—the synthetic model
 possesses no semantic understanding of these concepts.</p>
 <h3
-id="semantic-hierarchy-requirements-and-practical-implementation-approaches">3.2
-Semantic Hierarchy Requirements and Practical Implementation
-Approaches</h3>
+id="semantic-hierarchy-requirements-and-practical-implementation">3.2
+Semantic Hierarchy Requirements and Practical Implementation</h3>
 <p>Implementing genuinely semantic hierarchies in synthetic evaluation
 frameworks would require fundamental architectural changes beyond
 current capabilities. Semantic basis vectors with interpretable meaning
@@ -582,11 +570,12 @@ as geometric structure in representation space. When we set <span
 class="math inline"><em>α</em> &gt; 0</span>, we create non-zero cosine
 similarity between parent and child feature directions. Expanding the
 inner product after normalization:</p>
-<p><span class="math display">$$\begin{aligned}
-\mathbf{d}_{\text{child}}^T \mathbf{d}_{\text{parent}} &amp;= (\alpha
-\cdot \mathbf{d}_{\text{parent}} + \beta \cdot \mathbf{d}_\perp)^T
-\mathbf{d}_{\text{parent}} \\
-&amp;= \alpha \underbrace{(\mathbf{d}_{\text{parent}}^T
+<p><span
+class="math display">$$\begin{aligned}\mathbf{d}_{\text{child}}^T
+\mathbf{d}_{\text{parent}} &amp;= (\alpha \cdot
+\mathbf{d}_{\text{parent}} + \beta \cdot \mathbf{d}_\perp)^T
+\mathbf{d}_{\text{parent}} \\ &amp;= \alpha
+\underbrace{(\mathbf{d}_{\text{parent}}^T
 \mathbf{d}_{\text{parent}})}_{=1} + \beta
 \underbrace{(\mathbf{d}_\perp^T \mathbf{d}_{\text{parent}})}_{=0} \\
 &amp;= \alpha\end{aligned}$$</span></p>
@@ -1080,7 +1069,7 @@ Additional Experimental Details</h3>
 <p>[Additional details to be developed]</p>
 <h3 id="appendix-b-supplementary-results">Appendix B: Supplementary
 Results</h3>
-<p>[Supplementary results to be developed]</p>
+<p>[Supplementary results to be developed]kk</p>
 </main>
 
 <!-- ── Footer ── -->
