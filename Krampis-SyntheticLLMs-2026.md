@@ -75,11 +75,19 @@ Given the fundamental paradox that creating semantically meaningful synthetic fe
 
 Next, we introduce semantics of knowledge in the hierarchical structure of the synthetic models, by modifying how feature direction vectors are constructed. Our approach is making child feature directions compositionally dependent on their parent and own offspring directions, rather than being independent random vectors. When constructing a hierarchical feature tree, we define each child feature direction as $\mathbf{d}_{child} = \alpha \cdot \mathbf{d}_{parent} + \beta \cdot \mathbf{d}_{\perp}$, where $\mathbf{d}_{parent}$ is the parent's direction vector, $\mathbf{d}_{\perp}$ is a component orthogonal to the parent representing the specialization of the child concept, and $\alpha, \beta$ are mixing coefficients that control how much of the parent's representation is inherited.
 
-To obtain the orthogonal component $\mathbf{d}_{\perp}$, we employ Gram-Schmidt orthogonalization starting with a random vector $\mathbf{v}$ and subtracting its projection onto the parent direction: $\mathbf{d}_{\perp} = \mathbf{v} - (\mathbf{v} \cdot \mathbf{d}_{parent}) \mathbf{d}_{parent}$. The coefficient $\beta$ controls how much orthogonal specialization enters the final child direction---a large $\beta$ relative to $\alpha$ means the child direction tilts strongly toward its unique subspace, while a small $\beta$ means the child remains closely aligned with the parent direction (**Figure 2.**). This creates a genuine compositional structure, where containing child features and respectively their activations, literally contain components of parent features in their vector representations.
+
+
+
 
 ![Geometric Structure of Compositional Feature Directions](figures/fig2.png)
 
 **Figure 2: Geometric Structure of Compositional Feature Directions.** The child feature direction $\mathbf{d}_\text{child}$ (orange) is a weighted sum of the parent direction $\mathbf{d}_\text{parent}$ (blue) and an orthogonal component $\mathbf{d}_\perp$ (green), obtained via Gram--Schmidt orthogonalization. The angle $\theta$ satisfies $\cos\theta = \alpha$, directly encoding semantic relatedness as geometric proximity in the feature space. Dashed lines show the $\alpha$ and $\beta$ components along each axis.
+
+
+
+To obtain the orthogonal component $\mathbf{d}_{\perp}$, we employ Gram-Schmidt orthogonalization starting with a random vector $\mathbf{v}$ and subtracting its projection onto the parent direction: $\mathbf{d}_{\perp} = \mathbf{v} - (\mathbf{v} \cdot \mathbf{d}_{parent}) \mathbf{d}_{parent}$. The coefficient $\beta$ controls how much orthogonal specialization enters the final child direction---a large $\beta$ relative to $\alpha$ means the child direction tilts strongly toward its unique subspace, while a small $\beta$ means the child remains closely aligned with the parent direction (**Figure 2.**). This creates a genuine compositional structure, where containing child features and respectively their activations, literally contain components of parent features in their vector representations.
+
+
 
 Our theoretical foundation rests on semantic relatedness of concepts encoded in the synthetic model, stemming from the relationship of the concepts drawn from real-world knowledge, encoded as geometric structure in representation space. Furthermore, when we set $\alpha > 0$, we create non-zero cosine similarity between parent and child feature directions. Expanding the inner product after normalization:
 
@@ -89,31 +97,53 @@ $$= \alpha \underbrace{(\mathbf{d}_{\text{parent}}^T \mathbf{d}_{\text{parent}})
 
 $$= \alpha$$
 
+
+
 This creates testable predictions: SAEs that successfully decompose these features should discover latents where decoder directions for child features have high cosine similarity with decoder directions for parent features, and interventions that ablate parent features should impair reconstruction of child features more severely than unrelated features.
+
+
 
 ### 3.4 LLM-Generated Misalignment Hierarchies and Geometric Implementation
 
 Our experimental pipeline leverages large language models to generate interpretable concept hierarchies with explicit semantic similarity values, then translates these into geometric constraints within the synthetic framework. In the first step, we prompt an LLM to produce a tree of misalignment-related concepts with "Deceptive Reasoning" as a root, children like "Goal Misrepresentation" and "Information Withholding," and grandchildren such as "Reward Hacking" and "Sycophantic Agreement." Critically, we ask the LLM to assign an $\alpha$ value to each parent-child edge encoding its judgment of semantic similarity---"Reward Hacking" might receive $\alpha = 0.4$ from "Goal Misrepresentation" since it represents a specific instantiation, while "Goal Misrepresentation" might receive $\alpha = 0.7$ from "Deceptive Reasoning" as a direct sub-case.
 
+
+
 In the second step, we translate the tree into feature directions by starting at the root with a random unit vector $\mathbf{d}_{root}$ and recursively computing child directions using the compositional formula. The mixing coefficient $\beta$ is derived from $\alpha$ to achieve the specified cosine similarity after normalization. Grandchildren inherit geometric structure transitively from both parents and grandparents---"Reward Hacking" contains directional overlap with both "Goal Misrepresentation" and "Deceptive Reasoning," capturing the correct semantic property of compositional concept inheritance.
 
+
+
 The resulting feature directions integrate directly into SynthSAEBench's hierarchy mechanism, where the parent firing-probability constraint $c_{child} \leftarrow c_{child} \cdot \mathbf{1}[c_{parent} > 0]$ enforces statistical dependencies while the geometric construction ensures that hidden activations for child concept samples literally contain components pointing toward parent concept directions. This enables precise diagnostic evaluation: we can test whether SAEs learn latents whose decoder directions maintain high cosine similarity with ground-truth concept directions, whether ablating latents aligned with "Deceptive Reasoning" impairs reconstruction of "Reward Hacking" more than unrelated features, and whether SAEs correctly split hierarchies or inappropriately absorb child concepts into parent latents.
+
+
 
 ![LLM-Generated Deceptive Reasoning Hierarchy](figures/fig3.png)
 
 **Figure 3: LLM-Generated Deceptive Reasoning Hierarchy.** An example hierarchy produced by prompting an LLM to generate misalignment-related concept trees with semantic similarity coefficients $\alpha$ and conditional firing probabilities $p$. Each parent--child edge carries the LLM-assigned $\alpha$ value used to construct the child feature direction $\mathbf{d}_\text{child} = \alpha\mathbf{d}_\text{parent} + \beta\mathbf{d}_\perp$. Grandchildren inherit geometry transitively: "Reward Hacking" (violet) therefore contains directional overlap with both "Goal Misrepresentation" and "Deceptive Reasoning", correctly capturing compositional concept inheritance.
 
+
+
 ### 3.5 Safety Research Applications
 
 The semantic hierarchy approach enables several critical AI safety research directions. We can construct arbitrarily complex semantic hierarchies reflecting real AI safety threat models---power-seeking, deception, sycophancy, manipulation, goal misspecification---and rigorously test whether interpretability tools can decompose these structures. Four concrete evaluation axes emerge from this framework:
 
+
+
 **Capability Detection Robustness.** Test SAE identification of rare, sparse dangerous features (appearing in fewer than 0.1% of samples). If SAEs fail to consistently recover rare scheming features in the controlled synthetic setting, they will likely miss such features in real models where dangerous behaviors are inherently infrequent.
+
+
 
 **Transfer Learning for Monitoring.** If structural patterns---clustered latents with low firing probability and mutual exclusivity---reliably indicate scheming-type hierarchies in synthetic data, we can search for the same geometric signatures in real SAEs trained on large language models as a monitoring signal, enabling scalable safety auditing without labeling every feature manually.
 
+
+
 **Worst-Case Adversarial Scenarios.** Model capability concealment can be simulated by creating features that are anti-correlated with overt expressions of the same capabilities. This tests whether SAEs can still recover underlying dangerous features when obvious activation signals are suppressed, mimicking how a deceptively aligned model might hide its true capabilities during evaluation.
 
+
+
 **Intervention Testing with Ground Truth.** Because we have complete ground truth about which features represent dangerous capabilities, we can test whether ablating or clamping SAE latents matched to these features actually prevents the corresponding behavior in downstream tasks---providing principled validation that interpretability interventions have the intended causal effect.
+
+
 
 ## 4. Results
 
