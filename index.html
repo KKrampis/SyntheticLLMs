@@ -172,6 +172,23 @@
     /* ── HR ── */
     .pub-content hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
 
+    /* ── References (citeproc) ── */
+    .pub-content .csl-bib-body { margin: 0.5rem 0; }
+    .pub-content .csl-entry {
+      display: flex;
+      gap: 0.5em;
+      margin-bottom: 0.75rem;
+      line-height: 1.6;
+      font-size: 0.9rem;
+    }
+    .pub-content .csl-left-margin {
+      min-width: 2rem;
+      color: var(--blue);
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .pub-content .csl-right-inline { flex: 1; }
+
     /* ── Footer ── */
     .pub-footer {
       background: var(--bg2);
@@ -305,14 +322,16 @@ neural network activations into interpretable features, yet measuring
 the quality of these features remains an active area of research. Recent
 work has converged on a multi-dimensional evaluation framework that
 addresses different aspects of SAE quality: concept detection, feature
-separability, reconstruction fidelity, and human interpretability [1].
-The development of comprehensive evaluation suites has revealed that
-gains on traditional proxy metrics, such as reconstruction loss at a
-given sparsity level, do not reliably translate to better practical
+separability, reconstruction fidelity, and human interpretability <span
+class="citation" data-cites="karvonen_saebench_2025">[1]</span>. The
+development of comprehensive evaluation suites has revealed that gains
+on traditional proxy metrics, such as reconstruction loss at a given
+sparsity level, do not reliably translate to better practical
 performance, highlighting the need for more sophisticated assessment
 methods.</p>
 <p>Sparse probing methodology has proven particularly valuable for
-testing whether individual SAE features capture known concepts [2]. This
+testing whether individual SAE features capture known concepts <span
+class="citation" data-cites="gurnee_finding_2023">[2]</span>. This
 technique selects the top-k SAE features most correlated with binary
 classification tasks and trains logistic regression probes on only those
 features. When applied to tasks spanning language identification,
@@ -322,10 +341,12 @@ learn dedicated, interpretable representations of specific concepts.
 However, recent comprehensive testing across 113 datasets has shown that
 SAE-based sparse probes do not consistently outperform simple baselines
 like logistic regression on raw activations for supervised
-classification tasks [3].</p>
+classification tasks <span class="citation"
+data-cites="kantamneni_are_2025">[3]</span>.</p>
 <p>Concept disentanglement represents another crucial dimension of SAE
 evaluation, measuring whether these models properly separate independent
-features into non-overlapping representations [4]. Originally developed
+features into non-overlapping representations <span class="citation"
+data-cites="karvonen_measuring_2024">[4]</span>. Originally developed
 using language models trained on chess and Othello game transcripts
 where ground-truth features are formally specifiable, this approach has
 been extended to general language models through metrics such as RAVEL,
@@ -339,19 +360,21 @@ splitting.</p>
 <p>Automated interpretability techniques have revolutionized the
 scalability of SAE feature evaluation by using large language models to
 generate and assess natural language explanations of feature behavior
-[5]. This two-stage pipeline involves an explainer model producing
-concise descriptions based on activating examples, followed by a scorer
-model predicting feature activation patterns based on these
-explanations. The accuracy of these predictions serves as a measure of
-explanation quality and feature interpretability. While this approach
-has dramatically reduced evaluation costs and enabled analysis of
-millions of features, it often struggles to differentiate between SAE
-architectures, suggesting it captures necessary but not sufficient
-aspects of SAE quality.</p>
+<span class="citation" data-cites="paulo_automatically_2024">[5]</span>.
+This two-stage pipeline involves an explainer model producing concise
+descriptions based on activating examples, followed by a scorer model
+predicting feature activation patterns based on these explanations. The
+accuracy of these predictions serves as a measure of explanation quality
+and feature interpretability. While this approach has dramatically
+reduced evaluation costs and enabled analysis of millions of features,
+it often struggles to differentiate between SAE architectures,
+suggesting it captures necessary but not sufficient aspects of SAE
+quality.</p>
 <p>The integration of these evaluation methods has revealed that SAE
 quality is irreducibly multi-dimensional, with no single metric capable
-of identifying optimal architectures [1]. This finding has shifted the
-field away from optimizing purely for reconstruction loss toward
+of identifying optimal architectures <span class="citation"
+data-cites="karvonen_saebench_2025">[1]</span>. This finding has shifted
+the field away from optimizing purely for reconstruction loss toward
 embracing nuanced, multi-metric evaluation paradigms. The challenge of
 transferable interpretability across model families adds another layer
 of complexity, as geometric feature similarity patterns must be
@@ -361,10 +384,11 @@ intervention transfer.</p>
 <h2 id="methodology">2. Methodology</h2>
 <h3 id="synthetic-data-generation-framework">2.1 Synthetic Data
 Generation Framework</h3>
-<p>Our methodology builds upon the SynthSAEBench framework [6], which
-generates large-scale synthetic activation data with realistic neural
-network feature characteristics. The synthetic data generation process
-begins by defining N = 16,384 ground-truth features in a D =
+<p>Our methodology builds upon the SynthSAEBench framework <span
+class="citation" data-cites="chanin_synthsaebench_2026">[6]</span>,
+which generates large-scale synthetic activation data with realistic
+neural network feature characteristics. The synthetic data generation
+process begins by defining N = 16,384 ground-truth features in a D =
 768-dimensional activation space. Each feature i is represented by a
 unit direction vector <span
 class="math inline"><strong>d</strong><sub><em>i</em></sub> ∈ ℝ<sup>768</sup></span>,
@@ -998,24 +1022,60 @@ translate to meaningful understanding of dangerous model behaviors.</p>
 <h2 id="acknowledgments">Acknowledgments</h2>
 <p>[Acknowledgments section to be developed]</p>
 <h2 id="references">References</h2>
-<p>[1] Karvonen, A., Loughran, T., &amp; Kenton, Z. (2025). SAEBench: A
-comprehensive evaluation suite for sparse autoencoders. <em>arXiv
-preprint arXiv:2503.09532</em>.</p>
-<p>[2] Gurnee, W., Nanda, N., Pauly, M., Harvey, K., Troitskii, D.,
-&amp; Bertsimas, D. (2023). Finding neurons in a haystack: Case studies
-with sparse probing. <em>arXiv preprint arXiv:2305.01610</em>.</p>
-<p>[3] Kantamneni, S., Wattenberg, M., &amp; Firat, O. (2025).
-Evaluating sparse autoencoder representations with supervised
-classification tasks. <em>arXiv preprint arXiv:2502.16681</em>.</p>
-<p>[4] Karvonen, A., Foote, B., Bricken, T., &amp; Brown, T. (2024).
-SAEs learn sparse representations of sparse representations. <em>arXiv
-preprint arXiv:2408.00113</em>.</p>
-<p>[5] Paulo, F., Friedman, D., &amp; EleutherAI. (2025). Delphi:
-Towards machine psychology through conditional language modeling.
-<em>arXiv preprint arXiv:2410.13928</em>.</p>
-<p>[6] Chanin, D., et al. (2026). SynthSAEBench: Evaluating Sparse
-Autoencoders on Scalable Realistic Synthetic Data. <em>arXiv preprint
-arXiv:2602.14687</em>.</p>
+<div id="refs" class="references csl-bib-body" role="list">
+<div id="ref-karvonen_saebench_2025" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">A.
+Karvonen <em>et al.</em>, <span>“<span>SAEBench</span>: <span>A</span>
+<span>Comprehensive</span> <span>Benchmark</span> for
+<span>Sparse</span> <span>Autoencoders</span> in <span>Language</span>
+<span>Model</span> <span>Interpretability</span>.”</span> arXiv, Jun.
+2025. doi: <a
+href="https://doi.org/10.48550/arXiv.2503.09532">10.48550/arXiv.2503.09532</a>.</div>
+</div>
+<div id="ref-gurnee_finding_2023" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline">W.
+Gurnee, N. Nanda, M. Pauly, K. Harvey, D. Troitskii, and D. Bertsimas,
+<span>“Finding <span>Neurons</span> in a <span>Haystack</span>:
+<span>Case</span> <span>Studies</span> with <span>Sparse</span>
+<span>Probing</span>.”</span> arXiv, 2023. doi: <a
+href="https://doi.org/10.48550/arXiv.2305.01610">10.48550/arXiv.2305.01610</a>.</div>
+</div>
+<div id="ref-kantamneni_are_2025" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[3] </div><div class="csl-right-inline">S.
+Kantamneni, J. Engels, S. Rajamanoharan, M. Tegmark, and N. Nanda,
+<span>“Are <span>Sparse</span> <span>Autoencoders</span>
+<span>Useful</span>? <span>A</span> <span>Case</span> <span>Study</span>
+in <span>Sparse</span> <span>Probing</span>.”</span> arXiv, 2025. doi:
+<a
+href="https://doi.org/10.48550/arXiv.2502.16681">10.48550/arXiv.2502.16681</a>.</div>
+</div>
+<div id="ref-karvonen_measuring_2024" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[4] </div><div class="csl-right-inline">A.
+Karvonen <em>et al.</em>, <span>“Measuring <span>Progress</span> in
+<span>Dictionary</span> <span>Learning</span> for <span>Language</span>
+<span>Model</span> <span>Interpretability</span> with <span>Board</span>
+<span>Game</span> <span>Models</span>.”</span> arXiv, 2024. doi: <a
+href="https://doi.org/10.48550/arXiv.2408.00113">10.48550/arXiv.2408.00113</a>.</div>
+</div>
+<div id="ref-paulo_automatically_2024" class="csl-entry"
+role="listitem">
+<div class="csl-left-margin">[5] </div><div class="csl-right-inline">G.
+Paulo, A. Mallen, C. Juang, and N. Belrose, <span>“Automatically
+<span>Interpreting</span> <span>Millions</span> of <span>Features</span>
+in <span>Large</span> <span>Language</span> <span>Models</span>.”</span>
+arXiv, 2024. doi: <a
+href="https://doi.org/10.48550/arXiv.2410.13928">10.48550/arXiv.2410.13928</a>.</div>
+</div>
+<div id="ref-chanin_synthsaebench_2026" class="csl-entry"
+role="listitem">
+<div class="csl-left-margin">[6] </div><div class="csl-right-inline">D.
+Chanin and A. Garriga-Alonso, <span>“<span>SynthSAEBench</span>:
+<span>Evaluating</span> <span>Sparse</span> <span>Autoencoders</span> on
+<span>Scalable</span> <span>Realistic</span> <span>Synthetic</span>
+<span>Data</span>.”</span> arXiv, 2026. doi: <a
+href="https://doi.org/10.48550/arXiv.2602.14687">10.48550/arXiv.2602.14687</a>.</div>
+</div>
+</div>
 <h2 id="appendices">Appendices</h2>
 <h3 id="appendix-a-additional-experimental-details">Appendix A:
 Additional Experimental Details</h3>

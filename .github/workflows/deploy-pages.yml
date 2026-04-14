@@ -78,6 +78,8 @@ jobs:
             -H arxiv-preamble.tex \
             --from=markdown+tex_math_dollars \
             --citeproc \
+            --bibliography references.bib \
+            --csl ieee.csl \
             -o Krampis-SyntheticLLMs-2026.pdf
           ls -lh Krampis-SyntheticLLMs-2026.pdf
 
@@ -88,6 +90,8 @@ jobs:
             --from=markdown+tex_math_dollars \
             --highlight-style=espresso \
             --citeproc \
+            --bibliography references.bib \
+            --csl ieee.csl \
             -o index.html
           ls -lh index.html
 
