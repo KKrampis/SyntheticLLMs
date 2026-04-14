@@ -9,6 +9,8 @@ fontsize: 11pt
 geometry: "margin=1.2in,top=1.1in,bottom=1.1in"
 documentclass: article
 numbersections: true
+bibliography: references.bib
+csl: ieee.csl
 linkReferences: true
 link-citations: true
 colorlinks: true

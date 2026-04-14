@@ -7,6 +7,8 @@ on:
     paths:
       - 'Krampis-SyntheticLLMs-2026.md'   # primary manuscript — always triggers PDF recompile
       - 'paper-meta.yaml'
+      - 'references.bib'
+      - 'ieee.csl'
       - 'arxiv-preamble.tex'
       - 'index.html'
       - '_templates/**'
@@ -71,6 +73,7 @@ jobs:
             --pdf-engine=pdflatex \
             -H arxiv-preamble.tex \
             --from=markdown+tex_math_dollars \
+            --citeproc \
             --number-sections \
             -o _site/paper.pdf
           echo "PDF compiled successfully"
@@ -123,10 +126,11 @@ jobs:
 
           # Convert primary manuscript to HTML for /paper/
           pandoc Krampis-SyntheticLLMs-2026.md \
+            --metadata-file=paper-meta.yaml \
             --standalone \
             --from=markdown+tex_math_dollars \
-            --metadata title="Geometric Feature Invariance in SAEs" \
             --highlight-style=espresso \
+            --citeproc \
             -H _templates/doc-style.html \
             -B _templates/paper-nav.html \
             -o "_site/paper/index.html"
