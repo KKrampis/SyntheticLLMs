@@ -385,6 +385,24 @@ To reduce spurious correlations, these direction vectors undergo an
 orthogonalization process that minimizes <span
 class="math inline"><em>L</em><sub><em>o</em><em>r</em><em>t</em><em>h</em><em>o</em></sub> = ∑<sub><em>i</em> ≠ <em>j</em></sub>(<strong>d</strong><sub><em>i</em></sub><sup><em>T</em></sup><strong>d</strong><sub><em>j</em></sub>)<sup>2</sup> + <em>λ</em>∑<sub><em>i</em></sub>(∥<strong>d</strong><sub><em>i</em></sub>∥<sub>2</sub>−1)<sup>2</sup></span>,
 pushing vectors toward orthogonality while maintaining unit length.</p>
+<figure>
+<img src="figures/fig1.png"
+alt="Natural Language Concept Hierarchy Encoded as Geometric Feature Directions" />
+<figcaption aria-hidden="true">Natural Language Concept Hierarchy
+Encoded as Geometric Feature Directions</figcaption>
+</figure>
+<p><strong>Figure 1: Natural Language Concept Hierarchy.</strong>
+Features are organized as a tree where each edge carries a
+cosine-similarity coefficient <span
+class="math inline"><em>α</em></span> encoding semantic relatedness as
+geometric proximity. Root concepts (blue) such as “Animal” spawn
+intermediate nodes (green) such as “Mammal” and “Reptile”, which in turn
+produce leaf concepts (violet/orange) such as “Dog”, “Whale”, and
+ultimately “Golden Retriever”. This hierarchical distribution models how
+natural language concepts organize from broad categories through
+intermediate levels to specific instantiations, providing a controlled
+testbed for evaluating whether SAEs can recover compositional structure
+embedded in neural representations.</p>
 <p>The framework incorporates three critical phenomena observed in real
 neural networks: superposition, hierarchy, and correlation.
 Superposition arises naturally when the number of features (N = 16,384)
@@ -584,7 +602,7 @@ alt="Geometric Structure of Compositional Feature Directions" />
 <figcaption aria-hidden="true">Geometric Structure of Compositional
 Feature Directions</figcaption>
 </figure>
-<p><strong>Figure 1: Geometric Structure of Compositional Feature
+<p><strong>Figure 2: Geometric Structure of Compositional Feature
 Directions.</strong> The child feature direction <span
 class="math inline"><strong>d</strong><sub>child</sub></span> (orange)
 is a weighted sum of the parent direction <span
@@ -647,7 +665,7 @@ alt="LLM-Generated Deceptive Reasoning Hierarchy" />
 <figcaption aria-hidden="true">LLM-Generated Deceptive Reasoning
 Hierarchy</figcaption>
 </figure>
-<p><strong>Figure 2: LLM-Generated Deceptive Reasoning
+<p><strong>Figure 3: LLM-Generated Deceptive Reasoning
 Hierarchy.</strong> An example hierarchy produced by prompting an LLM to
 generate misalignment-related concept trees with semantic similarity
 coefficients <span class="math inline"><em>α</em></span> and conditional
