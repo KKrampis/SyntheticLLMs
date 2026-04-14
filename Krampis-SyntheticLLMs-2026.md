@@ -57,25 +57,25 @@ Furthermore, the activation generation follows the linear superposition model wh
 
 In both real and synthetic models, superposition arises naturally when the number of features (in our case, $N = 16,384$) exceeds the activation dimensionality ($D = 768$), forcing features to share representational space. The degree of feature interference scales approximately as $O(1/\sqrt{D})$ with increasing dimensionality, while growing with the number of packed features. This superposition creates fundamental ambiguity in activation interpretation: an example activation vector $\mathbf{a} = [1.9, 0.436]$ could arise from multiple coefficient combinations when features overlap significantly, such as $c_1=1, c_2=1$ versus $c_1=2, c_2=0$ for features with directions $\mathbf{d}_1 = [1, 0]$ and $\mathbf{d}_2 = [0.9, 0.436]$. The superposition overlap is quantified using Mean Max Cosine Similarity: $\rho_{mm} = \frac{1}{N} \sum_{i=1}^N \max_{j \neq i} |\mathbf{d}_i^T \mathbf{d}_j|$, where $\rho_{mm} \approx 0.15$ indicates moderate superposition in the standard benchmark.
 
+
+
 ## 3. Experimental Setup
 
-### 3.1 Semantic Structure Limitations in Representation Space
+### 3.1 Structure Limitations in Representation Spaces of Synthetic Models
 
 The fundamental challenge in evaluating sparse autoencoders on semantic structures lies in the gap between statistical and semantic hierarchies. Current synthetic benchmarks, while powerful for controlled experimentation, implement purely statistical dependencies that lack semantic meaning. The core limitation is that semantics requires compositional structure in the representation itself, not merely correlated firing probabilities. In real language models, semantic relationships like "deceptive reasoning" and "goal misrepresentation" exhibit meaningful connections because the activation patterns for child concepts literally contain components of parent concepts, creating genuine compositional structure where child representations are built from parent representations plus additional information.
 
 In contrast, existing synthetic frameworks treat hierarchical features as independent random directions with statistical dependency rules. When a child feature fires, it adds an arbitrary vector to the activation that bears no compositional relationship to its parent's contribution. This disconnect means that while we can test whether SAEs handle hierarchical statistical dependencies, we cannot evaluate whether they recover semantically meaningful compositional structures. The semantic labels assigned to features ("Deceptive Reasoning," "Goal Misrepresentation") serve only human interpretation---the synthetic model possesses no semantic understanding of these concepts.
 
-### 3.2 Semantic Hierarchy Requirements and Practical Implementation
+### 3.2  Encoding of Semantic Knowledge in Internal Model Hierarchies
 
 Implementing genuinely semantic hierarchies in synthetic evaluation frameworks would require fundamental architectural changes beyond current capabilities. Semantic basis vectors with interpretable meaning would replace random orthogonal directions, defining fundamental semantic concepts like intentionality, truthfulness, goal-oriented behavior, and theory of mind as basis vectors, then constructing complex features as meaningful combinations of these primitives.
 
 Given the fundamental paradox that creating semantically meaningful synthetic features requires knowing what semantic structure looks like in representation space---precisely what we aim to investigate---we implement three practical approaches. The weak semantic structure approach creates statistical signatures that correlate with potential semantic patterns, while the hybrid approach leverages real model guidance by collecting LLM activations on curated datasets with known semantic properties. The explicit limitation acknowledgment approach recognizes that synthetic benchmarks test statistical decomposition capabilities rather than semantic understanding, focusing on measurable properties: handling hierarchical statistical dependencies, decomposing correlated versus independent features, and scaling behavior under various statistical constraints.
 
-### 3.3 Compositional Feature Directions with Hierarchical Constraints
+### 3.3 Compositional Feature Directions with Semantical Constraints
 
 Next, we introduce semantics of knowledge in the hierarchical structure of the synthetic models, by modifying how feature direction vectors are constructed. Our approach is making child feature directions compositionally dependent on their parent and own offspring directions, rather than being independent random vectors. When constructing a hierarchical feature tree, we define each child feature direction as $\mathbf{d}_{child} = \alpha \cdot \mathbf{d}_{parent} + \beta \cdot \mathbf{d}_{\perp}$, where $\mathbf{d}_{parent}$ is the parent's direction vector, $\mathbf{d}_{\perp}$ is a component orthogonal to the parent representing the specialization of the child concept, and $\alpha, \beta$ are mixing coefficients that control how much of the parent's representation is inherited.
-
-
 
 
 
@@ -97,53 +97,33 @@ $$= \alpha \underbrace{(\mathbf{d}_{\text{parent}}^T \mathbf{d}_{\text{parent}})
 
 $$= \alpha$$
 
-
-
-This creates testable predictions: SAEs that successfully decompose these features should discover latents where decoder directions for child features have high cosine similarity with decoder directions for parent features, and interventions that ablate parent features should impair reconstruction of child features more severely than unrelated features.
+With this approach, our overarching goal is to test whether SAEs can  successfully decompose these features, and discover the latents where in synthetic models the directions for child features have high cosine similarity with directions for parent features. Furthermore, due to the ease of adjusting the composition of the synthetic models, performing interventions that ablate parent features we can assess whether these impair reconstruction of child features due to the inheritance when compared to unrelated features.
 
 
 
-### 3.4 LLM-Generated Misalignment Hierarchies and Geometric Implementation
+### 3.4 Semantic encoding of AI Safety Hierarchies in Representation Space
 
 Our experimental pipeline leverages large language models to generate interpretable concept hierarchies with explicit semantic similarity values, then translates these into geometric constraints within the synthetic framework. In the first step, we prompt an LLM to produce a tree of misalignment-related concepts with "Deceptive Reasoning" as a root, children like "Goal Misrepresentation" and "Information Withholding," and grandchildren such as "Reward Hacking" and "Sycophantic Agreement." Critically, we ask the LLM to assign an $\alpha$ value to each parent-child edge encoding its judgment of semantic similarity---"Reward Hacking" might receive $\alpha = 0.4$ from "Goal Misrepresentation" since it represents a specific instantiation, while "Goal Misrepresentation" might receive $\alpha = 0.7$ from "Deceptive Reasoning" as a direct sub-case.
 
-
-
 In the second step, we translate the tree into feature directions by starting at the root with a random unit vector $\mathbf{d}_{root}$ and recursively computing child directions using the compositional formula. The mixing coefficient $\beta$ is derived from $\alpha$ to achieve the specified cosine similarity after normalization. Grandchildren inherit geometric structure transitively from both parents and grandparents---"Reward Hacking" contains directional overlap with both "Goal Misrepresentation" and "Deceptive Reasoning," capturing the correct semantic property of compositional concept inheritance.
 
-
-
 The resulting feature directions integrate directly into SynthSAEBench's hierarchy mechanism, where the parent firing-probability constraint $c_{child} \leftarrow c_{child} \cdot \mathbf{1}[c_{parent} > 0]$ enforces statistical dependencies while the geometric construction ensures that hidden activations for child concept samples literally contain components pointing toward parent concept directions. This enables precise diagnostic evaluation: we can test whether SAEs learn latents whose decoder directions maintain high cosine similarity with ground-truth concept directions, whether ablating latents aligned with "Deceptive Reasoning" impairs reconstruction of "Reward Hacking" more than unrelated features, and whether SAEs correctly split hierarchies or inappropriately absorb child concepts into parent latents.
-
-
 
 ![LLM-Generated Deceptive Reasoning Hierarchy](figures/fig3.png)
 
 **Figure 3: LLM-Generated Deceptive Reasoning Hierarchy.** An example hierarchy produced by prompting an LLM to generate misalignment-related concept trees with semantic similarity coefficients $\alpha$ and conditional firing probabilities $p$. Each parent--child edge carries the LLM-assigned $\alpha$ value used to construct the child feature direction $\mathbf{d}_\text{child} = \alpha\mathbf{d}_\text{parent} + \beta\mathbf{d}_\perp$. Grandchildren inherit geometry transitively: "Reward Hacking" (violet) therefore contains directional overlap with both "Goal Misrepresentation" and "Deceptive Reasoning", correctly capturing compositional concept inheritance.
 
-
-
 ### 3.5 Safety Research Applications
 
 The semantic hierarchy approach enables several critical AI safety research directions. We can construct arbitrarily complex semantic hierarchies reflecting real AI safety threat models---power-seeking, deception, sycophancy, manipulation, goal misspecification---and rigorously test whether interpretability tools can decompose these structures. Four concrete evaluation axes emerge from this framework:
 
-
-
 **Capability Detection Robustness.** Test SAE identification of rare, sparse dangerous features (appearing in fewer than 0.1% of samples). If SAEs fail to consistently recover rare scheming features in the controlled synthetic setting, they will likely miss such features in real models where dangerous behaviors are inherently infrequent.
-
-
 
 **Transfer Learning for Monitoring.** If structural patterns---clustered latents with low firing probability and mutual exclusivity---reliably indicate scheming-type hierarchies in synthetic data, we can search for the same geometric signatures in real SAEs trained on large language models as a monitoring signal, enabling scalable safety auditing without labeling every feature manually.
 
-
-
 **Worst-Case Adversarial Scenarios.** Model capability concealment can be simulated by creating features that are anti-correlated with overt expressions of the same capabilities. This tests whether SAEs can still recover underlying dangerous features when obvious activation signals are suppressed, mimicking how a deceptively aligned model might hide its true capabilities during evaluation.
 
-
-
 **Intervention Testing with Ground Truth.** Because we have complete ground truth about which features represent dangerous capabilities, we can test whether ablating or clamping SAE latents matched to these features actually prevents the corresponding behavior in downstream tasks---providing principled validation that interpretability interventions have the intended causal effect.
-
-
 
 ## 4. Results
 
