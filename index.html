@@ -554,22 +554,6 @@ orthogonal to the parent representing the specialization of the child
 concept, and <span class="math inline"><em>α</em>, <em>β</em></span> are
 mixing coefficients that control how much of the parent’s representation
 is inherited.</p>
-<p>To obtain the orthogonal component <span
-class="math inline"><strong>d</strong><sub>⊥</sub></span>, we employ
-Gram-Schmidt orthogonalization starting with a random vector <span
-class="math inline"><strong>v</strong></span> and subtracting its
-projection onto the parent direction: <span
-class="math inline"><strong>d</strong><sub>⊥</sub> = <strong>v</strong> − (<strong>v</strong>⋅<strong>d</strong><sub><em>p</em><em>a</em><em>r</em><em>e</em><em>n</em><em>t</em></sub>)<strong>d</strong><sub><em>p</em><em>a</em><em>r</em><em>e</em><em>n</em><em>t</em></sub></span>.
-The coefficient <span class="math inline"><em>β</em></span> controls how
-much orthogonal specialization enters the final child direction—a large
-<span class="math inline"><em>β</em></span> relative to <span
-class="math inline"><em>α</em></span> means the child direction tilts
-strongly toward its unique subspace, while a small <span
-class="math inline"><em>β</em></span> means the child remains closely
-aligned with the parent direction (<strong>Figure 2.</strong>). This
-creates a genuine compositional structure, where containing child
-features and respectively their activations, literally contain
-components of parent features in their vector representations.</p>
 <figure>
 <img src="figures/fig2.png"
 alt="Geometric Structure of Compositional Feature Directions" />
@@ -590,6 +574,22 @@ encoding semantic relatedness as geometric proximity in the feature
 space. Dashed lines show the <span class="math inline"><em>α</em></span>
 and <span class="math inline"><em>β</em></span> components along each
 axis.</p>
+<p>To obtain the orthogonal component <span
+class="math inline"><strong>d</strong><sub>⊥</sub></span>, we employ
+Gram-Schmidt orthogonalization starting with a random vector <span
+class="math inline"><strong>v</strong></span> and subtracting its
+projection onto the parent direction: <span
+class="math inline"><strong>d</strong><sub>⊥</sub> = <strong>v</strong> − (<strong>v</strong>⋅<strong>d</strong><sub><em>p</em><em>a</em><em>r</em><em>e</em><em>n</em><em>t</em></sub>)<strong>d</strong><sub><em>p</em><em>a</em><em>r</em><em>e</em><em>n</em><em>t</em></sub></span>.
+The coefficient <span class="math inline"><em>β</em></span> controls how
+much orthogonal specialization enters the final child direction—a large
+<span class="math inline"><em>β</em></span> relative to <span
+class="math inline"><em>α</em></span> means the child direction tilts
+strongly toward its unique subspace, while a small <span
+class="math inline"><em>β</em></span> means the child remains closely
+aligned with the parent direction (<strong>Figure 2.</strong>). This
+creates a genuine compositional structure, where containing child
+features and respectively their activations, literally contain
+components of parent features in their vector representations.</p>
 <p>Our theoretical foundation rests on semantic relatedness of concepts
 encoded in the synthetic model, stemming from the relationship of the
 concepts drawn from real-world knowledge, encoded as geometric structure
