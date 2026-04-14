@@ -488,8 +488,9 @@ where <span
 class="math inline"><em>ρ</em><sub><em>m</em><em>m</em></sub> ≈ 0.15</span>
 indicates moderate superposition in the standard benchmark.</p>
 <h2 id="experimental-setup">3. Experimental Setup</h2>
-<h3 id="semantic-structure-limitations-in-representation-space">3.1
-Semantic Structure Limitations in Representation Space</h3>
+<h3
+id="structure-limitations-in-representation-spaces-of-synthetic-models">3.1
+Structure Limitations in Representation Spaces of Synthetic Models</h3>
 <p>The fundamental challenge in evaluating sparse autoencoders on
 semantic structures lies in the gap between statistical and semantic
 hierarchies. Current synthetic benchmarks, while powerful for controlled
@@ -513,8 +514,8 @@ semantic labels assigned to features (“Deceptive Reasoning,” “Goal
 Misrepresentation”) serve only human interpretation—the synthetic model
 possesses no semantic understanding of these concepts.</p>
 <h3
-id="semantic-hierarchy-requirements-and-practical-implementation">3.2
-Semantic Hierarchy Requirements and Practical Implementation</h3>
+id="encoding-of-semantic-knowledge-in-internal-model-hierarchies">3.2
+Encoding of Semantic Knowledge in Internal Model Hierarchies</h3>
 <p>Implementing genuinely semantic hierarchies in synthetic evaluation
 frameworks would require fundamental architectural changes beyond
 current capabilities. Semantic basis vectors with interpretable meaning
@@ -536,8 +537,8 @@ properties: handling hierarchical statistical dependencies, decomposing
 correlated versus independent features, and scaling behavior under
 various statistical constraints.</p>
 <h3
-id="compositional-feature-directions-with-hierarchical-constraints">3.3
-Compositional Feature Directions with Hierarchical Constraints</h3>
+id="compositional-feature-directions-with-semantical-constraints">3.3
+Compositional Feature Directions with Semantical Constraints</h3>
 <p>Next, we introduce semantics of knowledge in the hierarchical
 structure of the synthetic models, by modifying how feature direction
 vectors are constructed. Our approach is making child feature directions
@@ -605,15 +606,17 @@ class="math display"><strong>d</strong><sub>child</sub><sup><em>T</em></sup><str
 \underbrace{(\mathbf{d}_\perp^T
 \mathbf{d}_{\text{parent}})}_{=0}$$</span></p>
 <p><span class="math display"> = <em>α</em></span></p>
-<p>This creates testable predictions: SAEs that successfully decompose
-these features should discover latents where decoder directions for
-child features have high cosine similarity with decoder directions for
-parent features, and interventions that ablate parent features should
-impair reconstruction of child features more severely than unrelated
-features.</p>
+<p>With this approach, our overarching goal is to test whether SAEs can
+successfully decompose these features, and discover the latents where in
+synthetic models the directions for child features have high cosine
+similarity with directions for parent features. Furthermore, due to the
+ease of adjusting the composition of the synthetic models, performing
+interventions that ablate parent features we can assess whether these
+impair reconstruction of child features due to the inheritance when
+compared to unrelated features.</p>
 <h3
-id="llm-generated-misalignment-hierarchies-and-geometric-implementation">3.4
-LLM-Generated Misalignment Hierarchies and Geometric Implementation</h3>
+id="semantic-encoding-of-ai-safety-hierarchies-in-representation-space">3.4
+Semantic encoding of AI Safety Hierarchies in Representation Space</h3>
 <p>Our experimental pipeline leverages large language models to generate
 interpretable concept hierarchies with explicit semantic similarity
 values, then translates these into geometric constraints within the
