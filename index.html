@@ -566,28 +566,10 @@ much orthogonal specialization enters the final child direction—a large
 class="math inline"><em>α</em></span> means the child direction tilts
 strongly toward its unique subspace, while a small <span
 class="math inline"><em>β</em></span> means the child remains closely
-aligned with the parent direction. This creates genuine compositional
-structure where activations containing child features literally contain
+aligned with the parent direction (<strong>Figure 2.</strong>). This
+creates a genuine compositional structure, where containing child
+features and respectively their activations, literally contain
 components of parent features in their vector representations.</p>
-<p>The theoretical foundation rests on semantic relatedness manifesting
-as geometric structure in representation space. When we set <span
-class="math inline"><em>α</em> &gt; 0</span>, we create non-zero cosine
-similarity between parent and child feature directions. Expanding the
-inner product after normalization:</p>
-<p><span
-class="math display"><strong>d</strong><sub>child</sub><sup><em>T</em></sup><strong>d</strong><sub>parent</sub> = (<em>α</em>⋅<strong>d</strong><sub>parent</sub>+<em>β</em>⋅<strong>d</strong><sub>⊥</sub>)<sup><em>T</em></sup><strong>d</strong><sub>parent</sub></span></p>
-<p><span class="math display">$$= \alpha
-\underbrace{(\mathbf{d}_{\text{parent}}^T
-\mathbf{d}_{\text{parent}})}_{=1} + \beta
-\underbrace{(\mathbf{d}_\perp^T
-\mathbf{d}_{\text{parent}})}_{=0}$$</span></p>
-<p><span class="math display"> = <em>α</em></span></p>
-<p>This creates testable predictions: SAEs that successfully decompose
-these features should discover latents where decoder directions for
-child features have high cosine similarity with decoder directions for
-parent features, and interventions that ablate parent features should
-impair reconstruction of child features more severely than unrelated
-features.</p>
 <figure>
 <img src="figures/fig2.png"
 alt="Geometric Structure of Compositional Feature Directions" />
@@ -608,6 +590,27 @@ encoding semantic relatedness as geometric proximity in the feature
 space. Dashed lines show the <span class="math inline"><em>α</em></span>
 and <span class="math inline"><em>β</em></span> components along each
 axis.</p>
+<p>Our theoretical foundation rests on semantic relatedness of concepts
+encoded in the synthetic model, stemming from the relationship of the
+concepts drawn from real-world knowledge, encoded as geometric structure
+in representation space. Furthermore, when we set <span
+class="math inline"><em>α</em> &gt; 0</span>, we create non-zero cosine
+similarity between parent and child feature directions. Expanding the
+inner product after normalization:</p>
+<p><span
+class="math display"><strong>d</strong><sub>child</sub><sup><em>T</em></sup><strong>d</strong><sub>parent</sub> = (<em>α</em>⋅<strong>d</strong><sub>parent</sub>+<em>β</em>⋅<strong>d</strong><sub>⊥</sub>)<sup><em>T</em></sup><strong>d</strong><sub>parent</sub></span></p>
+<p><span class="math display">$$= \alpha
+\underbrace{(\mathbf{d}_{\text{parent}}^T
+\mathbf{d}_{\text{parent}})}_{=1} + \beta
+\underbrace{(\mathbf{d}_\perp^T
+\mathbf{d}_{\text{parent}})}_{=0}$$</span></p>
+<p><span class="math display"> = <em>α</em></span></p>
+<p>This creates testable predictions: SAEs that successfully decompose
+these features should discover latents where decoder directions for
+child features have high cosine similarity with decoder directions for
+parent features, and interventions that ablate parent features should
+impair reconstruction of child features more severely than unrelated
+features.</p>
 <h3
 id="llm-generated-misalignment-hierarchies-and-geometric-implementation">3.4
 LLM-Generated Misalignment Hierarchies and Geometric Implementation</h3>
