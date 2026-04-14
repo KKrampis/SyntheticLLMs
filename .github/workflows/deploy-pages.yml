@@ -7,6 +7,8 @@ on:
     paths:
       - 'Krampis-SyntheticLLMs-2026.md'   # primary manuscript — always triggers PDF + HTML regen
       - 'paper-meta.yaml'
+      - 'references.bib'
+      - 'ieee.csl'
       - 'arxiv-preamble.tex'
       - '_templates/**'
       - 'slides-reveal.js/**'
@@ -75,6 +77,7 @@ jobs:
             --pdf-engine=pdflatex \
             -H arxiv-preamble.tex \
             --from=markdown+tex_math_dollars \
+            --citeproc \
             -o Krampis-SyntheticLLMs-2026.pdf
           ls -lh Krampis-SyntheticLLMs-2026.pdf
 
@@ -84,6 +87,7 @@ jobs:
             --template _templates/website-template.html \
             --from=markdown+tex_math_dollars \
             --highlight-style=espresso \
+            --citeproc \
             -o index.html
           ls -lh index.html
 
