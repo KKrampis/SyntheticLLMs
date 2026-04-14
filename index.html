@@ -426,15 +426,17 @@ Feature Dictionary, Correlation and Activation Structure</h3>
 realistic neural network feature characteristics, by incorporating three
 critical phenomena observed in real neural networks: superposition,
 correlation and real-world concepts that follow hierarchical structures
-as mentioned in section 2.1.</p>
-<p>To achieve the tree structure dependencies enforce also feature
-activation constraints <span class="math inline"><em>c</em></span> based
-on <span
-class="math inline"><em>c</em><sub><em>c</em><em>h</em><em>i</em><em>l</em><em>d</em></sub> ← <em>c</em><sub><em>c</em><em>h</em><em>i</em><em>l</em><em>d</em></sub> ⋅ <strong>1</strong>[<em>c</em><sub><em>p</em><em>a</em><em>r</em><em>e</em><em>n</em><em>t</em></sub>&gt;0]</span>.
-The hierarchical structure implements realistic concept taxonomies where
-child features can only activate when their parent features are active,
-mimicking how abstract concepts enable more specific subcategories <span
-class="citation" data-cites="chanin_synthsaebench_2026">[6]</span>. The
+(section 2.1. and <strong>Figure 1.</strong>).</p>
+<p>In our synthetic models the tree structure dependencies also enforce
+feature activation constraints <span
+class="math inline"><em>c</em></span> as <span
+class="math inline"><em>c</em><sub><em>c</em><em>h</em><em>i</em><em>l</em><em>d</em></sub> ← <em>c</em><sub><em>c</em><em>h</em><em>i</em><em>l</em><em>d</em></sub> ⋅ <strong>1</strong>[<em>c</em><sub><em>p</em><em>a</em><em>r</em><em>e</em><em>n</em><em>t</em></sub>&gt;0]</span>
+, emulating activations of the model with real world data where a child
+feature can only activate when their parent feature is also active <span
+class="citation" data-cites="chanin_synthsaebench_2026">[6]</span>. This
+stems from the fact that knowledge concepts are connected by
+inheritance, and is followed similarly throughout the hierarchy
+mimicking how abstract concepts enable more specific subcategories. The
 enforcement algorithm processes constraints level-by-level from roots to
 leaves: for each node with parent index <span
 class="math inline"><em>p</em><em>a</em><em>r</em><em>e</em><em>n</em><em>t</em><sub><em>i</em><em>d</em><em>x</em></sub></span>
@@ -446,20 +448,21 @@ then <span
 class="math inline"><em>c</em><sub><em>c</em><em>h</em><em>i</em><em>l</em><em>d</em><sub><em>i</em><em>d</em><em>x</em></sub></sub> = 0</span>.
 Additionally, a mutual exclusion rule among siblings ensures that only
 one child within a sibling group can fire simultaneously, creating
-competitive dynamics that reflect real-world concept relationships.</p>
-<p>Furthermore, the synthetic activation generation follows the linear
-superposition model where each sample activation is constructed as <span
-class="math inline">$\mathbf{a} = \sum_{i=1}^N c_i \mathbf{d}_i$</span>,
-with coefficients <span
+competitive dynamics that further reflect real-world concept
+relationships.</p>
+<p>Furthermore, the activation generation follows the linear
+superposition model where each sample activation output from the
+synthetic model is constructed as <span class="math inline">$\mathbf{a}
+= \sum_{i=1}^N c_i \mathbf{d}_i$</span>, with coefficients <span
 class="math inline"><em>c</em><sub><em>i</em></sub></span> sampled from
 the tree-constrained distributions. Each feature <span
 class="math inline"><em>i</em></span> receives a firing probability
 <span class="math inline"><em>p</em><sub><em>i</em></sub></span> drawn
 from a Zipfian distribution to model realistic feature frequency
-patterns, with firing magnitudes <span
-class="math inline"><em>μ</em><sub><em>i</em></sub></span> linearly
-interpolated across the frequency spectrum.</p>
-<p>Superposition arises naturally when the number of features (<span
+patterns, with the firing magnitudes linearly interpolated across the
+frequency spectrum.</p>
+<p>In both real and synthetic models, superposition arises naturally
+when the number of features (in our case, <span
 class="math inline"><em>N</em> = 16, 384</span>) exceeds the activation
 dimensionality (<span class="math inline"><em>D</em> = 768</span>),
 forcing features to share representational space. The degree of feature
@@ -467,7 +470,7 @@ interference scales approximately as <span
 class="math inline">$O(1/\sqrt{D})$</span> with increasing
 dimensionality, while growing with the number of packed features. This
 superposition creates fundamental ambiguity in activation
-interpretation: a given activation vector <span
+interpretation: an example activation vector <span
 class="math inline"><strong>a</strong> = [1.9,0.436]</span> could arise
 from multiple coefficient combinations when features overlap
 significantly, such as <span
@@ -535,12 +538,13 @@ various statistical constraints.</p>
 <h3
 id="compositional-feature-directions-with-hierarchical-constraints">3.3
 Compositional Feature Directions with Hierarchical Constraints</h3>
-<p>We introduce partial semantic structure by modifying how feature
-direction vectors are constructed within hierarchical relationships,
-making child feature directions compositionally dependent on their
-parent directions rather than having them be independent random vectors.
-When constructing a hierarchical feature tree, we define each child
-feature direction as <span
+<p>Next, we introduce semantics of knowledge in the hierarchical
+structure of the synthetic models, by modifying how feature direction
+vectors are constructed. Our approach is making child feature directions
+compositionally dependent on their parent and own offspring directions,
+rather than being independent random vectors. When constructing a
+hierarchical feature tree, we define each child feature direction as
+<span
 class="math inline"><strong>d</strong><sub><em>c</em><em>h</em><em>i</em><em>l</em><em>d</em></sub> = <em>α</em> ⋅ <strong>d</strong><sub><em>p</em><em>a</em><em>r</em><em>e</em><em>n</em><em>t</em></sub> + <em>β</em> ⋅ <strong>d</strong><sub>⊥</sub></span>,
 where <span
 class="math inline"><strong>d</strong><sub><em>p</em><em>a</em><em>r</em><em>e</em><em>n</em><em>t</em></sub></span>
@@ -571,14 +575,13 @@ class="math inline"><em>α</em> &gt; 0</span>, we create non-zero cosine
 similarity between parent and child feature directions. Expanding the
 inner product after normalization:</p>
 <p><span
-class="math display">$$\begin{aligned}\mathbf{d}_{\text{child}}^T
-\mathbf{d}_{\text{parent}} &amp;= (\alpha \cdot
-\mathbf{d}_{\text{parent}} + \beta \cdot \mathbf{d}_\perp)^T
-\mathbf{d}_{\text{parent}} \\ &amp;= \alpha
+class="math display"><strong>d</strong><sub>child</sub><sup><em>T</em></sup><strong>d</strong><sub>parent</sub> = (<em>α</em>⋅<strong>d</strong><sub>parent</sub>+<em>β</em>⋅<strong>d</strong><sub>⊥</sub>)<sup><em>T</em></sup><strong>d</strong><sub>parent</sub></span></p>
+<p><span class="math display">$$= \alpha
 \underbrace{(\mathbf{d}_{\text{parent}}^T
 \mathbf{d}_{\text{parent}})}_{=1} + \beta
-\underbrace{(\mathbf{d}_\perp^T \mathbf{d}_{\text{parent}})}_{=0} \\
-&amp;= \alpha\end{aligned}$$</span></p>
+\underbrace{(\mathbf{d}_\perp^T
+\mathbf{d}_{\text{parent}})}_{=0}$$</span></p>
+<p><span class="math display"> = <em>α</em></span></p>
 <p>This creates testable predictions: SAEs that successfully decompose
 these features should discover latents where decoder directions for
 child features have high cosine similarity with decoder directions for
