@@ -22,10 +22,6 @@ Our approach involves developing synthetic benchmarks to test SAE transfer and t
 | **Impact**         | AI safety becomes scalable without requiring complete re-interpretation and SAE generation for each new model, fine-tuned variant, or model family member |
 | **Key Assumption** | Geometric feature similarity is both necessary and sufficient for interpretability transfer                                                               |
 
-![Semantic Feature Taxonomy: Geometric Embedding](figures/fig1.png)
-
-**Figure 1: Semantic Feature Taxonomy.** Each parent--child edge carries a semantic similarity coefficient $\alpha$ used to construct the child feature direction $\mathbf{d}_\text{child} = \alpha\mathbf{d}_\text{parent} + \beta\mathbf{d}_\perp$. Root concepts (blue) spawn child concepts (green) and grandchild concepts (violet/orange) with progressively specialized feature directions. The $\alpha$ values encode how much of the parent representation is inherited, making semantic relatedness a geometric property of the feature space.
-
 ## 1. Related Work
 
 Sparse autoencoders have emerged as a powerful tool for decomposing neural network activations into interpretable features, yet measuring the quality of these features remains an active area of research. Recent work has converged on a multi-dimensional evaluation framework that addresses different aspects of SAE quality: concept detection, feature separability, reconstruction fidelity, and human interpretability [@karvonen_saebench_2025]. The development of comprehensive evaluation suites has revealed that gains on traditional proxy metrics, such as reconstruction loss at a given sparsity level, do not reliably translate to better practical performance, highlighting the need for more sophisticated assessment methods.
@@ -85,14 +81,13 @@ The theoretical foundation rests on semantic relatedness manifesting as geometri
 $$\begin{aligned}
 \mathbf{d}_{\text{child}}^T \mathbf{d}_{\text{parent}} &= (\alpha \cdot \mathbf{d}_{\text{parent}} + \beta \cdot \mathbf{d}_\perp)^T \mathbf{d}_{\text{parent}} \\
 &= \alpha \underbrace{(\mathbf{d}_{\text{parent}}^T \mathbf{d}_{\text{parent}})}_{=1} + \beta \underbrace{(\mathbf{d}_\perp^T \mathbf{d}_{\text{parent}})}_{=0} \\
-&= \alpha
-\end{aligned}$$
+&= \alpha\end{aligned}$$
 
 This creates testable predictions: SAEs that successfully decompose these features should discover latents where decoder directions for child features have high cosine similarity with decoder directions for parent features, and interventions that ablate parent features should impair reconstruction of child features more severely than unrelated features.
 
 ![Geometric Structure of Compositional Feature Directions](figures/fig2.png)
 
-**Figure 2: Geometric Structure of Compositional Feature Directions.** The child feature direction $\mathbf{d}_\text{child}$ (orange) is a weighted sum of the parent direction $\mathbf{d}_\text{parent}$ (blue) and an orthogonal component $\mathbf{d}_\perp$ (green), obtained via Gram--Schmidt orthogonalization. The angle $\theta$ satisfies $\cos\theta = \alpha$, directly encoding semantic relatedness as geometric proximity in the feature space. Dashed lines show the $\alpha$ and $\beta$ components along each axis.
+**Figure 1: Geometric Structure of Compositional Feature Directions.** The child feature direction $\mathbf{d}_\text{child}$ (orange) is a weighted sum of the parent direction $\mathbf{d}_\text{parent}$ (blue) and an orthogonal component $\mathbf{d}_\perp$ (green), obtained via Gram--Schmidt orthogonalization. The angle $\theta$ satisfies $\cos\theta = \alpha$, directly encoding semantic relatedness as geometric proximity in the feature space. Dashed lines show the $\alpha$ and $\beta$ components along each axis.
 
 ### 3.4 LLM-Generated Misalignment Hierarchies and Geometric Implementation
 
@@ -104,7 +99,7 @@ The resulting feature directions integrate directly into SynthSAEBench's hierarc
 
 ![LLM-Generated Deceptive Reasoning Hierarchy](figures/fig3.png)
 
-**Figure 3: LLM-Generated Deceptive Reasoning Hierarchy.** An example hierarchy produced by prompting an LLM to generate misalignment-related concept trees with semantic similarity coefficients $\alpha$ and conditional firing probabilities $p$. Each parent--child edge carries the LLM-assigned $\alpha$ value used to construct the child feature direction $\mathbf{d}_\text{child} = \alpha\mathbf{d}_\text{parent} + \beta\mathbf{d}_\perp$. Grandchildren inherit geometry transitively: "Reward Hacking" (violet) therefore contains directional overlap with both "Goal Misrepresentation" and "Deceptive Reasoning", correctly capturing compositional concept inheritance.
+**Figure 2: LLM-Generated Deceptive Reasoning Hierarchy.** An example hierarchy produced by prompting an LLM to generate misalignment-related concept trees with semantic similarity coefficients $\alpha$ and conditional firing probabilities $p$. Each parent--child edge carries the LLM-assigned $\alpha$ value used to construct the child feature direction $\mathbf{d}_\text{child} = \alpha\mathbf{d}_\text{parent} + \beta\mathbf{d}_\perp$. Grandchildren inherit geometry transitively: "Reward Hacking" (violet) therefore contains directional overlap with both "Goal Misrepresentation" and "Deceptive Reasoning", correctly capturing compositional concept inheritance.
 
 ### 3.5 Safety Research Applications
 
@@ -120,9 +115,23 @@ The semantic hierarchy approach enables several critical AI safety research dire
 
 ## 4. Results
 
+### Taxonomy and Semantic Dictionary
+
+The starting point is `feature_hierarchies/mitre_atlas_adversarial_ml.json`, a hand-authored semantic dictionary encoding the MITRE ATLAS adversarial machine learning threat taxonomy as a forest of concept trees. The file contains 13 root nodes --- one per ATLAS tactic, including *Adversarial Evasion*, *Data Poisoning*, *Model Extraction and Stealing*, and *Prompt Injection and LLM Exploitation* --- each heading a subtree of depth 2. Internal nodes represent tactic families (e.g. *Physical Domain Evasion*, *Digital Domain Evasion*) and leaves represent individual techniques (e.g. *Adversarial Patch*, *Black-Box Evasion*, *Stop Sign Attack*). Across all 13 trees the taxonomy defines 148 hierarchical feature slots, with individual tree sizes ranging from 10 to 13 nodes.
+
+Each node in the JSON carries a `label`, an `alpha` (\alpha) value specifying the desired cosine similarity between the node's feature vector and its parent's, a `beta` (\beta) value satisfying \alpha^2 + \beta^2 = 1, a `mutually_exclusive_children` flag indicating whether sibling features are treated as alternatives by the firing sampler, and a `children` array that recurses into the same schema. Root nodes are assigned \alpha = 0 and \beta = 1, meaning they have no inherited direction and are initialised as free unit vectors.
+
+### Synthetic Model Construction
+
+A `SyntheticModel` is instantiated with 512 features embedded in a 128-dimensional hidden space, giving a 4\times superposition ratio. Because the number of features exceeds the ambient dimensionality, the model cannot represent all features in an orthogonal basis and must instead place them in superposition --- an arrangement that mirrors the situation hypothesised for features in large language models. The model is seeded to be reproducible and configured with a `HierarchyConfig` pointing at the JSON taxonomy, which activates the semantic geometry initialiser.
+
+The initialiser traverses the JSON forest in depth-first order. For each parent--child edge it constructs the child's feature vector according to the rule *d*_child = \alpha\cdot*d*_parent + \beta \cdot \mathbf{d}_\perp, where \mathbf{d}_\perp is a unit vector in the subspace orthogonal to *d*_parent computed by Gram--Schmidt orthogonalisation. This guarantees cos(*d*_child, *d*_parent) = \alpha exactly, so the \alpha values in the JSON are not targets to be learned but rather geometric invariants enforced at initialisation time. The remaining 364 features not covered by the taxonomy are assigned mutually orthogonalised random unit vectors, filling the residual capacity of the hidden space as uniformly as the dimensionality allows.
+
+
+
 ![Cosine Similarity Heatmap](feature_hierarchies/visualizations/cosim_heatmap.png)
 
-**Figure.** Pairwise cosine similarity heatmap for SAE features organized into MITRE ATLAS taxonomy trees. Rows and columns correspond to the same set of features, ordered breadth-first within each tree (root, then level-1 children, then level-2 leaves). Colored rectangles outline level-1 subtree blocks. The pronounced columnar banding within each block reflects the shared parent-vector component inherited by sibling features under the same tactic node.
+**Figure 2.** Pairwise cosine similarity heatmap for SAE features organized into MITRE ATLAS taxonomy trees. Rows and columns correspond to the same set of features, ordered breadth-first within each tree (root, then level-1 children, then level-2 leaves). Colored rectangles outline level-1 subtree blocks. The pronounced columnar banding within each block reflects the shared parent-vector component inherited by sibling features under the same tactic node.
 
 ---
 
@@ -131,18 +140,6 @@ The semantic hierarchy approach enables several critical AI safety research dire
 The heatmap displays pairwise cosine similarities between SAE feature vectors organized according to MITRE ATLAS tactic hierarchies. Features within the same subtree share a common parent direction because each child feature is constructed as a linear combination of its parent vector and an orthogonal component: *d*_child = $\alpha\cdot$*d*_parent + $\beta \cdot \mathbf{d}_\perp$. As a result, any two siblings *i* and *j* under the same parent have cosine similarity with an arbitrary third feature *x* that is approximately equal --- cos(*d*_i, *x*) $\approx$ cos(*d*_j, *x*) --- since both are dominated by the same $\alpha\cdot$*d*_parent term. This makes entire columns within a subtree block appear nearly uniform in color, producing the characteristic vertical stripes visible inside the colored bounding boxes.
 
 The contrast between blocks of different colors illustrates the hierarchical structure at a coarser level. Features from different tactics have lower mutual similarities because their respective parent vectors are mutually orthogonal by construction, attenuating the shared-component effect across subtree boundaries. The columnar symmetry thus serves as a geometric fingerprint of the construction rule: the more features share ancestry, the more their similarity profiles with the rest of the matrix align, collapsing distinct rows into visually indistinguishable columns.
-
-### Taxonomy and Semantic Dictionary
-
-The starting point is `feature_hierarchies/mitre_atlas_adversarial_ml.json`, a hand-authored semantic dictionary encoding the MITRE ATLAS adversarial machine learning threat taxonomy as a forest of concept trees. The file contains 13 root nodes --- one per ATLAS tactic, including *Adversarial Evasion*, *Data Poisoning*, *Model Extraction and Stealing*, and *Prompt Injection and LLM Exploitation* --- each heading a subtree of depth 2. Internal nodes represent tactic families (e.g. *Physical Domain Evasion*, *Digital Domain Evasion*) and leaves represent individual techniques (e.g. *Adversarial Patch*, *Black-Box Evasion*, *Stop Sign Attack*). Across all 13 trees the taxonomy defines 148 hierarchical feature slots, with individual tree sizes ranging from 10 to 13 nodes.
-
-Each node in the JSON carries a `label`, an `alpha` ($\alpha$) value specifying the desired cosine similarity between the node's feature vector and its parent's, a `beta` ($\beta$) value satisfying $\alpha^2 + \beta^2 = 1$, a `mutually_exclusive_children` flag indicating whether sibling features are treated as alternatives by the firing sampler, and a `children` array that recurses into the same schema. Root nodes are assigned $\alpha = 0$ and $\beta = 1$, meaning they have no inherited direction and are initialised as free unit vectors.
-
-### Synthetic Model Construction
-
-A `SyntheticModel` is instantiated with 512 features embedded in a 128-dimensional hidden space, giving a 4$\times$ superposition ratio. Because the number of features exceeds the ambient dimensionality, the model cannot represent all features in an orthogonal basis and must instead place them in superposition --- an arrangement that mirrors the situation hypothesised for features in large language models. The model is seeded to be reproducible and configured with a `HierarchyConfig` pointing at the JSON taxonomy, which activates the semantic geometry initialiser.
-
-The initialiser traverses the JSON forest in depth-first order. For each parent--child edge it constructs the child's feature vector according to the rule *d*_child = $\alpha\cdot$*d*_parent + $\beta \cdot \mathbf{d}_\perp$, where $\mathbf{d}_\perp$ is a unit vector in the subspace orthogonal to *d*_parent computed by Gram--Schmidt orthogonalisation. This guarantees cos(*d*_child, *d*_parent) = $\alpha$ exactly, so the $\alpha$ values in the JSON are not targets to be learned but rather geometric invariants enforced at initialisation time. The remaining 364 features not covered by the taxonomy are assigned mutually orthogonalised random unit vectors, filling the residual capacity of the hidden space as uniformly as the dimensionality allows.
 
 ### Geometric Verification
 
@@ -187,11 +184,7 @@ The connection to the heatmaps is direct. The block-diagonal similarity structur
 
 ## 5. Discussion
 
-[Discussion section to be developed]
-
-## 6. Conclusion
-
-### 6.1 Implications for AI Safety Research
+### Implications for AI Safety Research
 
 The limitations of statistical versus semantic hierarchies carry significant implications for AI safety applications of sparse autoencoder research. Current synthetic evaluation frameworks enable testing of necessary but insufficient conditions for safety-relevant interpretability. We can reliably assess whether SAEs can detect rare but statistically structured patterns, which matters if scheming behaviors exhibit characteristic correlation signatures. The frameworks also allow evaluation of scaling behavior when dangerous features are sparse, robustness of detection mechanisms to feature correlations and hierarchical dependencies, and whether transfer learning approaches work effectively for statistical signatures of concerning behaviors.
 
@@ -202,8 +195,6 @@ For practical AI safety research, this analysis suggests using synthetic benchma
 This framework suggests a two-stage validation approach: first, demonstrate SAE capabilities on increasingly complex synthetic statistical structures to establish baseline competence, then validate these capabilities on real model activations with known safety-relevant semantic content. Only architectures that succeed at both stages should be considered reliable for safety-critical interpretability applications, ensuring that statistical decomposition capabilities translate to meaningful understanding of dangerous model behaviors.
 
 ## Acknowledgments
-
-[Acknowledgments section to be developed]
 
 ## References
 
