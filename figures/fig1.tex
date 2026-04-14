@@ -21,12 +21,12 @@
   \node[lvl2] (gecko) at (1.8,-4) {Gecko};
   \node[lvl2] (python) at (4.2,-4) {Python};
   \node[lvl3] (goldenret) at (-4.5,-6) {Golden\\Retriever};
-  \draw[->,>=Stealth] (animal) -- (mammal) node[lbl,midway,left=2pt] {$\alpha\!=\!0.8$};
-  \draw[->,>=Stealth] (animal) -- (reptile) node[lbl,midway,right=2pt] {$\alpha\!=\!0.5$};
-  \draw[->,>=Stealth] (mammal) -- (dog) node[lbl,midway,left=2pt] {$\alpha\!=\!0.7$};
-  \draw[->,>=Stealth] (mammal) -- (whale) node[lbl,midway,right=2pt] {$\alpha\!=\!0.6$};
-  \draw[->,>=Stealth] (reptile) -- (gecko) node[lbl,midway,left=2pt] {$\alpha\!=\!0.4$};
-  \draw[->,>=Stealth] (reptile) -- (python) node[lbl,midway,right=2pt] {$\alpha\!=\!0.5$};
-  \draw[->,>=Stealth] (dog) -- (goldenret) node[lbl,midway,left=2pt] {$\alpha\!=\!0.5$};
+  \draw[->,>=Stealth] (animal) -- (mammal);
+  \draw[->,>=Stealth] (animal) -- (reptile);
+  \draw[->,>=Stealth] (mammal) -- (dog);
+  \draw[->,>=Stealth] (mammal) -- (whale);
+  \draw[->,>=Stealth] (reptile) -- (gecko);
+  \draw[->,>=Stealth] (reptile) -- (python);
+  \draw[->,>=Stealth] (dog) -- (goldenret);
 \end{tikzpicture}
 \end{document}
