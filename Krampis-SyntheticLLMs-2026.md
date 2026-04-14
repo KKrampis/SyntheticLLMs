@@ -127,8 +127,6 @@ A `SyntheticModel` is instantiated with 512 features embedded in a 128-dimension
 
 The initialiser traverses the JSON forest in depth-first order. For each parent--child edge it constructs the child's feature vector according to the rule *d*_child = \alpha\cdot*d*_parent + \beta \cdot \mathbf{d}_\perp, where \mathbf{d}_\perp is a unit vector in the subspace orthogonal to *d*_parent computed by Gram--Schmidt orthogonalisation. This guarantees cos(*d*_child, *d*_parent) = \alpha exactly, so the \alpha values in the JSON are not targets to be learned but rather geometric invariants enforced at initialisation time. The remaining 364 features not covered by the taxonomy are assigned mutually orthogonalised random unit vectors, filling the residual capacity of the hidden space as uniformly as the dimensionality allows.
 
-
-
 ![Cosine Similarity Heatmap](feature_hierarchies/visualizations/cosim_heatmap.png)
 
 **Figure 2.** Pairwise cosine similarity heatmap for SAE features organized into MITRE ATLAS taxonomy trees. Rows and columns correspond to the same set of features, ordered breadth-first within each tree (root, then level-1 children, then level-2 leaves). Colored rectangles outline level-1 subtree blocks. The pronounced columnar banding within each block reflects the shared parent-vector component inherited by sibling features under the same tactic node.
