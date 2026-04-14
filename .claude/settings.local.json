@@ -27,7 +27,18 @@
       "Bash(pandoc \"Krampis-SyntheticLLMs-2026.md\" -t latex -o \"temp.tex\")",
       "Bash(grep -n \"\\$\\$\" temp.tex)",
       "Bash(pandoc \"Krampis-SyntheticLLMs-2026.md\" -o \"Krampis-SyntheticLLMs-2026.pdf\" --pdf-engine=pdflatex --include-in-header=\"latex_header.tex\" --variable=geometry:margin=1in)",
-      "mcp__zotero__search_items"
+      "mcp__zotero__search_items",
+      "Bash(git add Krampis-SyntheticLLMs-2026.md)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nFix math formulas with proper MathJax syntax in sections 2.1 and 2.2\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git push)",
+      "Bash(git pull)",
+      "Bash(git commit -m \"Update Claude settings\")",
+      "Bash(python create_hierarchy_figure.py)",
+      "Bash(python3 create_hierarchy_figure.py)",
+      "Bash(git add .)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nAdd Python script for creating hierarchical concept figure\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git commit -m \"Update manuscript formatting\")",
+      "Bash(git commit -m \"Minor text updates\")"
     ],
     "deny": [],
     "ask": []
