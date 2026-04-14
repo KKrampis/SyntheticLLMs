@@ -41,7 +41,9 @@
       "Bash(git commit -m \"Minor text updates\")",
       "Bash(git stash pop)",
       "Bash(git commit -m \"Update manuscript and Claude settings\")",
-      "Bash(git commit -m \"Break up mathematical proof into separate display equations for better readability\")"
+      "Bash(git commit -m \"Break up mathematical proof into separate display equations for better readability\")",
+      "Bash(git commit -m \"Move Figure 2 caption directly under the figure image\")",
+      "Bash(git commit -m \"Fix formatting and spacing\")"
     ],
     "deny": [],
     "ask": []
