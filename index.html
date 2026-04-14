@@ -300,22 +300,6 @@ necessary and sufficient for interpretability transfer</td>
 </tr>
 </tbody>
 </table>
-<figure>
-<img src="figures/fig1.png"
-alt="Semantic Feature Taxonomy: Geometric Embedding" />
-<figcaption aria-hidden="true">Semantic Feature Taxonomy: Geometric
-Embedding</figcaption>
-</figure>
-<p><strong>Figure 1: Semantic Feature Taxonomy.</strong> Each
-parent–child edge carries a semantic similarity coefficient <span
-class="math inline"><em>α</em></span> used to construct the child
-feature direction <span
-class="math inline"><strong>d</strong><sub>child</sub> = <em>α</em><strong>d</strong><sub>parent</sub> + <em>β</em><strong>d</strong><sub>⊥</sub></span>.
-Root concepts (blue) spawn child concepts (green) and grandchild
-concepts (violet/orange) with progressively specialized feature
-directions. The <span class="math inline"><em>α</em></span> values
-encode how much of the parent representation is inherited, making
-semantic relatedness a geometric property of the feature space.</p>
 <h2 id="related-work">1. Related Work</h2>
 <p>Sparse autoencoders have emerged as a powerful tool for decomposing
 neural network activations into interpretable features, yet measuring
@@ -587,8 +571,7 @@ inner product after normalization:</p>
 &amp;= \alpha \underbrace{(\mathbf{d}_{\text{parent}}^T
 \mathbf{d}_{\text{parent}})}_{=1} + \beta
 \underbrace{(\mathbf{d}_\perp^T \mathbf{d}_{\text{parent}})}_{=0} \\
-&amp;= \alpha
-\end{aligned}$$</span></p>
+&amp;= \alpha\end{aligned}$$</span></p>
 <p>This creates testable predictions: SAEs that successfully decompose
 these features should discover latents where decoder directions for
 child features have high cosine similarity with decoder directions for
@@ -601,7 +584,7 @@ alt="Geometric Structure of Compositional Feature Directions" />
 <figcaption aria-hidden="true">Geometric Structure of Compositional
 Feature Directions</figcaption>
 </figure>
-<p><strong>Figure 2: Geometric Structure of Compositional Feature
+<p><strong>Figure 1: Geometric Structure of Compositional Feature
 Directions.</strong> The child feature direction <span
 class="math inline"><strong>d</strong><sub>child</sub></span> (orange)
 is a weighted sum of the parent direction <span
@@ -664,7 +647,7 @@ alt="LLM-Generated Deceptive Reasoning Hierarchy" />
 <figcaption aria-hidden="true">LLM-Generated Deceptive Reasoning
 Hierarchy</figcaption>
 </figure>
-<p><strong>Figure 3: LLM-Generated Deceptive Reasoning
+<p><strong>Figure 2: LLM-Generated Deceptive Reasoning
 Hierarchy.</strong> An example hierarchy produced by prompting an LLM to
 generate misalignment-related concept trees with semantic similarity
 coefficients <span class="math inline"><em>α</em></span> and conditional
@@ -711,12 +694,65 @@ matched to these features actually prevents the corresponding behavior
 in downstream tasks—providing principled validation that
 interpretability interventions have the intended causal effect.</p>
 <h2 id="results">4. Results</h2>
+<h3 id="taxonomy-and-semantic-dictionary">Taxonomy and Semantic
+Dictionary</h3>
+<p>The starting point is
+<code>feature_hierarchies/mitre_atlas_adversarial_ml.json</code>, a
+hand-authored semantic dictionary encoding the MITRE ATLAS adversarial
+machine learning threat taxonomy as a forest of concept trees. The file
+contains 13 root nodes — one per ATLAS tactic, including <em>Adversarial
+Evasion</em>, <em>Data Poisoning</em>, <em>Model Extraction and
+Stealing</em>, and <em>Prompt Injection and LLM Exploitation</em> — each
+heading a subtree of depth 2. Internal nodes represent tactic families
+(e.g. <em>Physical Domain Evasion</em>, <em>Digital Domain Evasion</em>)
+and leaves represent individual techniques (e.g. <em>Adversarial
+Patch</em>, <em>Black-Box Evasion</em>, <em>Stop Sign Attack</em>).
+Across all 13 trees the taxonomy defines 148 hierarchical feature slots,
+with individual tree sizes ranging from 10 to 13 nodes.</p>
+<p>Each node in the JSON carries a <code>label</code>, an
+<code>alpha</code> (<span class="math inline"><em>α</em></span>) value
+specifying the desired cosine similarity between the node’s feature
+vector and its parent’s, a <code>beta</code> (<span
+class="math inline"><em>β</em></span>) value satisfying <span
+class="math inline"><em>α</em><sup>2</sup> + <em>β</em><sup>2</sup> = 1</span>,
+a <code>mutually_exclusive_children</code> flag indicating whether
+sibling features are treated as alternatives by the firing sampler, and
+a <code>children</code> array that recurses into the same schema. Root
+nodes are assigned <span class="math inline"><em>α</em> = 0</span> and
+<span class="math inline"><em>β</em> = 1</span>, meaning they have no
+inherited direction and are initialised as free unit vectors.</p>
+<h3 id="synthetic-model-construction">Synthetic Model Construction</h3>
+<p>A <code>SyntheticModel</code> is instantiated with 512 features
+embedded in a 128-dimensional hidden space, giving a <span
+class="math inline">4×</span> superposition ratio. Because the number of
+features exceeds the ambient dimensionality, the model cannot represent
+all features in an orthogonal basis and must instead place them in
+superposition — an arrangement that mirrors the situation hypothesised
+for features in large language models. The model is seeded to be
+reproducible and configured with a <code>HierarchyConfig</code> pointing
+at the JSON taxonomy, which activates the semantic geometry
+initialiser.</p>
+<p>The initialiser traverses the JSON forest in depth-first order. For
+each parent–child edge it constructs the child’s feature vector
+according to the rule <span
+class="math inline"><strong>d</strong><sub>child</sub> = <em>α</em> ⋅ <strong>d</strong><sub>parent</sub> + <em>β</em> ⋅ <strong>d</strong><sub>⊥</sub></span>,
+where <span class="math inline"><strong>d</strong><sub>⊥</sub></span> is
+a unit vector in the subspace orthogonal to <span
+class="math inline"><strong>d</strong><sub>parent</sub></span> computed
+by Gram–Schmidt orthogonalisation. This guarantees <span
+class="math inline">cos (<strong>d</strong><sub>child</sub>,<strong>d</strong><sub>parent</sub>) = <em>α</em></span>
+exactly, so the <span class="math inline"><em>α</em></span> values in
+the JSON are not targets to be learned but rather geometric invariants
+enforced at initialisation time. The remaining 364 features not covered
+by the taxonomy are assigned mutually orthogonalised random unit
+vectors, filling the residual capacity of the hidden space as uniformly
+as the dimensionality allows.</p>
 <figure>
 <img src="feature_hierarchies/visualizations/cosim_heatmap.png"
 alt="Cosine Similarity Heatmap" />
 <figcaption aria-hidden="true">Cosine Similarity Heatmap</figcaption>
 </figure>
-<p><strong>Figure.</strong> Pairwise cosine similarity heatmap for SAE
+<p><strong>Figure 2.</strong> Pairwise cosine similarity heatmap for SAE
 features organized into MITRE ATLAS taxonomy trees. Rows and columns
 correspond to the same set of features, ordered breadth-first within
 each tree (root, then level-1 children, then level-2 leaves). Colored
@@ -751,59 +787,6 @@ thus serves as a geometric fingerprint of the construction rule: the
 more features share ancestry, the more their similarity profiles with
 the rest of the matrix align, collapsing distinct rows into visually
 indistinguishable columns.</p>
-<h3 id="taxonomy-and-semantic-dictionary">Taxonomy and Semantic
-Dictionary</h3>
-<p>The starting point is
-<code>feature_hierarchies/mitre_atlas_adversarial_ml.json</code>, a
-hand-authored semantic dictionary encoding the MITRE ATLAS adversarial
-machine learning threat taxonomy as a forest of concept trees. The file
-contains 13 root nodes — one per ATLAS tactic, including <em>Adversarial
-Evasion</em>, <em>Data Poisoning</em>, <em>Model Extraction and
-Stealing</em>, and <em>Prompt Injection and LLM Exploitation</em> — each
-heading a subtree of depth 2. Internal nodes represent tactic families
-(e.g. <em>Physical Domain Evasion</em>, <em>Digital Domain Evasion</em>)
-and leaves represent individual techniques (e.g. <em>Adversarial
-Patch</em>, <em>Black-Box Evasion</em>, <em>Stop Sign Attack</em>).
-Across all 13 trees the taxonomy defines 148 hierarchical feature slots,
-with individual tree sizes ranging from 10 to 13 nodes.</p>
-<p>Each node in the JSON carries a <code>label</code>, an
-<code>alpha</code> (<span class="math inline"><em>α</em></span>) value
-specifying the desired cosine similarity between the node’s feature
-vector and its parent’s, a <code>beta</code> (<span
-class="math inline"><em>β</em></span>) value satisfying <span
-class="math inline"><em>α</em><sup>2</sup> + <em>β</em><sup>2</sup> = 1</span>,
-a <code>mutually_exclusive_children</code> flag indicating whether
-sibling features are treated as alternatives by the firing sampler, and
-a <code>children</code> array that recurses into the same schema. Root
-nodes are assigned <span class="math inline"><em>α</em> = 0</span> and
-<span class="math inline"><em>β</em> = 1</span>, meaning they have no
-inherited direction and are initialised as free unit vectors.</p>
-<h3 id="synthetic-model-construction">Synthetic Model Construction</h3>
-<p>A <code>SyntheticModel</code> is instantiated with 512 features
-embedded in a 128-dimensional hidden space, giving a 4<span
-class="math inline">×</span> superposition ratio. Because the number of
-features exceeds the ambient dimensionality, the model cannot represent
-all features in an orthogonal basis and must instead place them in
-superposition — an arrangement that mirrors the situation hypothesised
-for features in large language models. The model is seeded to be
-reproducible and configured with a <code>HierarchyConfig</code> pointing
-at the JSON taxonomy, which activates the semantic geometry
-initialiser.</p>
-<p>The initialiser traverses the JSON forest in depth-first order. For
-each parent–child edge it constructs the child’s feature vector
-according to the rule <em>d</em>_child = <span
-class="math inline"><em>α</em>⋅</span><em>d</em>_parent + <span
-class="math inline"><em>β</em> ⋅ <strong>d</strong><sub>⊥</sub></span>,
-where <span class="math inline"><strong>d</strong><sub>⊥</sub></span> is
-a unit vector in the subspace orthogonal to <em>d</em>_parent computed
-by Gram–Schmidt orthogonalisation. This guarantees cos(<em>d</em>_child,
-<em>d</em>_parent) = <span class="math inline"><em>α</em></span>
-exactly, so the <span class="math inline"><em>α</em></span> values in
-the JSON are not targets to be learned but rather geometric invariants
-enforced at initialisation time. The remaining 364 features not covered
-by the taxonomy are assigned mutually orthogonalised random unit
-vectors, filling the residual capacity of the hidden space as uniformly
-as the dimensionality allows.</p>
 <h3 id="geometric-verification">Geometric Verification</h3>
 <p>Before any training, the notebook verifies the constructed geometry
 numerically by iterating over all 135 parent–child pairs in the
@@ -975,10 +958,8 @@ have large mixing coefficients will show more tightly clustered blocks
 in the heatmap and correspondingly lower precision in the SAE recovery
 metrics.</p>
 <h2 id="discussion">5. Discussion</h2>
-<p>[Discussion section to be developed]</p>
-<h2 id="conclusion">6. Conclusion</h2>
-<h3 id="implications-for-ai-safety-research">6.1 Implications for AI
-Safety Research</h3>
+<h3 id="implications-for-ai-safety-research">Implications for AI Safety
+Research</h3>
 <p>The limitations of statistical versus semantic hierarchies carry
 significant implications for AI safety applications of sparse
 autoencoder research. Current synthetic evaluation frameworks enable
@@ -1020,7 +1001,6 @@ be considered reliable for safety-critical interpretability
 applications, ensuring that statistical decomposition capabilities
 translate to meaningful understanding of dangerous model behaviors.</p>
 <h2 id="acknowledgments">Acknowledgments</h2>
-<p>[Acknowledgments section to be developed]</p>
 <h2 id="references">References</h2>
 <div id="refs" class="references csl-bib-body" role="list">
 <div id="ref-karvonen_saebench_2025" class="csl-entry" role="listitem">
