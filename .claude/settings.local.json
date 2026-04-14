@@ -36,7 +36,9 @@
       "Bash(python create_hierarchy_figure.py)",
       "Bash(python3 create_hierarchy_figure.py)",
       "Bash(git add .)",
-      "Bash(git commit -m \"$(cat <<''EOF''\nAdd Python script for creating hierarchical concept figure\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")"
+      "Bash(git commit -m \"$(cat <<''EOF''\nAdd Python script for creating hierarchical concept figure\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git commit -m \"Update manuscript formatting\")",
+      "Bash(git commit -m \"Minor text updates\")"
     ],
     "deny": [],
     "ask": []
