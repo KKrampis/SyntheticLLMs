@@ -15,7 +15,19 @@
       "Bash(git commit -m \"$(cat <<''EOF''\nUpdate Claude settings and add new markdown content\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
       "Bash(git add .claude/settings.local.json)",
       "Bash(git commit -m \"$(cat <<''EOF''\nUpdate Claude settings configuration\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
-      "Bash(git checkout claude/github-pages-reveal-js-QCbwc)"
+      "Bash(git checkout claude/github-pages-reveal-js-QCbwc)",
+      "Bash(git add -A)",
+      "Bash(git commit -m \"Temporary commit before subtree update\")",
+      "Bash(git subtree pull --prefix=feature_hierarchies/ feature-hierarchies-remote main --squash)",
+      "Bash(pandoc --version)",
+      "Bash(pandoc \"Krampis-SyntheticLLMs-2026.md\" -o \"Krampis-SyntheticLLMs-2026.pdf\" --pdf-engine=pdflatex --variable=geometry:margin=1in)",
+      "Bash(pandoc \"Krampis-SyntheticLLMs-2026.md\" -o \"Krampis-SyntheticLLMs-2026.pdf\" --pdf-engine=pdflatex --include-in-header=\"latex_header.tex\" --variable=geometry:margin=1in --variable=fontsize:11pt)",
+      "Bash(pandoc --list-engines)",
+      "Bash(pandoc \"Krampis-SyntheticLLMs-2026.md\" -o \"Krampis-SyntheticLLMs-2026.pdf\" --pdf-engine=xelatex --include-in-header=\"latex_header.tex\" --variable=geometry:margin=1in)",
+      "Bash(pandoc \"Krampis-SyntheticLLMs-2026.md\" -t latex -o \"temp.tex\")",
+      "Bash(grep -n \"\\$\\$\" temp.tex)",
+      "Bash(pandoc \"Krampis-SyntheticLLMs-2026.md\" -o \"Krampis-SyntheticLLMs-2026.pdf\" --pdf-engine=pdflatex --include-in-header=\"latex_header.tex\" --variable=geometry:margin=1in)",
+      "mcp__zotero__search_items"
     ],
     "deny": [],
     "ask": []
