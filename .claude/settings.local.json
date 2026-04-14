@@ -32,7 +32,10 @@
       "Bash(git commit -m \"$(cat <<''EOF''\nFix math formulas with proper MathJax syntax in sections 2.1 and 2.2\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
       "Bash(git push)",
       "Bash(git pull)",
-      "Bash(git commit -m \"Update Claude settings\")"
+      "Bash(git commit -m \"Update Claude settings\")",
+      "Bash(python create_hierarchy_figure.py)",
+      "Bash(python3 create_hierarchy_figure.py)",
+      "Bash(git add .)"
     ],
     "deny": [],
     "ask": []

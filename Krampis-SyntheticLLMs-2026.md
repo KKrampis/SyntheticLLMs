@@ -37,7 +37,7 @@ The integration of these evaluation methods has revealed that SAE quality is irr
 
 ### 2.1 Hierarchical Feature Structure in Synthetic Models
 
-Our methodology builds upon the SynthSAEBench framework [@chanin_synthsaebench_2026], where the synthetic models are implemented using a hierarchical, parent-child tree feature structure, containing a forest of 128 trees with branching factor 4 and maximum depth 3, encompassing a realistic mix of 10,884 features subject to conceptual constraints alongside 5,500 independent features. The tree structure follows a balanced branching pattern: 128 root features at depth 0, 512 features at depth 1, 2,048 at depth 2, and 8,192 leaf features at depth 3. This distribution models how natural language concepts organize from broad categories (for example "animal") through intermediate levels ("mammal", "dog") to specific instantiations ("golden retriever"), providing a controlled testbed for evaluating whether SAEs can recover structure embedded in neural representations.
+Our methodology builds upon the SynthSAEBench framework [@chanin_synthsaebench_2026], where the synthetic models are implemented using a hierarchical, parent-child tree feature structure, containing a forest of 128 trees with branching factor 4 and maximum depth 3, encompassing a realistic mix of 10,884 features subject to conceptual constraints alongside 5,500 independent features. The tree structure follows a balanced branching pattern: 128 root features at depth 0, 512 features at depth 1, 2,048 at depth 2, and 8,192 leaf features at depth 3 ( **Figure 1.**). This distribution models how natural language concepts organize from broad categories (for example "animal") through intermediate levels ("mammal", "dog") to specific instantiations ("golden retriever"), providing a controlled testbed for evaluating whether SAEs can recover structure embedded in neural representations.
 
 This totals in $N = 16,384$ ground-truth features, which are placed in a $D = 768$-dimensional activation space. Each feature $i$ is represented by a unit direction vector $\mathbf{d}_i \in \mathbb{R}^{768}$, created through random sampling from a standard normal distribution followed by L2 normalization: $\mathbf{d}_i = \mathbf{g}_i / \|\mathbf{g}_i\|_2$ where $\mathbf{g}_i \sim \mathcal{N}(0, I_{768})$. To reduce spurious correlations, these direction vectors undergo an orthogonalization process that minimizes $L_{ortho} = \sum_{i \neq j} (\mathbf{d}_i^T \mathbf{d}_j)^2 + \lambda \sum_i (\|\mathbf{d}_i\|_2 - 1)^2$, pushing vectors toward orthogonality while maintaining unit length.
 
@@ -45,7 +45,7 @@ Furthermore, to model realistic feature co-occurrence patterns while maintaining
 
 ### 2.2 Feature Dictionary, Correlation and Activation Structure
 
-Furthermore, our methodology generates large-scale synthetic activation data with realistic neural network feature characteristics, by incorporating three critical phenomena observed in real neural networks: superposition, correlation and hierarchical structure.
+Our methodology generates large-scale synthetic activation data with realistic neural network feature characteristics, by incorporating three critical phenomena observed in real neural networks: superposition, correlation and hierarchical structure.
 
 To achieve this the tree structure dependencies enforce also feature activation constraints $c$ based on $c_{child} \leftarrow c_{child} \cdot \mathbf{1}[c_{parent} > 0]$. The hierarchical structure implements realistic concept taxonomies where child features can only activate when their parent features are active, mimicking how abstract concepts enable more specific subcategories [@chanin_synthsaebench_2026]. The enforcement algorithm processes constraints level-by-level from roots to leaves: for each node with parent index $parent_{idx}$ and child index $child_{idx}$, if $c_{parent_{idx}} = 0$ then $c_{child_{idx}} = 0$. Additionally, a mutual exclusion rule among siblings ensures that only one child within a sibling group can fire simultaneously, creating competitive dynamics that reflect real-world concept relationships.
 
@@ -82,7 +82,7 @@ This creates testable predictions: SAEs that successfully decompose these featur
 
 ![Geometric Structure of Compositional Feature Directions](figures/fig2.png)
 
-**Figure 1: Geometric Structure of Compositional Feature Directions.** The child feature direction $\mathbf{d}_\text{child}$ (orange) is a weighted sum of the parent direction $\mathbf{d}_\text{parent}$ (blue) and an orthogonal component $\mathbf{d}_\perp$ (green), obtained via Gram--Schmidt orthogonalization. The angle $\theta$ satisfies $\cos\theta = \alpha$, directly encoding semantic relatedness as geometric proximity in the feature space. Dashed lines show the $\alpha$ and $\beta$ components along each axis.
+**Figure 2: Geometric Structure of Compositional Feature Directions.** The child feature direction $\mathbf{d}_\text{child}$ (orange) is a weighted sum of the parent direction $\mathbf{d}_\text{parent}$ (blue) and an orthogonal component $\mathbf{d}_\perp$ (green), obtained via Gram--Schmidt orthogonalization. The angle $\theta$ satisfies $\cos\theta = \alpha$, directly encoding semantic relatedness as geometric proximity in the feature space. Dashed lines show the $\alpha$ and $\beta$ components along each axis.
 
 ### 3.4 LLM-Generated Misalignment Hierarchies and Geometric Implementation
 
@@ -94,7 +94,7 @@ The resulting feature directions integrate directly into SynthSAEBench's hierarc
 
 ![LLM-Generated Deceptive Reasoning Hierarchy](figures/fig3.png)
 
-**Figure 2: LLM-Generated Deceptive Reasoning Hierarchy.** An example hierarchy produced by prompting an LLM to generate misalignment-related concept trees with semantic similarity coefficients $\alpha$ and conditional firing probabilities $p$. Each parent--child edge carries the LLM-assigned $\alpha$ value used to construct the child feature direction $\mathbf{d}_\text{child} = \alpha\mathbf{d}_\text{parent} + \beta\mathbf{d}_\perp$. Grandchildren inherit geometry transitively: "Reward Hacking" (violet) therefore contains directional overlap with both "Goal Misrepresentation" and "Deceptive Reasoning", correctly capturing compositional concept inheritance.
+**Figure 3: LLM-Generated Deceptive Reasoning Hierarchy.** An example hierarchy produced by prompting an LLM to generate misalignment-related concept trees with semantic similarity coefficients $\alpha$ and conditional firing probabilities $p$. Each parent--child edge carries the LLM-assigned $\alpha$ value used to construct the child feature direction $\mathbf{d}_\text{child} = \alpha\mathbf{d}_\text{parent} + \beta\mathbf{d}_\perp$. Grandchildren inherit geometry transitively: "Reward Hacking" (violet) therefore contains directional overlap with both "Goal Misrepresentation" and "Deceptive Reasoning", correctly capturing compositional concept inheritance.
 
 ### 3.5 Safety Research Applications
 
