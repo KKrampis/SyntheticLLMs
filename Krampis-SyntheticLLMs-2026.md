@@ -39,7 +39,7 @@ The integration of these evaluation methods has revealed that SAE quality is irr
 
 Our methodology builds upon the SynthSAEBench framework [@chanin_synthsaebench_2026], where the synthetic models are implemented using a hierarchical, parent-child tree feature structure, containing a forest of 128 trees with branching factor 4 and maximum depth 3, encompassing a realistic mix of 10,884 features subject to conceptual constraints alongside 5,500 independent features. The tree structure follows a balanced branching pattern: 128 root features at depth 0, 512 features at depth 1, 2,048 at depth 2, and 8,192 leaf features at depth 3 ( **Figure 1.**). This distribution models how natural language concepts organize from broad categories (for example "animal") through intermediate levels ("mammal", "dog") to specific instantiations ("golden retriever"), providing a controlled testbed for evaluating whether SAEs can recover structure embedded in neural representations.
 
-![Natural Language Concept Hierarchy Encoded as Geometric Feature Directions](figures/fig1.png)
+![Natural Language Concept Hierarchy Encoded as Geometric Feature Directions](https://kkrampis.github.io/SyntheticLLMs/figures/fig1.png)
 
 **Figure 1: Natural Language Concept Hierarchy.** Features are organized as a tree where each edge carries a cosine-similarity coefficient $\alpha$ encoding semantic relatedness as geometric proximity. Root concepts (blue) such as "Animal" spawn intermediate nodes (green) such as "Mammal" and "Reptile", which in turn produce leaf concepts (violet/orange) such as "Dog", "Whale", and ultimately "Golden Retriever". This hierarchical distribution models how natural language concepts organize from broad categories through intermediate levels to specific instantiations, providing a controlled testbed for evaluating whether SAEs can recover compositional structure embedded in neural representations.
 
@@ -57,8 +57,6 @@ Furthermore, the activation generation follows the linear superposition model wh
 
 In both real and synthetic models, superposition arises naturally when the number of features (in our case, $N = 16,384$) exceeds the activation dimensionality ($D = 768$), forcing features to share representational space. The degree of feature interference scales approximately as $O(1/\sqrt{D})$ with increasing dimensionality, while growing with the number of packed features. This superposition creates fundamental ambiguity in activation interpretation: an example activation vector $\mathbf{a} = [1.9, 0.436]$ could arise from multiple coefficient combinations when features overlap significantly, such as $c_1=1, c_2=1$ versus $c_1=2, c_2=0$ for features with directions $\mathbf{d}_1 = [1, 0]$ and $\mathbf{d}_2 = [0.9, 0.436]$. The superposition overlap is quantified using Mean Max Cosine Similarity: $\rho_{mm} = \frac{1}{N} \sum_{i=1}^N \max_{j \neq i} |\mathbf{d}_i^T \mathbf{d}_j|$, where $\rho_{mm} \approx 0.15$ indicates moderate superposition in the standard benchmark.
 
-
-
 ## 3. Experimental Setup
 
 ### 3.1 Structure Limitations in Representation Spaces of Synthetic Models
@@ -75,21 +73,13 @@ Given the fundamental paradox that creating semantically meaningful synthetic fe
 
 ### 3.3 Compositional Feature Directions with Semantical Constraints
 
-Next, we introduce semantics of knowledge in the hierarchical structure of the synthetic models, by modifying how feature direction vectors are constructed. Our approach is making child feature directions compositionally dependent on their parent and own offspring directions, rather than being independent random vectors. When constructing a hierarchical feature tree, we define each child feature direction as $\mathbf{d}_{child} = \alpha \cdot \mathbf{d}_{parent} + \beta \cdot \mathbf{d}_{\perp}$, where $\mathbf{d}_{parent}$ is the parent's direction vector, $\mathbf{d}_{\perp}$ is a component orthogonal to the parent representing the specialization of the child concept, and $\alpha, \beta$ are mixing coefficients that control how much of the parent's representation is inherited.
-
-
+We introduce semantics of knowledge in the hierarchical structure of the synthetic models, by modifying how feature direction vectors are constructed. Our approach is making child feature directions compositionally dependent on their parent directions, rather than being independent random vectors. When constructing a hierarchical feature tree, we define each child feature direction as $\mathbf{d}_{child} = \alpha \cdot \mathbf{d}_{parent} + \beta \cdot \mathbf{d}_{\perp}$, where $\mathbf{d}_{parent}$ is the parent's direction vector, $\mathbf{d}_{\perp}$ is a component orthogonal to the parent representing the specialization of the child concept, and $\alpha, \beta$ are mixing coefficients that control how much of the parent's representation is inherited. The coefficient \beta controls how much orthogonal specialization enters the final child direction---a large \beta relative to \alpha means the child direction tilts strongly toward its unique subspace, while a small \beta means the child remains closely aligned with the parent direction (**Figure 2.**). Furthermore, when we set $\alpha > 0$, we create non-zero cosine similarity between parent and child feature directions. This approach, creates a genuine compositional structure, where containing child features and respectively their activations, literally contain components of parent features in their vector representations.
 
 ![Geometric Structure of Compositional Feature Directions](figures/fig2.png)
 
 **Figure 2: Geometric Structure of Compositional Feature Directions.** The child feature direction $\mathbf{d}_\text{child}$ (orange) is a weighted sum of the parent direction $\mathbf{d}_\text{parent}$ (blue) and an orthogonal component $\mathbf{d}_\perp$ (green), obtained via Gram--Schmidt orthogonalization. The angle $\theta$ satisfies $\cos\theta = \alpha$, directly encoding semantic relatedness as geometric proximity in the feature space. Dashed lines show the $\alpha$ and $\beta$ components along each axis.
 
-
-
-To obtain the orthogonal component $\mathbf{d}_{\perp}$, we employ Gram-Schmidt orthogonalization starting with a random vector $\mathbf{v}$ and subtracting its projection onto the parent direction: $\mathbf{d}_{\perp} = \mathbf{v} - (\mathbf{v} \cdot \mathbf{d}_{parent}) \mathbf{d}_{parent}$. The coefficient $\beta$ controls how much orthogonal specialization enters the final child direction---a large $\beta$ relative to $\alpha$ means the child direction tilts strongly toward its unique subspace, while a small $\beta$ means the child remains closely aligned with the parent direction (**Figure 2.**). This creates a genuine compositional structure, where containing child features and respectively their activations, literally contain components of parent features in their vector representations.
-
-
-
-Our theoretical foundation rests on semantic relatedness of concepts encoded in the synthetic model, stemming from the relationship of the concepts drawn from real-world knowledge, encoded as geometric structure in representation space. Furthermore, when we set $\alpha > 0$, we create non-zero cosine similarity between parent and child feature directions. Expanding the inner product after normalization:
+Our theoretical foundation rests on semantic relatedness of concepts, stemming from their ontological relationship drawn from real-world knowledge, and through this formalization we encode them as geometric structure in representation space. To obtain the orthogonal component $\mathbf{d}_{\perp}$, we employ Gram-Schmidt orthogonalization starting with a random vector $\mathbf{v}$ and subtracting its projection onto the parent direction: $\mathbf{d}_{\perp} = \mathbf{v} - (\mathbf{v} \cdot \mathbf{d}_{parent}) \mathbf{d}_{parent}$.  . Expanding the inner product after normalization:
 
 $$\mathbf{d}_{\text{child}}^T \mathbf{d}_{\text{parent}} = (\alpha \cdot \mathbf{d}_{\text{parent}} + \beta \cdot \mathbf{d}_\perp)^T \mathbf{d}_{\text{parent}}$$
 
@@ -97,21 +87,19 @@ $$= \alpha \underbrace{(\mathbf{d}_{\text{parent}}^T \mathbf{d}_{\text{parent}})
 
 $$= \alpha$$
 
+<!--
+
 With this approach, our overarching goal is to test whether SAEs can  successfully decompose these features, and discover the latents where in synthetic models the directions for child features have high cosine similarity with directions for parent features. Furthermore, due to the ease of adjusting the composition of the synthetic models, performing interventions that ablate parent features we can assess whether these impair reconstruction of child features due to the inheritance when compared to unrelated features.
 
-
+-->
 
 ### 3.4 Semantic encoding of AI Safety Hierarchies in Representation Space
 
-Our experimental pipeline leverages large language models to generate interpretable concept hierarchies with explicit semantic similarity values, then translates these into geometric constraints within the synthetic framework. In the first step, we prompt an LLM to produce a tree of misalignment-related concepts with "Deceptive Reasoning" as a root, children like "Goal Misrepresentation" and "Information Withholding," and grandchildren such as "Reward Hacking" and "Sycophantic Agreement." Critically, we ask the LLM to assign an $\alpha$ value to each parent-child edge encoding its judgment of semantic similarity---"Reward Hacking" might receive $\alpha = 0.4$ from "Goal Misrepresentation" since it represents a specific instantiation, while "Goal Misrepresentation" might receive $\alpha = 0.7$ from "Deceptive Reasoning" as a direct sub-case.
+Our experiment leverages large language models to generate interpretable concept hierarchies with explicit semantic similarity values, then translates these into geometric constraints within the synthetic framework. In the first step, we prompt an LLM to produce a tree of misalignment-related concepts with "Deceptive Reasoning" as a root, children like "Goal Misrepresentation" and "Information Withholding," and grandchildren such as "Reward Hacking" and "Sycophantic Agreement." Critically, we ask the LLM to assign an $\alpha$ value to each parent-child edge encoding its judgment of semantic similarity---"Reward Hacking" might receive $\alpha = 0.4$ from "Goal Misrepresentation" since it represents a specific instantiation, while "Goal Misrepresentation" might receive $\alpha = 0.7$ from "Deceptive Reasoning" as a direct sub-case.
 
 In the second step, we translate the tree into feature directions by starting at the root with a random unit vector $\mathbf{d}_{root}$ and recursively computing child directions using the compositional formula. The mixing coefficient $\beta$ is derived from $\alpha$ to achieve the specified cosine similarity after normalization. Grandchildren inherit geometric structure transitively from both parents and grandparents---"Reward Hacking" contains directional overlap with both "Goal Misrepresentation" and "Deceptive Reasoning," capturing the correct semantic property of compositional concept inheritance.
 
 The resulting feature directions integrate directly into SynthSAEBench's hierarchy mechanism, where the parent firing-probability constraint $c_{child} \leftarrow c_{child} \cdot \mathbf{1}[c_{parent} > 0]$ enforces statistical dependencies while the geometric construction ensures that hidden activations for child concept samples literally contain components pointing toward parent concept directions. This enables precise diagnostic evaluation: we can test whether SAEs learn latents whose decoder directions maintain high cosine similarity with ground-truth concept directions, whether ablating latents aligned with "Deceptive Reasoning" impairs reconstruction of "Reward Hacking" more than unrelated features, and whether SAEs correctly split hierarchies or inappropriately absorb child concepts into parent latents.
-
-![LLM-Generated Deceptive Reasoning Hierarchy](figures/fig3.png)
-
-**Figure 3: LLM-Generated Deceptive Reasoning Hierarchy.** An example hierarchy produced by prompting an LLM to generate misalignment-related concept trees with semantic similarity coefficients $\alpha$ and conditional firing probabilities $p$. Each parent--child edge carries the LLM-assigned $\alpha$ value used to construct the child feature direction $\mathbf{d}_\text{child} = \alpha\mathbf{d}_\text{parent} + \beta\mathbf{d}_\perp$. Grandchildren inherit geometry transitively: "Reward Hacking" (violet) therefore contains directional overlap with both "Goal Misrepresentation" and "Deceptive Reasoning", correctly capturing compositional concept inheritance.
 
 ### 3.5 Safety Research Applications
 
@@ -127,13 +115,17 @@ The semantic hierarchy approach enables several critical AI safety research dire
 
 ## 4. Results
 
-### Taxonomy and Semantic Dictionary
+### 4.1 Taxonomy and Semantic Dictionary
+
+![LLM-Generated Deceptive Reasoning Hierarchy](https://kkrampis.github.io/SyntheticLLMs/figures/fig3.png)
+
+**Figure 3: LLM-Generated Deceptive Reasoning Hierarchy.** An example hierarchy produced by prompting an LLM to generate misalignment-related concept trees with semantic similarity coefficients $\alpha$ and conditional firing probabilities $p$. Each parent--child edge carries the LLM-assigned $\alpha$ value used to construct the child feature direction $\mathbf{d}_\text{child} = \alpha\mathbf{d}_\text{parent} + \beta\mathbf{d}_\perp$. Grandchildren inherit geometry transitively: "Reward Hacking" (violet) therefore contains directional overlap with both "Goal Misrepresentation" and "Deceptive Reasoning", correctly capturing compositional concept inheritance.
 
 The starting point is `feature_hierarchies/mitre_atlas_adversarial_ml.json`, a hand-authored semantic dictionary encoding the MITRE ATLAS adversarial machine learning threat taxonomy as a forest of concept trees. The file contains 13 root nodes --- one per ATLAS tactic, including *Adversarial Evasion*, *Data Poisoning*, *Model Extraction and Stealing*, and *Prompt Injection and LLM Exploitation* --- each heading a subtree of depth 2. Internal nodes represent tactic families (e.g. *Physical Domain Evasion*, *Digital Domain Evasion*) and leaves represent individual techniques (e.g. *Adversarial Patch*, *Black-Box Evasion*, *Stop Sign Attack*). Across all 13 trees the taxonomy defines 148 hierarchical feature slots, with individual tree sizes ranging from 10 to 13 nodes.
 
 Each node in the JSON carries a `label`, an `alpha` ($\alpha$) value specifying the desired cosine similarity between the node's feature vector and its parent's, a `beta` ($\beta$) value satisfying $\alpha^2 + \beta^2 = 1$, a `mutually_exclusive_children` flag indicating whether sibling features are treated as alternatives by the firing sampler, and a `children` array that recurses into the same schema. Root nodes are assigned $\alpha = 0$ and $\beta = 1$, meaning they have no inherited direction and are initialised as free unit vectors.
 
-### Synthetic Model Construction
+### 4.2 Synthetic Model Construction
 
 A `SyntheticModel` is instantiated with 512 features embedded in a 128-dimensional hidden space, giving a $4\times$ superposition ratio. Because the number of features exceeds the ambient dimensionality, the model cannot represent all features in an orthogonal basis and must instead place them in superposition --- an arrangement that mirrors the situation hypothesised for features in large language models. The model is seeded to be reproducible and configured with a `HierarchyConfig` pointing at the JSON taxonomy, which activates the semantic geometry initialiser.
 
@@ -141,7 +133,7 @@ The initialiser traverses the JSON forest in depth-first order. For each parent-
 
 ![Cosine Similarity Heatmap](feature_hierarchies/visualizations/cosim_heatmap.png)
 
-**Figure 2.** Pairwise cosine similarity heatmap for SAE features organized into MITRE ATLAS taxonomy trees. Rows and columns correspond to the same set of features, ordered breadth-first within each tree (root, then level-1 children, then level-2 leaves). Colored rectangles outline level-1 subtree blocks. The pronounced columnar banding within each block reflects the shared parent-vector component inherited by sibling features under the same tactic node.
+**Figure 4.** Pairwise cosine similarity heatmap for SAE features organized into MITRE ATLAS taxonomy trees. Rows and columns correspond to the same set of features, ordered breadth-first within each tree (root, then level-1 children, then level-2 leaves). Colored rectangles outline level-1 subtree blocks. The pronounced columnar banding within each block reflects the shared parent-vector component inherited by sibling features under the same tactic node.
 
 ---
 
@@ -151,17 +143,17 @@ The heatmap displays pairwise cosine similarities between SAE feature vectors or
 
 The contrast between blocks of different colors illustrates the hierarchical structure at a coarser level. Features from different tactics have lower mutual similarities because their respective parent vectors are mutually orthogonal by construction, attenuating the shared-component effect across subtree boundaries. The columnar symmetry thus serves as a geometric fingerprint of the construction rule: the more features share ancestry, the more their similarity profiles with the rest of the matrix align, collapsing distinct rows into visually indistinguishable columns.
 
-### Geometric Verification
+### 4.3 Geometric Verification
 
 Before any training, the notebook verifies the constructed geometry numerically by iterating over all 135 parent--child pairs in the hierarchy and computing the cosine similarity between each pair of normalised feature vectors. The maximum absolute deviation from the corresponding $\alpha$ value is below $2 \times 10^{-7}$ across all pairs --- a level consistent with single-precision floating-point rounding --- confirming that the Gram--Schmidt procedure realises the intended similarities to essentially exact precision. This verification is not merely illustrative: it establishes a ground truth against which the SAE's learned representations can later be compared, and it guards against numerical drift that could otherwise invalidate the theoretical guarantees of the construction.
 
-### Feature Firing Distribution
+### 4.4 Feature Firing Distribution
 
 The model generates activations by sampling a sparse binary mask over the 512 features for each token in a batch, then computing the hidden state as the sum of the activated feature vectors scaled by sampled magnitudes. Firing probabilities are drawn from a Zipfian distribution with exponent 0.5, clipped to the interval $[10^{-3},\,0.3]$, so that a small number of features fire frequently while the majority fire rarely. This power-law structure reflects empirical observations about feature frequency in large language models and introduces a realistic diversity of sample counts across features.
 
 The hierarchy additionally enforces a conditional firing rule: a child feature may only be active on a given token if its parent is also active. This constraint ensures that the semantic relationships encoded in the JSON are reflected not only in the geometry of the feature vectors but also in their co-occurrence statistics. The notebook verifies this constraint exhaustively over 10,000 sampled batches, finding zero violations. Under these conditions the average number of active features per token (L0) is approximately 2.7, reflecting the combined effect of the low base firing rates and the hierarchical gating that suppresses children whenever their parent is inactive.
 
-### Cosine Similarity Heatmaps
+### 4.5 Cosine Similarity Heatmaps
 
 For each of four randomly selected tactic trees the heatmap is constructed as follows. First, all nodes in the tree are enumerated in breadth-first order --- root, then level-1 children in left-to-right order, then level-2 leaves grouped under their respective level-1 parents. This ordering is consequential: it places nodes that share a level-1 ancestor in contiguous index ranges, which is precisely what makes the block structure visible. The model's feature dictionary matrix *W* of shape (512, 128) is then L2-normalised row-wise to produce unit vectors, and the cosine similarity matrix for the selected nodes is computed as the inner product of the corresponding submatrix with its own transpose, yielding a symmetric $n\times n$ matrix.
 
@@ -169,7 +161,7 @@ The entries of this matrix have a predictable structure that follows directly fr
 
 Finally, for each level-1 child of the root, the set of all descendant feature indices is recovered via `get_all_feature_indices()` and mapped back to the BFS ordering, yielding a contiguous index range. A colored rectangle is drawn over the corresponding diagonal block to make the grouping explicit, with distinct colors assigned to each level-1 subtree in sequence.
 
-### SAE Training and Recovery
+### 4.6 SAE Training and Recovery
 
 The main experiment in the notebook trains a BatchTopK Sparse Autoencoder on hidden activations sampled from the synthetic model. The encoder projects the 128-dimensional hidden state into a 512-dimensional latent space, retains the top-*k* = 15 activations per token, and the decoder reconstructs the hidden state from the sparse latent code. With 10 million training tokens, batch size 1024, and learning rate $3 \times 10^{-4}$, training converges in roughly two minutes on CPU.
 

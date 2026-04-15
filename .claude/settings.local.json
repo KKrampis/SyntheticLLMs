@@ -44,7 +44,8 @@
       "Bash(git commit -m \"Break up mathematical proof into separate display equations for better readability\")",
       "Bash(git commit -m \"Move Figure 2 caption directly under the figure image\")",
       "Bash(git commit -m \"Fix formatting and spacing\")",
-      "Bash(git commit -m \"Update section titles and content structure\")"
+      "Bash(git commit -m \"Update section titles and content structure\")",
+      "Bash(git commit -m \"Add subsection numbering to section 4 and move Figure 3 to section 4.1\")"
     ],
     "deny": [],
     "ask": []
