@@ -46,7 +46,10 @@
       "Bash(git commit -m \"Fix formatting and spacing\")",
       "Bash(git commit -m \"Update section titles and content structure\")",
       "Bash(git commit -m \"Add subsection numbering to section 4 and move Figure 3 to section 4.1\")",
-      "Bash(git commit -m \"Move sections 3.4 and 3.5 to Discussion section as 5.2 and 5.3\")"
+      "Bash(git commit -m \"Move sections 3.4 and 3.5 to Discussion section as 5.2 and 5.3\")",
+      "Bash(git pull --rebase)",
+      "Bash(git add references.bib)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nFix mathematical notation, renumber sections, and improve text clarity\n\n- Add $ symbols around α and β in sections 2.2 and 3.2 for proper math rendering\n- Renumber sections: 4→3 (Results), 5→4 (Discussion) and all subsections\n- Add superposition explanation to Figure 3 legend with ρ_mm formula\n- Fix grammatical errors in section 3.2 first paragraph\n- Update Figure 3 legend and section 3.1 content\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")"
     ],
     "deny": [],
     "ask": []
