@@ -380,7 +380,7 @@ intermediate levels (“mammal”, “dog”) to specific instantiations
 whether SAEs can recover structure embedded in neural
 representations.</p>
 <figure>
-<img src="figures/fig1.png"
+<img src="https://kkrampis.github.io/SyntheticLLMs/figures/fig1.png"
 alt="Natural Language Concept Hierarchy Encoded as Geometric Feature Directions" />
 <figcaption aria-hidden="true">Natural Language Concept Hierarchy
 Encoded as Geometric Feature Directions</figcaption>
@@ -482,79 +482,40 @@ class="math inline"><strong>d</strong><sub>1</sub> = [1,0]</span> and
 <span
 class="math inline"><strong>d</strong><sub>2</sub> = [0.9,0.436]</span>.
 The superposition overlap is quantified using Mean Max Cosine
-Similarity: <span class="math inline">$\rho_{mm} = \frac{1}{N}
-\sum_{i=1}^N \max_{j \neq i} |\mathbf{d}_i^T \mathbf{d}_j|$</span>,
-where <span
-class="math inline"><em>ρ</em><sub><em>m</em><em>m</em></sub> ≈ 0.15</span>
-indicates moderate superposition in the standard benchmark.</p>
-<h2 id="experimental-setup">3. Experimental Setup</h2>
+Similarity: <span class="math inline">$\rho = \frac{1}{N} \sum_{i=1}^N
+\max_{j \neq i} |\mathbf{d}_i^T \mathbf{d}_j|$</span>, where <span
+class="math inline"><em>ρ</em> ≈ 0.15</span> indicates moderate
+superposition in the standard benchmark.</p>
 <h3
-id="structure-limitations-in-representation-spaces-of-synthetic-models">3.1
-Structure Limitations in Representation Spaces of Synthetic Models</h3>
-<p>The fundamental challenge in evaluating sparse autoencoders on
-semantic structures lies in the gap between statistical and semantic
-hierarchies. Current synthetic benchmarks, while powerful for controlled
-experimentation, implement purely statistical dependencies that lack
-semantic meaning. The core limitation is that semantics requires
-compositional structure in the representation itself, not merely
-correlated firing probabilities. In real language models, semantic
-relationships like “deceptive reasoning” and “goal misrepresentation”
-exhibit meaningful connections because the activation patterns for child
-concepts literally contain components of parent concepts, creating
-genuine compositional structure where child representations are built
-from parent representations plus additional information.</p>
-<p>In contrast, existing synthetic frameworks treat hierarchical
-features as independent random directions with statistical dependency
-rules. When a child feature fires, it adds an arbitrary vector to the
-activation that bears no compositional relationship to its parent’s
-contribution. This disconnect means that while we can test whether SAEs
-handle hierarchical statistical dependencies, we cannot evaluate whether
-they recover semantically meaningful compositional structures. The
-semantic labels assigned to features (“Deceptive Reasoning,” “Goal
-Misrepresentation”) serve only human interpretation—the synthetic model
-possesses no semantic understanding of these concepts.</p>
-<h3
-id="encoding-of-semantic-knowledge-in-internal-model-hierarchies">3.2
+id="encoding-of-semantic-knowledge-in-internal-model-hierarchies">2.2
 Encoding of Semantic Knowledge in Internal Model Hierarchies</h3>
-<p>Implementing genuinely semantic hierarchies in synthetic evaluation
-frameworks would require fundamental architectural changes beyond
-current capabilities. Semantic basis vectors with interpretable meaning
-would replace random orthogonal directions, defining fundamental
-semantic concepts like intentionality, truthfulness, goal-oriented
-behavior, and theory of mind as basis vectors, then constructing complex
-features as meaningful combinations of these primitives.</p>
-<p>Given the fundamental paradox that creating semantically meaningful
-synthetic features requires knowing what semantic structure looks like
-in representation space—precisely what we aim to investigate—we
-implement three practical approaches. The weak semantic structure
-approach creates statistical signatures that correlate with potential
-semantic patterns, while the hybrid approach leverages real model
-guidance by collecting LLM activations on curated datasets with known
-semantic properties. The explicit limitation acknowledgment approach
-recognizes that synthetic benchmarks test statistical decomposition
-capabilities rather than semantic understanding, focusing on measurable
-properties: handling hierarchical statistical dependencies, decomposing
-correlated versus independent features, and scaling behavior under
-various statistical constraints.</p>
-<h3
-id="compositional-feature-directions-with-semantical-constraints">3.3
-Compositional Feature Directions with Semantical Constraints</h3>
-<p>Next, we introduce semantics of knowledge in the hierarchical
-structure of the synthetic models, by modifying how feature direction
-vectors are constructed. Our approach is making child feature directions
-compositionally dependent on their parent and own offspring directions,
-rather than being independent random vectors. When constructing a
-hierarchical feature tree, we define each child feature direction as
-<span
+<p>We introduce semantics of knowledge in the hierarchical structure of
+the synthetic models, by modifying how feature direction vectors are
+constructed. Our approach is making child feature directions
+compositionally dependent on their parent directions, rather than being
+independent random vectors. When constructing a hierarchical feature
+tree, we define each child feature direction as <span
 class="math inline"><strong>d</strong><sub><em>c</em><em>h</em><em>i</em><em>l</em><em>d</em></sub> = <em>α</em> ⋅ <strong>d</strong><sub><em>p</em><em>a</em><em>r</em><em>e</em><em>n</em><em>t</em></sub> + <em>β</em> ⋅ <strong>d</strong><sub>⊥</sub></span>,
 where <span
 class="math inline"><strong>d</strong><sub><em>p</em><em>a</em><em>r</em><em>e</em><em>n</em><em>t</em></sub></span>
 is the parent’s direction vector, <span
 class="math inline"><strong>d</strong><sub>⊥</sub></span> is a component
 orthogonal to the parent representing the specialization of the child
-concept, and <span class="math inline"><em>α</em>, <em>β</em></span> are
-mixing coefficients that control how much of the parent’s representation
-is inherited.</p>
+concept, and <span class="math inline"><em>α</em></span>, <span
+class="math inline"><em>β</em></span> are mixing coefficients that
+control how much of the parent’s representation is inherited.</p>
+<p>The coefficient <span class="math inline"><em>β</em></span> controls
+how much orthogonal specialization enters the final child direction—a
+large <span class="math inline"><em>β</em></span> relative to <span
+class="math inline"><em>α</em></span> means the child direction tilts
+strongly toward its unique subspace, while a small <span
+class="math inline"><em>β</em></span> means the child remains closely
+aligned with the parent direction (<strong>Figure 2.</strong>).
+Furthermore, when we set <span
+class="math inline"><em>α</em> &gt; 0</span>, we create non-zero cosine
+similarity between parent and child feature directions. This approach,
+creates a genuine compositional structure, where child features contain
+a component of the parent in their vector representation.</p>
 <figure>
 <img src="figures/fig2.png"
 alt="Geometric Structure of Compositional Feature Directions" />
@@ -575,29 +536,16 @@ encoding semantic relatedness as geometric proximity in the feature
 space. Dashed lines show the <span class="math inline"><em>α</em></span>
 and <span class="math inline"><em>β</em></span> components along each
 axis.</p>
-<p>To obtain the orthogonal component <span
-class="math inline"><strong>d</strong><sub>⊥</sub></span>, we employ
-Gram-Schmidt orthogonalization starting with a random vector <span
-class="math inline"><strong>v</strong></span> and subtracting its
+<p>Our theoretical foundation rests on semantic relatedness of concepts,
+stemming from their ontological relationship drawn from real-world
+knowledge, and through this formalization we encode them as geometric
+structure in representation space. To obtain the orthogonal component
+<span class="math inline"><strong>d</strong><sub>⊥</sub></span>, we
+employ Gram-Schmidt orthogonalization starting with a random vector
+<span class="math inline"><strong>v</strong></span> and subtracting its
 projection onto the parent direction: <span
 class="math inline"><strong>d</strong><sub>⊥</sub> = <strong>v</strong> − (<strong>v</strong>⋅<strong>d</strong><sub><em>p</em><em>a</em><em>r</em><em>e</em><em>n</em><em>t</em></sub>)<strong>d</strong><sub><em>p</em><em>a</em><em>r</em><em>e</em><em>n</em><em>t</em></sub></span>.
-The coefficient <span class="math inline"><em>β</em></span> controls how
-much orthogonal specialization enters the final child direction—a large
-<span class="math inline"><em>β</em></span> relative to <span
-class="math inline"><em>α</em></span> means the child direction tilts
-strongly toward its unique subspace, while a small <span
-class="math inline"><em>β</em></span> means the child remains closely
-aligned with the parent direction (<strong>Figure 2.</strong>). This
-creates a genuine compositional structure, where containing child
-features and respectively their activations, literally contain
-components of parent features in their vector representations.</p>
-<p>Our theoretical foundation rests on semantic relatedness of concepts
-encoded in the synthetic model, stemming from the relationship of the
-concepts drawn from real-world knowledge, encoded as geometric structure
-in representation space. Furthermore, when we set <span
-class="math inline"><em>α</em> &gt; 0</span>, we create non-zero cosine
-similarity between parent and child feature directions. Expanding the
-inner product after normalization:</p>
+. Expanding the inner product after normalization:</p>
 <p><span
 class="math display"><strong>d</strong><sub>child</sub><sup><em>T</em></sup><strong>d</strong><sub>parent</sub> = (<em>α</em>⋅<strong>d</strong><sub>parent</sub>+<em>β</em>⋅<strong>d</strong><sub>⊥</sub>)<sup><em>T</em></sup><strong>d</strong><sub>parent</sub></span></p>
 <p><span class="math display">$$= \alpha
@@ -606,169 +554,87 @@ class="math display"><strong>d</strong><sub>child</sub><sup><em>T</em></sup><str
 \underbrace{(\mathbf{d}_\perp^T
 \mathbf{d}_{\text{parent}})}_{=0}$$</span></p>
 <p><span class="math display"> = <em>α</em></span></p>
-<p>With this approach, our overarching goal is to test whether SAEs can
-successfully decompose these features, and discover the latents where in
-synthetic models the directions for child features have high cosine
-similarity with directions for parent features. Furthermore, due to the
-ease of adjusting the composition of the synthetic models, performing
-interventions that ablate parent features we can assess whether these
-impair reconstruction of child features due to the inheritance when
-compared to unrelated features.</p>
-<h3
-id="semantic-encoding-of-ai-safety-hierarchies-in-representation-space">3.4
-Semantic encoding of AI Safety Hierarchies in Representation Space</h3>
-<p>Our experimental pipeline leverages large language models to generate
-interpretable concept hierarchies with explicit semantic similarity
-values, then translates these into geometric constraints within the
-synthetic framework. In the first step, we prompt an LLM to produce a
-tree of misalignment-related concepts with “Deceptive Reasoning” as a
-root, children like “Goal Misrepresentation” and “Information
-Withholding,” and grandchildren such as “Reward Hacking” and
-“Sycophantic Agreement.” Critically, we ask the LLM to assign an <span
-class="math inline"><em>α</em></span> value to each parent-child edge
-encoding its judgment of semantic similarity—“Reward Hacking” might
-receive <span class="math inline"><em>α</em> = 0.4</span> from “Goal
-Misrepresentation” since it represents a specific instantiation, while
-“Goal Misrepresentation” might receive <span
-class="math inline"><em>α</em> = 0.7</span> from “Deceptive Reasoning”
-as a direct sub-case.</p>
-<p>In the second step, we translate the tree into feature directions by
-starting at the root with a random unit vector <span
-class="math inline"><strong>d</strong><sub><em>r</em><em>o</em><em>o</em><em>t</em></sub></span>
-and recursively computing child directions using the compositional
-formula. The mixing coefficient <span
-class="math inline"><em>β</em></span> is derived from <span
-class="math inline"><em>α</em></span> to achieve the specified cosine
-similarity after normalization. Grandchildren inherit geometric
-structure transitively from both parents and grandparents—“Reward
-Hacking” contains directional overlap with both “Goal Misrepresentation”
-and “Deceptive Reasoning,” capturing the correct semantic property of
-compositional concept inheritance.</p>
-<p>The resulting feature directions integrate directly into
-SynthSAEBench’s hierarchy mechanism, where the parent firing-probability
-constraint <span
-class="math inline"><em>c</em><sub><em>c</em><em>h</em><em>i</em><em>l</em><em>d</em></sub> ← <em>c</em><sub><em>c</em><em>h</em><em>i</em><em>l</em><em>d</em></sub> ⋅ <strong>1</strong>[<em>c</em><sub><em>p</em><em>a</em><em>r</em><em>e</em><em>n</em><em>t</em></sub>&gt;0]</span>
-enforces statistical dependencies while the geometric construction
-ensures that hidden activations for child concept samples literally
-contain components pointing toward parent concept directions. This
-enables precise diagnostic evaluation: we can test whether SAEs learn
-latents whose decoder directions maintain high cosine similarity with
-ground-truth concept directions, whether ablating latents aligned with
-“Deceptive Reasoning” impairs reconstruction of “Reward Hacking” more
-than unrelated features, and whether SAEs correctly split hierarchies or
-inappropriately absorb child concepts into parent latents.</p>
+<!--
+
+With this approach, our overarching goal is to test whether SAEs can  successfully decompose these features, and discover the latents where in synthetic models the directions for child features have high cosine similarity with directions for parent features. Furthermore, due to the ease of adjusting the composition of the synthetic models, performing interventions that ablate parent features we can assess whether these impair reconstruction of child features due to the inheritance when compared to unrelated features.
+
+-->
+<h2 id="results">3. Results</h2>
+<h3 id="taxonomy-and-semantic-dictionary">3.1 Taxonomy and Semantic
+Dictionary</h3>
+<p>The starting point for building our semantic hieararchy of concepts,
+is the MITRE ATLAS adversarial machine learning threat taxonomy <span
+class="citation" data-cites="mitre_atlas">[7]</span> as a forest of
+concept trees. The file contains 13 root nodes — one per ATLAS tactic,
+including <em>Adversarial Evasion</em>, <em>Data Poisoning</em>,
+<em>Model Extraction and Stealing</em>, and <em>Prompt Injection and LLM
+Exploitation</em> — each heading a subtree of depth 2. Internal nodes
+represent tactic families (e.g. <em>Physical Domain Evasion</em>,
+<em>Digital Domain Evasion</em>) and leaves represent individual
+techniques (e.g. <em>Adversarial Patch</em>, <em>Black-Box Evasion</em>,
+<em>Stop Sign Attack</em>). Across all 13 trees the taxonomy defines 148
+hierarchical feature slots, with individual tree sizes ranging from 10
+to 13 nodes.</p>
 <figure>
-<img src="figures/fig3.png"
+<img src="https://kkrampis.github.io/SyntheticLLMs/figures/fig3.png"
 alt="LLM-Generated Deceptive Reasoning Hierarchy" />
 <figcaption aria-hidden="true">LLM-Generated Deceptive Reasoning
 Hierarchy</figcaption>
 </figure>
 <p><strong>Figure 3: LLM-Generated Deceptive Reasoning
-Hierarchy.</strong> An example hierarchy produced by prompting an LLM to
-generate misalignment-related concept trees with semantic similarity
-coefficients <span class="math inline"><em>α</em></span> and conditional
-firing probabilities <span class="math inline"><em>p</em></span>. Each
-parent–child edge carries the LLM-assigned <span
-class="math inline"><em>α</em></span> value used to construct the child
-feature direction <span
+Hierarchy.</strong> An example hierarchy of misalignment-related
+concepts with semantic similarity coefficients <span
+class="math inline"><em>α</em></span> and conditional firing
+probabilities <span class="math inline"><em>p</em></span>. Each
+parent–child edge carries an <span class="math inline"><em>α</em></span>
+value based on the relatedness of the concepts used to construct the
+child feature direction <span
 class="math inline"><strong>d</strong><sub>child</sub> = <em>α</em><strong>d</strong><sub>parent</sub> + <em>β</em><strong>d</strong><sub>⊥</sub></span>.
 Grandchildren inherit geometry transitively: “Reward Hacking” (violet)
 therefore contains directional overlap with both “Goal
 Misrepresentation” and “Deceptive Reasoning”, correctly capturing
-compositional concept inheritance.</p>
-<h3 id="safety-research-applications">3.5 Safety Research
-Applications</h3>
-<p>The semantic hierarchy approach enables several critical AI safety
-research directions. We can construct arbitrarily complex semantic
-hierarchies reflecting real AI safety threat models—power-seeking,
-deception, sycophancy, manipulation, goal misspecification—and
-rigorously test whether interpretability tools can decompose these
-structures. Four concrete evaluation axes emerge from this
-framework:</p>
-<p><strong>Capability Detection Robustness.</strong> Test SAE
-identification of rare, sparse dangerous features (appearing in fewer
-than 0.1% of samples). If SAEs fail to consistently recover rare
-scheming features in the controlled synthetic setting, they will likely
-miss such features in real models where dangerous behaviors are
-inherently infrequent.</p>
-<p><strong>Transfer Learning for Monitoring.</strong> If structural
-patterns—clustered latents with low firing probability and mutual
-exclusivity—reliably indicate scheming-type hierarchies in synthetic
-data, we can search for the same geometric signatures in real SAEs
-trained on large language models as a monitoring signal, enabling
-scalable safety auditing without labeling every feature manually.</p>
-<p><strong>Worst-Case Adversarial Scenarios.</strong> Model capability
-concealment can be simulated by creating features that are
-anti-correlated with overt expressions of the same capabilities. This
-tests whether SAEs can still recover underlying dangerous features when
-obvious activation signals are suppressed, mimicking how a deceptively
-aligned model might hide its true capabilities during evaluation.</p>
-<p><strong>Intervention Testing with Ground Truth.</strong> Because we
-have complete ground truth about which features represent dangerous
-capabilities, we can test whether ablating or clamping SAE latents
-matched to these features actually prevents the corresponding behavior
-in downstream tasks—providing principled validation that
-interpretability interventions have the intended causal effect.</p>
-<h2 id="results">4. Results</h2>
-<h3 id="taxonomy-and-semantic-dictionary">Taxonomy and Semantic
-Dictionary</h3>
-<p>The starting point is
-<code>feature_hierarchies/mitre_atlas_adversarial_ml.json</code>, a
-hand-authored semantic dictionary encoding the MITRE ATLAS adversarial
-machine learning threat taxonomy as a forest of concept trees. The file
-contains 13 root nodes — one per ATLAS tactic, including <em>Adversarial
-Evasion</em>, <em>Data Poisoning</em>, <em>Model Extraction and
-Stealing</em>, and <em>Prompt Injection and LLM Exploitation</em> — each
-heading a subtree of depth 2. Internal nodes represent tactic families
-(e.g. <em>Physical Domain Evasion</em>, <em>Digital Domain Evasion</em>)
-and leaves represent individual techniques (e.g. <em>Adversarial
-Patch</em>, <em>Black-Box Evasion</em>, <em>Stop Sign Attack</em>).
-Across all 13 trees the taxonomy defines 148 hierarchical feature slots,
-with individual tree sizes ranging from 10 to 13 nodes.</p>
-<p>Each node in the JSON carries a <code>label</code>, an
-<code>alpha</code> (<span class="math inline"><em>α</em></span>) value
-specifying the desired cosine similarity between the node’s feature
-vector and its parent’s, a <code>beta</code> (<span
-class="math inline"><em>β</em></span>) value satisfying <span
+compositional concept inheritance. This progressive inheritance
+increases superposition at deeper levels, as measured by Mean Max Cosine
+Similarity <span class="math inline">$\rho = \frac{1}{N} \sum_{i=1}^N
+\max_{j \neq i} |\mathbf{d}_i^T \mathbf{d}_j|$</span>, since deeper
+features carry more borrowed directional content from their
+ancestors.</p>
+<p>Each node in the JSON carries a label, an <span
+class="math inline"><em>α</em></span> value specifying the desired
+cosine similarity between the node’s feature vector and its parent’s, a
+<span class="math inline"><em>β</em></span> value satisfying <span
 class="math inline"><em>α</em><sup>2</sup> + <em>β</em><sup>2</sup> = 1</span>,
-a <code>mutually_exclusive_children</code> flag indicating whether
-sibling features are treated as alternatives by the firing sampler, and
-a <code>children</code> array that recurses into the same schema. Root
-nodes are assigned <span class="math inline"><em>α</em> = 0</span> and
-<span class="math inline"><em>β</em> = 1</span>, meaning they have no
-inherited direction and are initialised as free unit vectors.</p>
-<h3 id="synthetic-model-construction">Synthetic Model Construction</h3>
-<p>A <code>SyntheticModel</code> is instantiated with 512 features
-embedded in a 128-dimensional hidden space, giving a <span
-class="math inline">4×</span> superposition ratio. Because the number of
-features exceeds the ambient dimensionality, the model cannot represent
-all features in an orthogonal basis and must instead place them in
-superposition — an arrangement that mirrors the situation hypothesised
-for features in large language models. The model is seeded to be
-reproducible and configured with a <code>HierarchyConfig</code> pointing
-at the JSON taxonomy, which activates the semantic geometry
-initialiser.</p>
-<p>The initialiser traverses the JSON forest in depth-first order. For
-each parent–child edge it constructs the child’s feature vector
+and a mutually_exclusive_children flag indicating whether sibling
+features are treated as alternatives by the firing probability sampler.
+Root nodes are assigned <span class="math inline"><em>α</em> = 0</span>
+and <span class="math inline"><em>β</em> = 1</span>, meaning they have
+no inherited direction and are initialised as free unit vectors.</p>
+<h3 id="synthetic-model-construction">3.2 Synthetic Model
+Construction</h3>
+<p>Our setup for the initial experiment is a small synthetic model
+instantiated with 512 features embedded in a 128-dimensional hidden
+space. Because the number of features exceeds the ambient
+dimensionality, the model cannot represent all features in an orthogonal
+basis and must instead place them in superposition, mirroring the
+situation for features in large language models. The semantic geometry
+initialiser in the code traverses the JSON forest in depth-first order.
+For each parent–child edge it constructs the child’s feature vector
 according to the rule <span
-class="math inline"><strong>d</strong><sub>child</sub> = <em>α</em> ⋅ <strong>d</strong><sub>parent</sub> + <em>β</em> ⋅ <strong>d</strong><sub>⊥</sub></span>,
-where <span class="math inline"><strong>d</strong><sub>⊥</sub></span> is
-a unit vector in the subspace orthogonal to <span
-class="math inline"><strong>d</strong><sub>parent</sub></span> computed
-by Gram–Schmidt orthogonalisation. This guarantees <span
+class="math inline"><strong>d</strong><sub>child</sub> = <em>α</em> ⋅ <strong>d</strong><sub>parent</sub> + <em>β</em> ⋅ <strong>d</strong><sub>⊥</sub></span>.
+This guarantees <span
 class="math inline">cos (<strong>d</strong><sub>child</sub>,<strong>d</strong><sub>parent</sub>) = <em>α</em></span>
 exactly, so the <span class="math inline"><em>α</em></span> values in
 the JSON are not targets to be learned but rather geometric invariants
-enforced at initialisation time. The remaining 364 features not covered
-by the taxonomy are assigned mutually orthogonalised random unit
-vectors, filling the residual capacity of the hidden space as uniformly
-as the dimensionality allows.</p>
+enforced at initialisation time. The remaining 364 features not encoding
+semantic concepts found in the taxonomy are assigned mutually
+orthogonalised random unit vectors, filling the residual capacity of the
+hidden space as uniformly as the dimensionality allows.</p>
 <figure>
 <img src="feature_hierarchies/visualizations/cosim_heatmap.png"
 alt="Cosine Similarity Heatmap" />
 <figcaption aria-hidden="true">Cosine Similarity Heatmap</figcaption>
 </figure>
-<p><strong>Figure 2.</strong> Pairwise cosine similarity heatmap for SAE
+<p><strong>Figure 4.</strong> Pairwise cosine similarity heatmap for SAE
 features organized into MITRE ATLAS taxonomy trees. Rows and columns
 correspond to the same set of features, ordered breadth-first within
 each tree (root, then level-1 children, then level-2 leaves). Colored
@@ -776,13 +642,12 @@ rectangles outline level-1 subtree blocks. The pronounced columnar
 banding within each block reflects the shared parent-vector component
 inherited by sibling features under the same tactic node.</p>
 <hr />
-<h2 id="columnar-symmetry-in-the-cosine-similarity-heatmap">Columnar
-Symmetry in the Cosine Similarity Heatmap</h2>
 <p>The heatmap displays pairwise cosine similarities between SAE feature
 vectors organized according to MITRE ATLAS tactic hierarchies. Features
-within the same subtree share a common parent direction because each
-child feature is constructed as a linear combination of its parent
-vector and an orthogonal component: <em>d</em>_child = <span
+within the same subtree (blue, orange, green on <strong>Figure
+4</strong>) share a common parent direction because each child feature
+is constructed as a linear combination of its parent vector and an
+orthogonal component: <em>d</em>_child = <span
 class="math inline"><em>α</em>⋅</span><em>d</em>_parent + <span
 class="math inline"><em>β</em> ⋅ <strong>d</strong><sub>⊥</sub></span>.
 As a result, any two siblings <em>i</em> and <em>j</em> under the same
@@ -803,7 +668,7 @@ thus serves as a geometric fingerprint of the construction rule: the
 more features share ancestry, the more their similarity profiles with
 the rest of the matrix align, collapsing distinct rows into visually
 indistinguishable columns.</p>
-<h3 id="geometric-verification">Geometric Verification</h3>
+<h3 id="geometric-verification">3.3 Geometric Verification</h3>
 <p>Before any training, the notebook verifies the constructed geometry
 numerically by iterating over all 135 parent–child pairs in the
 hierarchy and computing the cosine similarity between each pair of
@@ -817,7 +682,8 @@ merely illustrative: it establishes a ground truth against which the
 SAE’s learned representations can later be compared, and it guards
 against numerical drift that could otherwise invalidate the theoretical
 guarantees of the construction.</p>
-<h3 id="feature-firing-distribution">Feature Firing Distribution</h3>
+<h3 id="feature-firing-distribution">3.4 Feature Firing
+Distribution</h3>
 <p>The model generates activations by sampling a sparse binary mask over
 the 512 features for each token in a batch, then computing the hidden
 state as the sum of the activated feature vectors scaled by sampled
@@ -838,7 +704,7 @@ finding zero violations. Under these conditions the average number of
 active features per token (L0) is approximately 2.7, reflecting the
 combined effect of the low base firing rates and the hierarchical gating
 that suppresses children whenever their parent is inactive.</p>
-<h3 id="cosine-similarity-heatmaps">Cosine Similarity Heatmaps</h3>
+<h3 id="cosine-similarity-heatmaps">3.5 Cosine Similarity Heatmaps</h3>
 <p>For each of four randomly selected tactic trees the heatmap is
 constructed as follows. First, all nodes in the tree are enumerated in
 breadth-first order — root, then level-1 children in left-to-right
@@ -878,7 +744,7 @@ ordering, yielding a contiguous index range. A colored rectangle is
 drawn over the corresponding diagonal block to make the grouping
 explicit, with distinct colors assigned to each level-1 subtree in
 sequence.</p>
-<h3 id="sae-training-and-recovery">SAE Training and Recovery</h3>
+<h3 id="sae-training-and-recovery">3.6 SAE Training and Recovery</h3>
 <p>The main experiment in the notebook trains a BatchTopK Sparse
 Autoencoder on hidden activations sampled from the synthetic model. The
 encoder projects the 128-dimensional hidden state into a 512-dimensional
@@ -973,9 +839,28 @@ is the proximate cause of the precision shortfall, and it grows with
 have large mixing coefficients will show more tightly clustered blocks
 in the heatmap and correspondingly lower precision in the SAE recovery
 metrics.</p>
-<h2 id="discussion">5. Discussion</h2>
-<h3 id="implications-for-ai-safety-research">Implications for AI Safety
-Research</h3>
+<h2 id="discussion">4. Discussion</h2>
+<p>Implementing semantic hierarchies in synthetic evaluation frameworks
+requires an architectural change, where feature vectors with semantic
+meaning replace random orthogonal vectors, defining fundamental semantic
+concepts like intentionality, truthfulness, goal-oriented behavior, and
+theory of mind as basis vectors, then constructing complex features as
+meaningful combinations of these primitives.</p>
+<p>Given the fundamental paradox that creating semantically meaningful
+synthetic features requires knowing what semantic structure looks like
+in representation space—precisely what we aim to investigate—we
+implement three practical approaches. The weak semantic structure
+approach creates statistical signatures that correlate with potential
+semantic patterns, while the hybrid approach leverages real model
+guidance by collecting LLM activations on curated datasets with known
+semantic properties. The explicit limitation acknowledgment approach
+recognizes that synthetic benchmarks test statistical decomposition
+capabilities rather than semantic understanding, focusing on measurable
+properties: handling hierarchical statistical dependencies, decomposing
+correlated versus independent features, and scaling behavior under
+various statistical constraints</p>
+<h3 id="implications-for-ai-safety-research">4.1 Implications for AI
+Safety Research</h3>
 <p>The limitations of statistical versus semantic hierarchies carry
 significant implications for AI safety applications of sparse
 autoencoder research. Current synthetic evaluation frameworks enable
@@ -1016,6 +901,95 @@ semantic content. Only architectures that succeed at both stages should
 be considered reliable for safety-critical interpretability
 applications, ensuring that statistical decomposition capabilities
 translate to meaningful understanding of dangerous model behaviors.</p>
+<p>The fundamental challenge in evaluating sparse autoencoders on
+semantic structures lies in the gap between statistical and semantic
+hierarchies. Current synthetic benchmarks, while powerful for controlled
+experimentation, implement purely statistical dependencies that lack
+semantic meaning. The core limitation is that semantics requires
+compositional structure in the representation itself, not merely
+correlated firing probabilities. In real language models, semantic
+relationships like “deceptive reasoning” and “goal misrepresentation”
+exhibit meaningful connections because the activation patterns for child
+concepts literally contain components of parent concepts, creating
+genuine compositional structure where child representations are built
+from parent representations plus additional information.</p>
+<p>In contrast, existing synthetic frameworks treat hierarchical
+features as independent random directions with statistical dependency
+rules. When a child feature fires, it adds an arbitrary vector to the
+activation that bears no compositional relationship to its parent’s
+contribution. This disconnect means that while we can test whether SAEs
+handle hierarchical statistical dependencies, we cannot evaluate whether
+they recover semantically meaningful compositional structures.</p>
+<h3
+id="semantic-encoding-of-ai-safety-hierarchies-in-representation-space">4.2
+Semantic encoding of AI Safety Hierarchies in Representation Space</h3>
+<p>Our experiment leverages large language models to generate
+interpretable concept hierarchies with explicit semantic similarity
+values, then translates these into geometric constraints within the
+synthetic framework. In the first step, we prompt an LLM to produce a
+tree of misalignment-related concepts with “Deceptive Reasoning” as a
+root, children like “Goal Misrepresentation” and “Information
+Withholding,” and grandchildren such as “Reward Hacking” and
+“Sycophantic Agreement.” Critically, we ask the LLM to assign an <span
+class="math inline"><em>α</em></span> value to each parent-child edge
+encoding its judgment of semantic similarity—“Reward Hacking” might
+receive <span class="math inline"><em>α</em> = 0.4</span> from “Goal
+Misrepresentation” since it represents a specific instantiation, while
+“Goal Misrepresentation” might receive <span
+class="math inline"><em>α</em> = 0.7</span> from “Deceptive Reasoning”
+as a direct sub-case.</p>
+<p>In the second step, we translate the tree into feature directions by
+starting at the root with a random unit vector <span
+class="math inline"><strong>d</strong><sub><em>r</em><em>o</em><em>o</em><em>t</em></sub></span>
+and recursively computing child directions using the compositional
+formula. The mixing coefficient <span
+class="math inline"><em>β</em></span> is derived from <span
+class="math inline"><em>α</em></span> to achieve the specified cosine
+similarity after normalization. Grandchildren inherit geometric
+structure transitively from both parents and grandparents—“Reward
+Hacking” contains directional overlap with both “Goal Misrepresentation”
+and “Deceptive Reasoning,” capturing the correct semantic property of
+compositional concept inheritance.</p>
+<p>This enables precise diagnostic evaluation: we can test whether SAEs
+learn latents whose decoder directions maintain high cosine similarity
+with ground-truth concept directions, whether ablating latents aligned
+with “Deceptive Reasoning” impairs reconstruction of “Reward Hacking”
+more than unrelated features, and whether SAEs correctly split
+hierarchies or inappropriately absorb child concepts into parent
+latents.</p>
+<h3 id="safety-research-applications">4.3 Safety Research
+Applications</h3>
+<p>The semantic hierarchy approach enables several critical AI safety
+research directions. We can construct arbitrarily complex semantic
+hierarchies reflecting real AI safety threat models—power-seeking,
+deception, sycophancy, manipulation, goal misspecification—and
+rigorously test whether interpretability tools can decompose these
+structures. Four concrete evaluation axes emerge from this
+framework:</p>
+<p><strong>Capability Detection Robustness.</strong> Test SAE
+identification of rare, sparse dangerous features (appearing in fewer
+than 0.1% of samples). If SAEs fail to consistently recover rare
+scheming features in the controlled synthetic setting, they will likely
+miss such features in real models where dangerous behaviors are
+inherently infrequent.</p>
+<p><strong>Transfer Learning for Monitoring.</strong> If structural
+patterns—clustered latents with low firing probability and mutual
+exclusivity—reliably indicate scheming-type hierarchies in synthetic
+data, we can search for the same geometric signatures in real SAEs
+trained on large language models as a monitoring signal, enabling
+scalable safety auditing without labeling every feature manually.</p>
+<p><strong>Worst-Case Adversarial Scenarios.</strong> Model capability
+concealment can be simulated by creating features that are
+anti-correlated with overt expressions of the same capabilities. This
+tests whether SAEs can still recover underlying dangerous features when
+obvious activation signals are suppressed, mimicking how a deceptively
+aligned model might hide its true capabilities during evaluation.</p>
+<p><strong>Intervention Testing with Ground Truth.</strong> Because we
+have complete ground truth about which features represent dangerous
+capabilities, we can test whether ablating or clamping SAE latents
+matched to these features actually prevents the corresponding behavior
+in downstream tasks—providing principled validation that
+interpretability interventions have the intended causal effect.</p>
 <h2 id="acknowledgments">Acknowledgments</h2>
 <h2 id="references">References</h2>
 <div id="refs" class="references csl-bib-body" role="list">
@@ -1070,6 +1044,14 @@ Chanin and A. Garriga-Alonso, <span>“<span>SynthSAEBench</span>:
 <span>Scalable</span> <span>Realistic</span> <span>Synthetic</span>
 <span>Data</span>.”</span> arXiv, 2026. doi: <a
 href="https://doi.org/10.48550/arXiv.2602.14687">10.48550/arXiv.2602.14687</a>.</div>
+</div>
+<div id="ref-mitre_atlas" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[7] </div><div
+class="csl-right-inline">MITRE Corporation, <span>“<span>MITRE
+ATLAS</span>: Adversarial threat landscape for artificial-intelligence
+systems.”</span> <a href="https://atlas.mitre.org"
+class="uri">https://atlas.mitre.org</a>, 2023. Available: <a
+href="https://atlas.mitre.org">https://atlas.mitre.org</a></div>
 </div>
 </div>
 <h2 id="appendices">Appendices</h2>
